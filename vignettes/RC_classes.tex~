@@ -1,0 +1,1145 @@
+\documentclass[11pt]{article}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={210mm,297mm},
+ left=20mm,
+ right=20mm,
+ top=20mm,
+ bottom=20mm,
+ }
+\usepackage{Sweave}
+\usepackage{url}
+\usepackage{rotating}
+\usepackage{natbib}
+\usepackage{placeins}
+\usepackage{longtable}
+\usepackage[latin1]{inputenc}
+\usepackage{multirow}
+\usepackage{hyperref}
+%\usepackage{showframe}
+\usepackage{pdflscape}
+%\usepackage{pbox}
+
+%\sloppy
+%\SweaveOpts{echo=FALSE,prefix.string=script18/plot}
+\renewcommand{\textfraction}{0.0}
+
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\footnotesize #1]%
+{\raggedright\footnotesize #1}}
+
+\title{Introduction to RCSpin}
+\author{Rob Dunne}
+\date{\today}
+
+
+\begin{document}
+%\setkeys{Gin}{width=8cm}
+\setkeys{Gin}{width=0.9\columnwidth}
+\maketitle
+\tableofcontents
+
+\section{RCSpin}
+
+This library implements the CRC-SPIN model \cite[]{Rutter.2008,Rutter.and.Savarino.2010}
+using the Reference Classes object oriented system of R.  R how has 3 object systems, 
+S3, S4, and Reference Classes (RC) systems.
+
+RC is good for simulations with complex states.
+It has mutable objects -- i.e changes don't make copies.
+\marginpar{the class names are pointers, I think. Why is this a good idea? I don't know}
+
+
+
+
+
+\section{genericSpin}
+This class implements a natural aging model on a group of people
+represented as a \texttt{study\_group} of \texttt{Person} class objects.
+The main aim of this Class is to act as a framework for building more
+complex models through extension of this class. The simple natural
+aging model implemented in \texttt{updateSubject} acts as an
+example and place holder for subclasses to override with a more
+complex implementation of the function.
+
+At the moment it subjects a population to the age specific mortality rates taken from a provided table.
+See figure \ref{figure:GenericModel.png}.
+
+The function \verb+help(GenericModel)+ provides help about the methods.
+There is also  \verb+GenericModel(help)+ and
+\verb+GenericModel$help(updateSubject)+ for help on specific methods.
+
+ 
+ 
+\begin{Schunk}
+\begin{Sinput}
+> library(devtools) 
+> install_github("csiro-crc-spin/RCSpin",args=" -l ~/Downloads/temp")
+> library(RCSpin,lib.loc="~/Downloads/temp")
+> isS4(GenericModel) #TRUE
+> GenericModel$methods()
+> # [1] "callSuper"        "copy"             "doIteration"      "export"          
+> # [5] "field"            "getClass"         "getRefClass"      "import"          
+> # [9] "initFields"       "initialize"       "run"              "show"            
+> #[13] "show#envRefClass" "trace"            "untrace"          "updateSubject"   
+> #[17] "usingMethods" 
+> 
+> GenericModel$help()
+> GenericModel$fields()
+> #          iterations iteration_resolution          study_group 
+> #           "numeric"            "numeric"               "list" 
+> #       study_results 
+> #            "matrix" 
+> 
+> 
+\end{Sinput}
+\end{Schunk}
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=9cm]{./figs/GenericModel.png}
+  \caption{A population of 1000 peoiple subjected to the mortality rates of a supplied table.}
+  \label{figure:GenericModel.png}
+\end{figure}
+
+\FloatBarrier
+\section{crcSpin}
+
+\begin{Schunk}
+\begin{Sinput}
+> isS4(CrcSpinModel)
+> #[1] TRUE
+> showClass("CrcSpinModel")
+> #Class "CrcSpinModel" [in ".GlobalEnv"]
+> #
+> #Slots:
+> #Name:       .xData
+> #Class: environment
+> #Extends: .....
+> 
+> setGeneric("testFun", function(x)standardGeneric("testFun"))
+> setMethod("testFun", "numeric", function(x)x+1)
+> hasMethod("testFun", "numeric") #[1] TRUE
+> hasMethod("testFun", "integer") #inherited #[1] TRUE
+> existsMethod("testFun", "integer") # [1] FALSE
+> hasMethod("testFun") # default method  FALSE
+> hasMethod("testFun", "ANY") #FALSE
+> #how do I find out what functions are in CrcSpinModel? It has new and run -- but how would I find them?
+> 
+> 
+> cc<-CrcSpinModel$new(iterations=99, num_subjects=10)
+> cc$run()
+> cc$study_group[1]
+> ## [[1]]
+> ## Spin Person object of class "PersonWithColon"
+> ## Age:[1] 85
+> ## Sex:[1] "F"
+> ## State:[1] "deceased"
+> ## In treatment program:[1] "no"
+> ## Study id:[1] 1
+> ## Clinical history:
+> ## Spin ClinicalHistory object of class "ClinicalHistory"
+> ## Status:character(0)
+> ## Events:list()
+> ## Risk level:[1] "standard"
+> ## Colon clinical characteristic:[1] "clear"
+> ## Colon:
+> ## Spin Colon object of class "Colon"
+> 
+> cc$study_group[[1]]$colon
+> #Spin Colon object of class "Colon"
+> 
+> cc$study_group[[1]]$colon$sites[[1]]$initiated_in_year
+> ## #cc<-CrcSpinModel$new(iterations=99, num_subjects=50000)
+> ## #cc$run()
+> ## #save(cc,file="script8_cc.Rdata")
+> ## res2<-cc$study_results
+> 
+> ## qq<-500
+> ## plot(res2[,2]/qq,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
+> ##      ylab="proportion of population",ylim=c(0,0.05),
+> ##           main="CRC -- population with no screening")
+> ## lines(res2[,3]/qq,col="plum4",lwd=2) #"pre clinical CRC" ie CRC
+> ## lines(res2[,5]/qq,col="black",lwd=2) #death CRC
+> 
+> ## legend(20,0.04,c("population","large adenoma", "CRC","death CRC"), col=c(
+> ## "green","orange","plum4","black"),lwd=2)
+> ## axis(2, pretty( c(0,0.05),10))
+> ## par(new=TRUE)
+> ## plot(pp<- qq-cumsum(res[,16]),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+> 
+> ## axis(4, pretty(range(c(0,qq),10)))
+> ## mtext(side=4, line=3, "population")
+> 
+> ## axis(1,pretty(range(1:99),10))
+> ## box() #- to make it look "as usual"
+> 
+> 
+> ## cc<-GenericModel$new(iterations=99, num_subjects=500)
+> ## cc
+> ## #Spin Model object of class "GenericModel" 
+> ## #Iterations:[1] 99
+> ## #Iteration resolution:[1] 1
+> ## #Study group:
+> ## #Study group size:500 
+> ## cc$run()
+> ## cc$study_group[1]
+> ## cc$study_group[[1]]$colon
+> ## #Error in envRefInferField(x, what, getClass(class(x)), selfEnv) : 
+> ## #  ‘colon’ is not a valid field or method name for reference class “Person”
+> 
+> ## dim(res2) #[1] 198   18
+> ## res.M<-res2[(1:99)*2-1,]
+> ## res.F<-res2[(1:99)*2,]
+> ## plot(res.M[,1],type="l")
+> ## points(res.F[,1])
+> 
+> CrcSpinModel$methods()
+> ##  [1] "adenomaParamsType"               "callSuper"                      
+> ##  [3] "copy"                            "crcRiskParamsType"              
+> ##  [5] "doIteration"                     "export"                         
+> ##  [7] "field"                           "getClass"                       
+> ##  [9] "getModelResultSize"              "getModelResultSize#GenericModel"
+> ## [11] "getRefClass"                     "import"                         
+> ## [13] "initFields"                      "initialize"                     
+> ## [15] "initialize#GenericModel"         "modelSubjectDiseaseDevelopment" 
+> ## [17] "personWithColonType"             "propegate_model_parameters"     
+> ## [19] "run"                             "set_adenoma_modeling_parameters"
+> ## [21] "set_crcrisk_modeling_parameters" "show"                           
+> ## [23] "show#envRefClass"                "subjectHasNotLeftStudy"         
+> ## [25] "testForAndTreatCRC"              "trace"                          
+> ## [27] "untrace"                         "updateSubject"                  
+> ## [29] "updateSubject#GenericModel"      "usingMethods"
+> 
+> 
+> CrcSpinModel$fields()
+> #         iterations iteration_resolution          study_group 
+> #           "numeric"            "numeric"               "list" 
+> #       study_results     commencement_age crcrisk_model_params 
+> #            "matrix"            "numeric"      "CrcRiskParams" 
+> #adenoma_model_params 
+> #     "AdenomaParams" 
+> 
+> 
+> 
+> 
+> cc<-GenericModel$new(iterations=99, num_subjects=5)
+> cc$trace(run,browser)
+> cc$run()
+> cc$untrace(run,browser)
+> cc$trace(doIteration,browser)
+> cc$run()
+> cc$untrace(doIteration,browser)
+> cc$trace(updateSubject,browser)
+> cc$run()
+> 
+\end{Sinput}
+\end{Schunk}
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=9cm]{./figs/CrcSpinModel.png}
+  \caption{A population of 5000 peoiple subjected to the CRC-SPIN model.}
+  \label{figure:CrcSpinModel.png}
+\end{figure}
+
+\FloatBarrier
+\section{DukesCrcSpinModel}
+
+
+\begin{Schunk}
+\begin{Sinput}
+> #source("dukesCrcSpin.R")
+> #set.seed(123)
+> #cc<-DukesCrcSpinModel$new(iterations=99, num_subjects=500)
+> #cc$run() 
+> #cc$study_group[1]
+> #[[1]]
+> #Spin Person object of class "DukesPersonWithColon" 
+> #Age:[1] 69
+> #Sex:[1] "F"
+> #State:[1] "living"
+> #In treatment program:[1] "yes"
+> #Study id:[1] 1
+> #Clinical history:
+> #Spin ClinicalHistory object of class "ClinicalHistory" 
+> #Status:character(0)
+> #Events:list()
+> #Risk level:[1] "standard"
+> #Colon clinical characteristic:[1] "symptomatic CRC"
+> #Colon:
+> #Spin Colon object of class "DukesColon"
+> 
+> ## res2<-cc$study_results
+> ## dim(res2) #[1] 198   60
+> ## res.M<-res2[(1:99)*2-1,]
+> ## res.F<-res2[(1:99)*2,]
+> ## plot(res.M[,1],type="l")
+> ## points(res.F[,1])
+> 
+> 
+> ## qq<-250
+> ## plot(res.M[,7]/qq,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
+> ##      ylab="proportion of population",ylim=c(0,1),
+> ##           main="CRC -- male population with no screening")
+> ## lines(res.M[,8]/qq,col="plum4",lwd=2) #large adenoma
+> ## lines(res.M[,9]/qq,col="purple",lwd=2) #CRC
+> ## lines(res.M[,10]/qq,col="black",lwd=2) #death
+> 
+> ## legend(10,0.7,c("population","adenoma","large adenoma", "CRC","death CRC"), col=c(
+> ## "green","orange","plum4","purple","black"),lwd=2)
+> ## axis(2, pretty( c(0,1),10))
+> ## par(new=TRUE)
+> ## plot(pp<- qq-cumsum(res.M[,45]),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+> 
+> ## axis(4, pretty(range(c(0,qq),10)))
+> ## mtext(side=4, line=3, "population")
+> 
+> ## axis(1,pretty(range(1:99),10))
+> ## box() #- to make it look "as usual"
+> 
+> 
+> ##apply(res.M,2,sum)
+> 
+> ##  [1]  7701# 1 "adenoma"                   object@colon@sites -- state                                          
+> ##  [2]   684# 2 "large adenoma"             a person can be in more than one columns ie 1 1 1                    
+> ##  [3]   200# 3 "pre symptomatic CRC"      "adenoma"  "large adenoma" and "pre symptomatic CRC"                  
+> ##  [4]     2# 4 deceased                                                                                         
+> ##  [5]    34# 5 object@colon.clinical                                                                            
+> ##  [6] 12986# 6 "clear"           #object@colon@state                                                            
+> ##  [7]  3110# 7 "adenoma"                                                                                        
+> ##  [8]   493# 8 "large adenoma"                                                                                  
+> ##  [9]   147# 9 "pre symptomatic CRC"                                                                            
+> ## [10]    34# 10 "CRC"                                                                                           
+> ## [11]     2# 11 "deceased"   -- ie CRC deceased                                                                 
+> ## [12]    94# 12 A                              if (object@colon@state=="pre symptomatic CRC"){                  
+> ## [13]    29# 13 B                                                                                               
+> ## [14]    35# 14 C                                                                                               
+> ## [15]     2# 15 D                                                                                               
+> ## [16]     0# 16 deceased   -- these are all 0                                                                   
+> ## [17]    16# 17  "cecum"                                                                                        
+> ## [18]    29# 18  "ascending"                                                                                    
+> ## [19]    32# 19  "transverse"                                                                                   
+> ## [20]    19# 20  descending"                                                                                    
+> ## [21]    34# 21 "sigmoid"                                                                                       
+> ## [22]    17# 22 "rectum"                                                                                        
+> ## [23]     7# 23  A                              if (object@colon@state=="CRC"){                                 
+> ## [24]     4# 24  B                                                                                              
+> ## [25]    15# 25  C                                                                                              
+> ## [26]    11# 26  D                                                                                              
+> ## [27]     0# 27 deceased   -- these are all 0                                                                   
+> ## [28]     2# 28  "cecum"                                                                                        
+> ## [29]     8# 29  "ascending"                                                                                    
+> ## [30]     6# 30  "transverse"                                                                                   
+> ## [31]     4# 31  descending"                                                                                    
+> ## [32]     9# 32 "sigmoid"                                                                                       
+> ## [33]     5# 33 "rectum"                                                                                        
+> ## [34]    19# 34  "cecum"            person1@colon@cancer.site                                                   
+> ## [35]    37# 35  "ascending"                                                                                    
+> ## [36]    39# 36  "transverse"                                                                                   
+> ## [37]    23# 37  descending"                                                                                    
+> ## [38]    43# 38 "sigmoid"                                                                                       
+> ## [39]    22# 39 "rectum"                                                                                        
+> ## [40]    88# 40  A                              person1@colon@stage  includes CRC and pre-symptomatic           
+> ## [41]    32# 41  B                                                                                              
+> ## [42]    48# 42  C                                                                                              
+> ## [43]    13# 43  D                                                                                              
+> ## [44]     2# 44 deceased   from CRC                                                                             
+> ## [45]   228# 45 ifelse(is.element(object@state,c("deceased","deceased CRC")),1,0)                               
+> ## [46]    34# 46 ifelse(is.element(object@colon.clinical,c("CRC")),1,0)                                          
+> ## [47]     0#  ifelse(is.element(test.outcome@test.type,c("iFOBT")),1,0)                                         
+> ## [48]     0#  ifelse(is.element(test.outcome@compliance,c("accept")),1,0)                                       
+> ## [49]     0#  ifelse(is.element(test.outcome@test.type,c("blood")),1,0)                                         
+> ## [50]     0#  ifelse(is.element(test.outcome@compliance,c("screen")),1,0)                                       
+> ## [51]     0#  test.result=="positive"                                                                           
+> ## [52]    34#  person has a colonoscopy as a result of test or for symptoms -- may need fixing                   
+> ## [53]     0#  "adenoma" "large adenoma  found from test or symptoms                                             
+> ## [54]     4#  A                         found from  test or symptoms                                            
+> ## [55]     4#  B                         found from  test or symptoms                                            
+> ## [56]    15#  C                         found from  test or symptoms                                            
+> ## [57]    11#  D                    found from symptoms                                                          
+> ## [58]    34#    people entering in.treatment.program                                                            
+> ## [59]     0#    bleeding                                                                                        
+> ## [60]     0#    perforation                                                                                     
+> 
+> 
+> 
+> 
+> ##  [1] 306105## 1 "adenoma"                   object@colon@sites -- state
+> ##  [2]  25901## 2 "large adenoma"             a person can be in more than one columns ie 1 1 1
+> ##  [3]   7061## 3 "pre symptomatic CRC"      "adenoma"  "large adenoma" and "pre symptomatic CRC"
+> ##  [4]     67## 4 deceased
+> ##  [5]   1233## 5 object@colon.clinical
+> ##  [6]      0## 6 "clear"           #object@colon@state
+> ##  [7] 254796## 7 "adenoma"
+> ##  [8]  25258## 8 "large adenoma"
+> ##  [9]   5782## 9 "pre symptomatic CRC"
+> ## [10]   1233## 10 "CRC"
+> ## [11]     67## 11 "deceased"   -- ie CRC deceased
+> ## [12]   3781## 12 A                              if (object@colon@state=="pre symptomatic CRC"){
+> ## [13]   1034## 13 B
+> ## [14]    928## 14 C
+> ## [15]     72## 15 D
+> ## [16]      0## 16 deceased   -- these are all 0
+> ## [17]    431## 17  "cecum"
+> ## [18]   1355## 18  "ascending"
+> ## [19]   1367## 19  "transverse"
+> ## [20]    739## 20  descending"
+> ## [21]   1357## 21 "sigmoid"
+> ## [22]    533## 22 "rectum"
+> ## [23]    193## 23  A                              if (object@colon@state=="CRC"){
+> ## [24]    245## 24  B
+> ## [25]    566## 25  C
+> ## [26]    242## 26  D
+> ## [27]      0## 27 deceased   -- these are all 0
+> ## [28]     90## 28  "cecum"
+> ## [29]    290## 29  "ascending"
+> ## [30]    302## 30  "transverse"
+> ## [31]    155## 31  descending"
+> ## [32]    278## 32 "sigmoid"
+> ## [33]    118## 33 "rectum"
+> ## [34]    526## 34  "cecum"            person1@colon@cancer.site
+> ## [35]   1663## 35  "ascending"
+> ## [36]   1680## 36  "transverse"
+> ## [37]    903## 37  descending"
+> ## [38]   1651## 38 "sigmoid"
+> ## [39]    659## 39 "rectum"
+> ## [40]   3940## 40  A                              person1@colon@stage  includes CRC and pre-symptomatic
+> ## [41]   1272## 41  B
+> ## [42]   1489## 42  C
+> ## [43]    314## 43  D
+> ## [44]     67## 44 deceased   from CRC
+> ## [45]  22547## 45 ifelse(is.element(object@state,c("deceased","deceased CRC")),1,0)
+> ## [46]   1233## 46 ifelse(is.element(object@colon.clinical,c("CRC")),1,0)
+> ## [47] 110361##  ifelse(is.element(test.outcome@test.type,c("iFOBT")),1,0)
+> ## [48]  44063##  ifelse(is.element(test.outcome@compliance,c("accept")),1,0)
+> ## [49]      0##  ifelse(is.element(test.outcome@test.type,c("blood")),1,0)
+> ## [50]      0##  ifelse(is.element(test.outcome@compliance,c("screen")),1,0)
+> ## [51]   2027##  test.result=="positive"
+> ## [52]   3260##  person has a colonoscopy as a result of test or for symptoms -- may need fixing
+> ## [53]    754##  "adenoma" "large adenoma  found from test or symptoms
+> ## [54]    291##  A                         found from  test or symptoms
+> ## [55]    274##  B                         found from  test or symptoms
+> ## [56]    582##  C                         found from  test or symptoms
+> ## [57]    242##  D                    found from symptoms
+> ## [58]   2143##    people entering in.treatment.program
+> ## [59]      3##    bleeding
+> ## [60]      1##    perforation                                                                                     
+> 
+> 
+> xx$trace(edit, browser)
+> ## "Test",
+> ## fields = list(
+> ##         age="numeric",
+> ##         type="character",
+> ##         compliance="character",
+> ##         result="character",
+> ##         state="character"
+> ##     )
+> ##  methods =   summary ,       show 
+> 
+> ## "ClinicalHistory"
+> ##     fields = list(
+> ##         status="character",
+> ##         events="list"
+> ##         ),
+> ## methods = summary ,show
+> 
+> ## "Person",
+> ##     fields = list(
+> ##         age="numeric",
+> ##         sex="character",
+> ##         state="character", #"deceased","living", etc (as needed by subclasses)
+> ##         in_treatment_program="character",
+> ##         clinical_history="ClinicalHistory",
+> ##         study_id="numeric",
+> ##         random_seed_state="integer"
+> ##     )
+> ## methods = initialize 
+> ##         saveRNGState 
+> ##         restoreRNGState
+> ##         modelDeathFromOtherCauses
+> ##         summary 
+> ##         show 
+> 
+> ## alex<-Person$new()
+> 
+> 
+> 
+> ## "RiskParameters",
+> ##             fields = list(
+> ##                 baseline_risk="numeric",
+> ##                 sex_linked_risk="numeric",
+> ##                 age_risk="numeric"
+> ##                 )
+> 
+> ## "SymptomaticPresentation",
+> ##             fields = list(
+> ##                 age="numeric",
+> ##                 cancer.stage="character"
+> ##                 )
+> 
+> 
+> 
+> 
+> ##                               updateSubject = function (subject) {
+> ##                                     if (subject$state=="living") {
+> ##                                         subject$restoreRNGState()
+> ##                                         subject$age = subject$age + iteration_resolution
+> ##                                         subject$modelDeathFromOtherCauses()
+> ##                                         subject$saveRNGState()
+> ##                                     }
+> ##                                     return((subject$state=="living"))
+> ##                                 }
+> 
+> ###############
+> 
+> alex<-PersonWithColon$new()
+> alex$age #1
+> alex$clinical_history
+> alex$in_treatment_program
+> alex$state
+> alex$colon_clinical
+> iFOBT.screening(alex)
+> alex$clinical_history$events<- lappend(alex$clinical_history$events,
++                                              Test$new(
++                                                  age=alex$age,
++                                                  type="iFOBT",
++                                                  compliance="accept",
++                                                  result="positive",
++                                                  state= "adenoma")
++                                              )
+> #I have put iFOBT.screening() function into the CRCSpinModel class. Apparently I
+> #could have put it in the Person class
+> 
+> source("crcSpin.R")
+> model<-CrcSpinModel$new(iterations=99, num_subjects=5)
+> alex<-PersonWithColon$new()
+> model$iFOBTscreening(alex)
+> alex
+> model$NBCSP(alex)
+> #Alternatively, you could just use one of the people already in the model's study_group.
+> 
+> 
+> model$iFOBTscreening(model$study_group[[1]])
+> model$study_group[[1]]
+> #Spin Person object of class "PersonWithColon" 
+> #Age:[1] 20
+> #Sex:[1] "F"
+> #State:[1] "living"
+> #In treatment program:[1] "no"
+> #Study id:[1] 1
+> #Clinical history:
+> #Spin ClinicalHistory object of class "ClinicalHistory" 
+> #Status:character(0)
+> #Events:[[1]]
+> #Spin Test object of class "Test" 
+> #Age:[1] 20
+> #Type of test:[1] "iFOBT"
+> #Compliance:[1] "accept"
+> #Result:[1] "negative"
+> #State:[1] "TN"
+> #
+> #Risk level:[1] "standard"
+> #Colon clinical characteristic:[1] "clear"
+> #Colon:
+> #Spin Colon object of class "Colon"
+> 
+> 
+> 
+> 
+> #############################
+> source("dukesCrcSpin.R")
+> alex<-DukesPersonWithColon$new()
+> alex$age #1
+> alex$clinical_history
+> alex$in_treatment_program
+> alex$state
+> alex$colon_clinical
+> iFOBTscreening(alex) #Error: could not find function "iFOBTscreening"
+> model<-DukesCrcSpinModel$new(iterations=99, num_subjects=5)
+> model$iFOBTscreening(alex)
+> alex
+> model$NBCSP(alex)  #0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> alex
+> model$run()
+> model$study_group[1]
+> ## [[1]]
+> ## Spin Person object of class "PersonWithColon"
+> ## Age:[1] 85
+> ## Sex:[1] "F"
+> ## State:[1] "deceased"
+> ## In treatment program:[1] "no"
+> ## Study id:[1] 1
+> ## Clinical history:
+> ## Spin ClinicalHistory object of class "ClinicalHistory"
+> ## Status:character(0)
+> ## Events:list()
+> ## Risk level:[1] "standard"
+> ## Colon clinical characteristic:[1] "clear"
+> ## Colon:
+> ## Spin Colon object of class "Colon"
+> 
+> cc$study_group[[1]]$colon
+> #Spin Colon object of class "Colon"
+> 
+> cc$study_group[[10]]$colon$sites[[1]]$initiated_in_year
+> #cc<-CrcSpinModel$new(iterations=99, num_subjects=50000)
+> #cc$run()
+> #save(cc,file="script8_cc.Rdata")
+> res2<-cc$study_results
+> qq<-500
+> plot(res2[,2]/qq,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
++      ylab="proportion of population",ylim=c(0,0.05),
++           main="CRC -- population with no screening")
+> lines(res2[,3]/qq,col="plum4",lwd=2) #"pre clinical CRC" ie CRC
+> lines(res2[,5]/qq,col="black",lwd=2) #death CRC
+> legend(20,0.04,c("population","large adenoma", "CRC","death CRC"), col=c(
++ "green","orange","plum4","black"),lwd=2)
+> axis(2, pretty( c(0,0.05),10))
+> par(new=TRUE)
+> plot(pp<- qq-cumsum(res[,16]),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+> axis(4, pretty(range(c(0,qq),10)))
+> mtext(side=4, line=3, "population")
+> axis(1,pretty(range(1:99),10))
+> box() #- to make it look "as usual"
+> ########################################
+> 
+> source("dukesCrcSpin.R")
+> set.seed(123)
+> cc<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000)
+> cc$run() 
+> cc$study_group[1]
+> res2<-cc$study_results
+> save(res2,file="res2.Rdata")
+> load(file="res2.Rdata")
+> load(file="res4.Rdata")
+> load(file="res6.Rdata")
+> load(file="res7.Rdata")
+> res.M<-res2[(1:99)*2-1,]
+> res.F<-res2[(1:99)*2,]
+> res.M<-res4[(1:99)*2-1,]
+> res.F<-res4[(1:99)*2,]
+> res.M<-res6[(1:99)*2-1,]
+> res.F<-res6[(1:99)*2,]
+> res.M<-res7[(1:99)*2-1,]
+> res.F<-res7[(1:99)*2,]
+> apply(res.M,2,sum)
+> # [1]  552896   36870   17719    2165    8298 1259860  253453   28752   13923
+> #[10]    2260    2144    7094    2178    3808    1793       0    1088    3281
+> #[19]    3384    1617    3174    1379     395     512    1113     463       0
+> #[28]     179     531     535     266     507     242    1428    4318    4436
+> #[37]    2138    4166    1841    6707    2501    4741    2234    2144   23324
+> #[46]    8298  113839   45298       0       0    2262    2262     896       0
+> #[55]       0       0       0     896       0       0
+> 
+> write.table(res.M,file="t2.csv",sep=",",col.names=nn,row.names=FALSE)
+> #svn commit crcSpin.R dukesCrcSpin.R -m "added NBCSP and iFOBTscreening functions to crcSpin.R, put updateSubject in dukesCrcSpin.R, added lapped to genericSpin.R"
+> 
+> 
+> 
+> y<-res.M[,40:44]  #person1@colon@stage  includes CRC and pre-symptomatic     
+> x<-c(1:99)
+> z<-c(1,2,3,4,5) #z <- val2col(apply(y,2,max), col=COLS)
+> #ylim=c(0, 1.2*max(apply(y,1,sum), na.rm=TRUE))
+> 
+> png("t7.png")
+> par(mfrow=c(3,1))
+> plot.stacked(x,y, xlim=c(0, 100), ylim=c(0, 500),
++               yaxs="i", col=z, border="white", lwd=0.5,order.method="as.is")
+> title(main="all CRC, population of 25000 males")
+> y<-res.M[,54:57]     #   found from test or symptoms      
+> z<-c(1,2,3,4) 
+> plot.stacked(x,y, xlim=c(0, 100),  ylim=c(0, 500),
++               yaxs="i", col=z, border="white", lwd=0.5,order.method="as.is")
+> title(main="entering treatment -- detected by NBCSP")
+> y<-res.M[,12:16]     #                        if (object@colon@state=="pre symptomatic CRC"){
+> z<-c(1,2,3,4,5)
+> plot.stacked(x,y, xlim=c(0, 100), ylim=c(0, 500),
++               yaxs="i", col=z, border="white", lwd=0.5,order.method="as.is")
+> title(main="undetected  CRC")
+> dev.off()
+> abline(v=c(55,60,65,70,75))
+> cc<-DukesCrcSpinModel$new(iterations=99, num_subjects=5)
+> cc$trace(NBCSP,browser)
+> cc$run()
+> #cc$untrace(run,browser)
+> 
+> 
+> 
+> 
+> 
+> ###############################################################################
+> #on tamar 
+> library(SpinModels)
+> #Loading required package: Rcpp
+> #Loading required package: RcppArmadillo
+> rr<-CrcSpinModel$new(99,50000,125)
+> rr$run()
+> res<-rr$study_results
+> res.M<-res[(1:99)*2-1,]
+> res.F<-res[(1:99)*2,]
+> apply(res.M,2,sum)
+> # [1] 486534  46117  10907   2432      0 245146  38407   8068   2432    797
+> #[11]   2526   2309   1237   2627   1004  21975   2432   2432
+> #ylim=c(0, 1.2*max(apply(y,1,sum), na.rm=TRUE))
+>  
+> #1 	count(adenoma.state=="adenoma"); 	A count of adenomas in all patients of the study group that have state "adenoma"
+> #2 	count(adenoma.state=="large adenoma"); 	A count of adenomas in all patients of the study group that have state "large adenoma"
+> #3 	count(adenoma.state=="pre symptomatic CRC"); 	A count of adenomas in all patients of the study group that have state "pre symptomatic CRC"
+> #4 	count(person.colon_clinical=="CRC"); 	A count of patients that have colon_clinical state "CRC"
+> #5 	count(colon.state=="clear"); 	A count of how many peoples colons were in state "clear"
+> #6 	count(colon.state=="adenoma"); 	A count of how many peoples colons were in state "adenoma"
+> #7 	count(colon.state=="large adenoma"); 	A count of how many peoples colons were in state "large adenoma"
+> #8 	count(colon.state=="pre symptomatic CRC"); 	A count of how many peoples colons were in state "pre symptomatic CRC"
+> #9 	count(colon.state=="CRC"); 	A count of how many peoples colons were in state "CRC"
+> 
+> 
+> 
+> 
+> y<-res.M[,7:9]  #person1@colon@stage  includes CRC and pre-symptomatic     
+> x<-c(1:99)
+> z<-c(1,2,3) #z <- val2col(apply(y,2,max), col=COLS)
+> #png("t5.png")
+> par(mfrow=c(3,1))
+> plot.stacked(x,y, xlim=c(0, 100), ylim=c(0, 1000),
++               yaxs="i", col=z, border="white", lwd=0.5,order.method="as.is")
+> title(main="large adenomas, CRC, symptomatic CRC, population of 25000 males")
+> #dev.off()
+> 
+> 
+> y<-res.M[,12:16]     #                        if (object@colon@state=="pre symptomatic CRC"){
+> z<-c(1,2,3,4,5)
+> plot.stacked(x,y, xlim=c(0, 100), ylim=c(0, 1000),
++               yaxs="i", col=z, border="white", lwd=0.5,order.method="as.is")
+> title(main="undetected  CRC")
+> dev.off()
+> abline(v=c(55,60,65,70,75))
+> number.F<-25000
+> number.M<-25000
+> tt <- res.F+res.M
+> apply(tt,2,sum)
+> #########################################################################
+> #http://seer.cancer.gov
+> 
+> #Based on rates from 2008-2010, 4.82% of men and women born today will
+> #be diagnosed with cancer of the colon and rectum at some time during
+> #their lifetime.
+> 
+> sum(res.F[,4]+res.M[,4])/(number.F+number.M)
+> #[1]   0.1136
+> 
+> #1.91% of men will develop cancer of the colon
+> #and rectum between their 50th and 70th birthdays compared to 1.41% for
+> #women. 
+> 
+> sum(res.F[50:70,4])/(number.F-cumsum(res.F[,16]))[60]
+> # 0.05308885
+> sum(res.M[50:70,4])/(number.M-cumsum(res.M[,16]))[60]
+> #] 0.03492438
+> 
+> # adenoma (adenomas + large adenomsa + pre symptomatic CRC)
+>  mean((res.M[40:49,6]+res.F[40:49,6]+res.M[40:49,7]+res.F[40:49,7]+res.M[40:49,8]+res.F[40:49,8])/50000)
+> #] 0.16715
+> mean((res.M[50:75,6]+res.F[50:75,6]+res.M[50:75,7]+res.F[50:75,7]+res.M[50:75,8]+res.F[50:75,8])/50000)
+>  # 0.21818
+> mean((res.M[76:80,6]+res.F[76:80,6]+res.M[76:80,7]+res.F[76:80,7]+res.M[76:80,8]+res.F[76:80,8])/50000)
+> #  0.216136
+> 
+> # proportion of Adenomas greater the 10 mm
+> mean(res.F[-c(1:40),7]/(res.F[-c(1:40),7]+res.F[-c(1:40),6]))
+> #0.1589128
+> 
+> 
+> 
+> 
+> load("res_rcpp.Rdata")
+> number.M<- 1450000/2
+> number.F<- 1450000/2
+> #http://seer.cancer.gov
+> #Based on rates from 2008-2010, 4.82% of men and women born today will
+> #be diagnosed with cancer of the colon and rectum at some time during
+> #their lifetime.
+> 
+> sum(res.F[,4]+res.M[,4])/(number.F+number.M)
+> #[1]   0.08714
+> 
+> #1.91% of men will develop cancer of the colon
+> #and rectum between their 50th and 70th birthdays compared to 1.41% for
+> #women. 
+> 
+> sum(res.F[50:70,4])/(number.F-cumsum(res.F[,16]))[60]
+> # 0.03027862
+> sum(res.M[50:70,4])/(number.M-cumsum(res.M[,16]))[60]
+> #]  0.03261103
+> 
+> # adenoma (adenomas + large adenomsa + pre symptomatic CRC)
+>  mean((res.M[40:49,6]+res.F[40:49,6]+res.M[40:49,7]+res.F[40:49,7]+res.M[40:49,8]+res.F[40:49,8])/1450000)
+> #] 0.16715
+> mean((res.M[50:75,6]+res.F[50:75,6]+res.M[50:75,7]+res.F[50:75,7]+res.M[50:75,8]+res.F[50:75,8])/1450000)
+>  # 0.21818
+> mean((res.M[76:80,6]+res.F[76:80,6]+res.M[76:80,7]+res.F[76:80,7]+res.M[76:80,8]+res.F[76:80,8])/1450000)
+> #  0.216136
+> 
+> 
+> 
+> # proportion of Adenomas greater the 10 mm
+> mean(res.F[-c(1:40),7]/(res.F[-c(1:40),7]+res.F[-c(1:40),6]))
+> #0.1589128
+> 
+> 
+> 
+> 
+> ###############################################################################
+> ## http://www.r-bloggers.com/data-mountains-and-streams-stacked-area-plots-in-r/
+> ##plot.stacked makes a stacked plot where each y series is plotted on top
+> ##of the each other using filled polygons
+> ##
+> ##Arguments include:
+> ## 'x' - a vector of values
+> ## 'y' - a matrix of data series (columns) corresponding to x
+> ## 'order.method' = c("as.is", "max", "first")
+> ## "as.is" - plot in order of y column
+> ## "max" - plot in order of when each y series reaches maximum value
+> ## "first" - plot in order of when each y series first value > 0
+> ## 'col' - fill colors for polygons corresponding to y columns (will recycle)
+> ## 'border' - border colors for polygons corresponding to y columns (will recycle) (see ?polygon for details)
+> ## 'lwd' - border line width for polygons corresponding to y columns (will recycle)
+> ## '...' - other plot arguments
+> 
+> plot.stacked <- function(x, y,order.method = "as.is",ylab="", xlab="",
++                          border = NULL, lwd=1,
++                          col=rainbow(length(y[1,])),
++                          ylim=NULL,
++                          ...
++                          ){
++     
++     if(sum(y < 0) > 0) error("y cannot contain negative numbers")
++     
++     if(is.null(border)) border <- par("fg")
++     border <- as.vector(matrix(border, nrow=ncol(y), ncol=1))
++     col <- as.vector(matrix(col, nrow=ncol(y), ncol=1))
++     lwd <- as.vector(matrix(lwd, nrow=ncol(y), ncol=1))
++     
++     if(order.method == "max") {
++         ord <- order(apply(y, 2, which.max))
++         y <- y[, ord]
++         col <- col[ord]
++         border <- border[ord]
++     }
++     
++     if(order.method == "first") {
++         ord <- order(apply(y, 2, function(x) min(which(r>0))))
++         
++         
++         y <- y[, ord]
++         col <- col[ord]
++         border <- border[ord]
++     }
++     
++     top.old <- x*0
++     polys <- vector(mode="list", ncol(y))
++     for(i in seq(polys)){
++         top.new <- top.old + y[,i]
++         polys[[i]] <- list(x=c(x, rev(x)), y=c(top.old, rev(top.new)))
++         top.old <- top.new
++     }
++     
++     if(is.null(ylim)) ylim <- range(sapply(polys, function(x) range(x$y, na.rm=TRUE)), na.rm=TRUE)
++     plot(x,y[,1], ylab=ylab, xlab=xlab, ylim=ylim, t="n", ...)
++     for(i in seq(polys)){
++         polygon(polys[[i]], border=border[i], col=col[i], lwd=lwd[i])
++     }
++     
++ }
+> #plot.stream makes a "stream plot" where each y series is plotted
+> #as stacked filled polygons on alternating sides of a baseline.
+> #
+> #Arguments include:
+> #'x' - a vector of values
+> #'y' - a matrix of data series (columns) corresponding to x
+> #'order.method' = c("as.is", "max", "first")
+> # "as.is" - plot in order of y column
+> # "max" - plot in order of when each y series reaches maximum value
+> # "first" - plot in order of when each y series first value > 0
+> #'center' - if TRUE, the stacked polygons will be centered so that the middle,
+> #i.e. baseline ("g0"), of the stream is approximately equal to zero.
+> #Centering is done before the addition of random wiggle to the baseline.
+> #'frac.rand' - fraction of the overall data "stream" range used to define the range of
+> #random wiggle (uniform distrubution) to be added to the baseline 'g0'
+> #'spar' - setting for smooth.spline function to make a smoothed version of baseline "g0"
+> #'col' - fill colors for polygons corresponding to y columns (will recycle)
+> #'border' - border colors for polygons corresponding to y columns (will recycle) (see ?polygon for details)
+> #'lwd' - border line width for polygons corresponding to y columns (will recycle)
+> #'...' - other plot arguments
+>  
+> plot.stream <- function( x, y, order.method = "as.is", frac.rand=0.1,
++                         spar=0.2, center=TRUE, ylab="", xlab="", border = NULL, lwd=1,
++                         col=rainbow(length(y[1,])), ylim=NULL, ...  ){
++     
++     if(sum(y < 0) > 0) error("y cannot contain negative numbers")
++     
++     if(is.null(border)) border <- par("fg")
++     border <- as.vector(matrix(border, nrow=ncol(y), ncol=1))
++     col <- as.vector(matrix(col, nrow=ncol(y), ncol=1))
++     lwd <- as.vector(matrix(lwd, nrow=ncol(y), ncol=1))
++     
++     if(order.method == "max") {
++         ord <- order(apply(y, 2, which.max))
++         y <- y[, ord]
++         col <- col[ord]
++         border <- border[ord]
++     }
++     
++     if(order.method == "first") {
++ 	ord <- order(apply(y, 2, function(x) min(which(r>0))))
++         y <- y[, ord]
++         col <- col[ord]
++         border <- border[ord]
++     }
++     
++     bottom.old <- x*0
++     top.old <- x*0
++     polys <- vector(mode="list", ncol(y))
++     for(i in seq(polys)){
++         if(i %% 2 == 1){ #if odd
++             top.new <- top.old + y[,i]
++             polys[[i]] <- list(x=c(x, rev(x)), y=c(top.old, rev(top.new)))
++             top.old <- top.new
++         }
++         if(i %% 2 == 0){ #if even
++             bottom.new <- bottom.old - y[,i]
++             polys[[i]] <- list(x=c(x, rev(x)), y=c(bottom.old, rev(bottom.new)))
++             bottom.old <- bottom.new
++         }
++ }
++  
++     ylim.tmp <- range(sapply(polys, function(x) range(x$y, na.rm=TRUE)), na.rm=TRUE)
++     outer.lims <- sapply(polys, function(r) rev(r$y[(length(r$y)/2+1):length(r$y)]))
++     mid <- apply(outer.lims, 1, function(r) mean(c(max(r, na.rm=TRUE), min(r, na.rm=TRUE)), na.rm=TRUE))
++                                         #center and wiggle
++     if(center) {
++         g0 <- -mid + runif(length(x), min=frac.rand*ylim.tmp[1], max=frac.rand*ylim.tmp[2])
++     } else {
++         g0 <- runif(length(x), min=frac.rand*ylim.tmp[1], max=frac.rand*ylim.tmp[2])
++     }
++     fit <- smooth.spline(g0 ~ x, spar=spar)
++     
++     for(i in seq(polys)){
++         polys[[i]]$y <- polys[[i]]$y + c(fit$y, rev(fit$y))
++     }
++     
++     if(is.null(ylim)) ylim <- range(sapply(polys, function(x) range(x$y, na.rm=TRUE)), na.rm=TRUE)
++     plot(x,y[,1], ylab=ylab, xlab=xlab, ylim=ylim, t="n", ...)
++     for(i in seq(polys)){
++         polygon(polys[[i]], border=border[i], col=col[i], lwd=lwd[i])
++     }
++     
++ }
+> #this function converts a vector of values("z") to a vector of color
+> #levels. One must define the number of colors. The limits of the color
+> #scale("zlim") or the break points for the color changes("breaks") can 
+> #also be defined. when breaks and zlim are defined, breaks overrides zlim.
+> val2col<-function(z, zlim, col = heat.colors(12), breaks){
++     if(!missing(breaks)){
++         if(length(breaks) != (length(col)+1)){stop("must have one more break than colour")}
++     }
++     if(missing(breaks) & !missing(zlim)){
++         zlim[2] <- zlim[2]+c(zlim[2]-zlim[1])*(1E-3)#adds a bit to the range in both directions
++         zlim[1] <- zlim[1]-c(zlim[2]-zlim[1])*(1E-3)
++         breaks <- seq(zlim[1], zlim[2], length.out=(length(col)+1)) 
++     }
++     if(missing(breaks) & missing(zlim)){
++         zlim <- range(z, na.rm=TRUE)
++         zlim[2] <- zlim[2]+c(zlim[2]-zlim[1])*(1E-3)#adds a bit to the range in both directions
++         zlim[1] <- zlim[1]-c(zlim[2]-zlim[1])*(1E-3)
++         breaks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
++     }
++     CUT <- cut(z, breaks=breaks)
++     colorlevels <- col[match(CUT, levels(CUT))] # assign colors to heights for each point
++     return(colorlevels)
++ }
+> ## set.seed(1)
+> ## m <- 500
+> ## n <- 30
+> ## x <- seq(m)
+> ## y <- matrix(0, nrow=m, ncol=n)
+> ## colnames(y) <- seq(n)
+> ## for(i in seq(ncol(y))){
+> ## mu <- runif(1, min=0.25*m, max=0.75*m)
+> ## SD <- runif(1, min=5, max=20)
+> ## TMP <- rnorm(1000, mean=mu, sd=SD)
+> ## HIST <- hist(TMP, breaks=c(0,x), plot=FALSE)
+> ## fit <- smooth.spline(HIST$counts ~ HIST$mids)
+> ## y[,i] <- fit$y
+> ## }
+> ## y <- replace(y, y<0.01, 0)
+>  
+>  
+> ## #Plot Ex. 1 - Color by max value
+> ## pal <- colorRampPalette(c(rgb(0.85,0.85,1), rgb(0.2,0.2,0.7)))
+> ## BREAKS <- pretty(apply(y,2,max),8)
+> ## LEVS <- levels(cut(1, breaks=BREAKS))
+> ## COLS <- pal(length(BREAKS )-1)
+> ## z <- val2col(apply(y,2,max), col=COLS)
+>  
+> ## #plot.stacked(x,y, xlim=c(100, 400), ylim=c(0, 1.2*max(apply(y,1,sum), na.rm=TRUE)),
+> ## #             yaxs="i", col=z, border="white", lwd=0.5)
+> 
+> 
+> 
+> 
+> 
+> 
+> source("dukesCrcSpin.R")
+> set.seed(123)
+> dd <- DukesCrcSpinModel$new(iterations=99, num_subjects=50000)
+> dd$run()
+> res7<-dd$study_results
+> ############################
+> t2<-read.table(file="t2.csv",sep=",",header=TRUE)#R5 model,  no intervention, Dukes staging. See \texttt{t2.csv}
+>                                                  #DukesCrcSpinModel$new(iterations=99, num_subjects=50000)
+> t3<-read.table(file="t3.csv",sep=",",header=TRUE)# S4 model, no intervention, Dukes
+> t2<-as.vector(apply(t2,2,sum))
+> t3<-as.vector(apply(t3,2,sum))
+> source("output_names")
+> cbind(t2,t3,nn)
+> ##       t2        t3         crc-spin          nn                                                                                        
+> ##  [1,] "552896"  "317874"  486534     "1 adenoma                   object@colon@sites -- state"                                 
+> ##  [2,] "36870"   "32164"    46117     "2 large adenoma             a person can be in more than one columns ie 1 1 1"           
+> ##  [3,] "17719"   "9095"     10907     "3 pre symptomatic CRC      adenoma  large adenoma and pre symptomatic CRC"               
+> ##  [4,] "2165"    "108"                "4 deceased"            
+> 
+> #the R5 model seems to have an excess number of deaths
+> #it also seems to have higher numbers of everythign -- but this might be natural variation
+> #
+> #          if (length(colon$sites)>0){
+> #                tt<-lapply(colon$sites,f<-function(x){(x$state=="deceased")})
+> #                tt<-unlist(tt)
+> #                aa[4]<-sum(tt)
+> #            }
+> 
+> 
+> 
+> ##  [5,] "8298"    "1644"   "5 object@colon.clinical"                              -- these can be summed
+> 
+> ##  [6,] "1259860" "0"      "6 clear           #object@colon@state"                                                   
+> ##  [7,] "253453"  "260835" "7 adenoma"                                       makes no sense to sum this                                        
+> ##  [8,] "28752"   "31194"  "8 large adenoma"                                                                         
+> ##  [9,] "13923"   "7390"   "9 pre symptomatic CRC"                                                                   
+> ## [10,] "2260"    "1644"   "10 CRC"                                                 
+> ## [11,] "2144"    "108"    "11 deceased   -- ie CRC deceased"                           -- these can be summed
+> 
+> ## [12,] "7094"    "4662"   "12 A                              if (object@colon@state==pre symptomatic CRC){"         
+> ## [13,] "2178"    "1372"   "13 B"                                                                                    
+> ## [14,] "3808"    "1284"   "14 C"                                                                                    
+> ## [15,] "1793"    "113"    "15 D"                                                                                    
+> ## [16,] "0"       "0"      "16 deceased   -- these are all 0"                                                        
+> ## [17,] "1088"    "685"    "17  cecum"                                                                               
+> ## [18,] "3281"    "1641"   "18  ascending"                                                                           
+> ## [19,] "3384"    "1768"   "19  transverse"                                                                          
+> ## [20,] "1617"    "834"    "20  descending"                                                                          
+> ## [21,] "3174"    "1853"   "21 sigmoid"                                                                              
+> ## [22,] "1379"    "609"    "22 rectum"                                                                               
+> ## [23,] "395"     "222"    "23  A                              if (object@colon@state==CRC){"                        
+> ## [24,] "512"     "297"    "24  B"                                                                                   
+> ## [25,] "1113"    "791"    "25  C"                                                                                   
+> ## [26,] "463"     "348"    "26  D"                                                                                   
+> ## [27,] "0"       "0"      "27 deceased   -- these are all 0"                                                        
+> ## [28,] "179"     "151"    "28  cecum"                                                                               
+> ## [29,] "531"     "370"    "29  ascending"                                                                           
+> ## [30,] "535"     "379"    "30  transverse"                                                                          
+> ## [31,] "266"     "191"    "31  descending"                                                                          
+> ## [32,] "507"     "412"    "32 sigmoid"                                                                              
+> ## [33,] "242"     "141"    "33 rectum"                                                                               
+> ## [34,] "1428"    "844"    "34  cecum            person1@colon@cancer.site"                                          
+> ## [35,] "4318"    "2038"   "35  ascending"                                                                           
+> ## [36,] "4436"    "2180"   "36  transverse"                                                                          
+> ## [37,] "2138"    "1031"   "37  descending"                                                                          
+> ## [38,] "4166"    "2291"   "38 sigmoid"                                                                              
+> ## [39,] "1841"    "758"    "39 rectum"                                                                               
+> ## [40,] "6707"    "4839"   "40  A                              person1@colon@stage  includes CRC and pre-symptomatic"
+> ## [41,] "2501"    "1662"   "41  B"                                                                                   
+> ## [42,] "4741"    "2072"   "42  C"                                                                                   
+> ## [43,] "2234"    "461"    "43  D"                                                                                   
+> ## [44,] "2144"    "108"    "44 deceased   from CRC"                                                                  
+> ## [45,] "23324"   "22998"  "45 ifelse(is.element(object@state,c(deceased,deceased CRC)),1,0)"                        
+> ## [46,] "8298"    "1644"   "46 ifelse(is.element(object@colon.clinical,c(CRC)),1,0)"                                 
+> ## [47,] "113839"  "0"      "47 ifelse(is.element(test.outcome@test.type,c(iFOBT)),1,0)"                              
+> ## [48,] "45298"   "0"      "48 ifelse(is.element(test.outcome@compliance,c(accept)),1,0)"                            
+> ## [49,] "0"       "0"      "48  ifelse(is.element(test.outcome@test.type,c(blood)),1,0)"                             
+> ## [50,] "0"       "0"      "50 ifelse(is.element(test.outcome@compliance,c(screen)),1,0)"                            
+> ## [51,] "2262"    "0"      "51 test.result==positive"                                                                
+> ## [52,] "2262"    "1644"   "52 person has a colonoscopy as a result of test or for symptoms -- may need fixing"      
+> ## [53,] "896"     "0"      "53 adenoma large adenoma  found from test or symptoms"                                   
+> ## [54,] "0"       "211"    "54 A                         found from  test or symptoms"                               
+> ## [55,] "0"       "295"    "55 B                         found from  test or symptoms"                               
+> ## [56,] "0"       "790"    "56 C                         found from  test or symptoms"                               
+> ## [57,] "0"       "348"    "57 D                    found from symptoms"                                             
+> ## [58,] "896"     "1644"   "58   people entering in.treatment.program"                                               
+> ## [59,] "0"       "0"      "58   bleeding"                                                                           
+> ## [60,] "0"       "0"      "60   perforation"                                                                        
+> 
+> plot(log(t2),log(t3))
+> 
+> 
+> #################################################################################################
+> #http://seer.cancer.gov
+> 
+> #Based on rates from 2008-2010, 4.82% of men and women born today will
+> #be diagnosed with cancer of the colon and rectum at some time during
+> #their lifetime.
+> #crc-spin
+> #(2432  +  797)/50000
+> #[1] 0.06458
+> 
+> 
+> # S4 model, no intervention, Dukes
+> #(1644+108)/25000
+> #[1] 0.07008
+> 
+> # R5 model, no intervention, Dukes
+> 
+> 
+> 
+\end{Sinput}
+\end{Schunk}
+
+
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=9cm]{./figs/DukesCrcSpinModel.png}
+  \caption{A population of 5000 peoiple subjected to the CRC-SPIN model.}
+  \label{figure:DukesCrcSpinModel.png}
+\end{figure}
+
+
+\clearpage
+\begin{thebibliography}{}
+
+%\bibliographystyle{apalike}
+%\bibliography{RCSpin}
+%% M-n P to create a tex file then bibtex to create the .bbl file
+%% then include the .bbl file here
+  
+\bibitem[Rutter, 2008]{Rutter.2008}
+Rutter, C. (2008).
+\newblock Group health research institute ({CRC-SPIN}).
+\newblock Version: HI.001.10242008.41523. Document generated: 10/24/2008
+  \url{https://cisnet.flexkb.net/mp/pub/cisnet_colorectal_ghc_profile.pdf}.
+
+\bibitem[Rutter and Savarino, 2010]{Rutter.and.Savarino.2010}
+Rutter, C.~M. and Savarino, J.~E. (2010).
+\newblock An evidence-based microsimulation model for colorectal cancer:
+  validation and application.
+\newblock {\em Cancer Epidemiol Biomarkers Prev}, 19(8):1992--2002.
+\newblock Epub 2010 Jul 20.
+\end{thebibliography}
+
+
+
+
+\end{document}

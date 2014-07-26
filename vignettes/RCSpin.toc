@@ -1,0 +1,5 @@
+\contentsline {section}{\numberline {1}RCSpin}{1}{section.1}
+\contentsline {section}{\numberline {2}genericSpin}{1}{section.2}
+\contentsline {section}{\numberline {3}crcSpin}{2}{section.3}
+\contentsline {section}{\numberline {4}DukesCrcSpinModel}{3}{section.4}
+\contentsline {section}{\numberline {A}outputs}{9}{appendix.A}
