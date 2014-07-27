@@ -177,37 +177,49 @@ mtext(side=4, line=3, "population")
 axis(1,pretty(range(1:99),10))
 box() #- to make it look "as usual"
 
+names(results.M[,40:44])
+#[1] "colon.stage.A"        "colon.stage.B"        "colon.stage.C"       
+#[4] "colon.stage.D"        "colon.stage.deceased"
 
 y<-results.M[,40:44]  #person1@colon@stage  includes CRC and pre-symptomatic     
 x<-c(1:99)
 z<-c(1,2,3,4,5) #z <- val2col(apply(y,2,max), col=COLS)
 #ylim=c(0, 1.2*max(apply(y,1,sum), na.rm=TRUE))
 
-#png("t7.png")
+png("stacked_plots.png")
 par(mfrow=c(3,1))
 plot.stacked(x,y, xlim=c(0, 100), ylim=c(0, 500),
               yaxs="i", col=z, border="white", lwd=0.5,order.method="as.is")
 title(main="all CRC, population of 25000 males")
+abline(v=c(50,55,60,65,70))
 
-
-y<-res.M[,54:57]     #   found from test or symptoms      
+names(results.M[,54:57] )
+y<-results.M[,54:57]     #   found from test or symptoms      
 z<-c(1,2,3,4) 
 plot.stacked(x,y, xlim=c(0, 100),  ylim=c(0, 500),
               yaxs="i", col=z, border="white", lwd=0.5,order.method="as.is")
 title(main="entering treatment -- detected by NBCSP")
 
-
-y<-res.M[,12:16]     #                        if (object@colon@state=="pre symptomatic CRC"){
+names(results.M[,12:16])
+#[1] "colon.state.CRC.adenoma.stage.A"       
+#[2] "colon.state.CRC.adenoma.stage.B"       
+#[3] "colon.state.CRC.adenoma.stage.C"       
+#[4] "colon.state.CRC.adenoma.stage.D"       
+#[5] "colon.state.CRC.adenoma.stage.deceased"
+y<-results.M[,12:16]     #                        if (object@colon@state=="pre symptomatic CRC"){
 z<-c(1,2,3,4,5)
 plot.stacked(x,y, xlim=c(0, 100), ylim=c(0, 500),
               yaxs="i", col=z, border="white", lwd=0.5,order.method="as.is")
 title(main="undetected  CRC")
-#dev.off()
-abline(v=c(55,60,65,70,75))
+dev.off()
 
+@ 
+
+<<eval=TRUE,echo=FALSE,results=hide>>=
 
 ###############################################################################
 ## http://www.r-bloggers.com/data-mountains-and-streams-stacked-area-plots-in-r/
+##http://menugget.blogspot.com.au/2013/12/data-mountains-and-streams-stacked-area.html
 ##plot.stacked makes a stacked plot where each y series is plotted on top
 ##of the each other using filled polygons
 ##
@@ -419,6 +431,17 @@ val2col<-function(z, zlim, col = heat.colors(12), breaks){
   \label{figure:DukesCrcSpinModel.png}
 \end{figure}
 
+\clearpage
+
+
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[totalheight=17cm]{./figs/stacked_plots.png}
+  \caption{Stacked plots \protect{\cite[]{menugget.2013}} of the distribution of CRC by Dukes' stages across a range of ages for a male populatioon of size 25000.}
+  \label{figure:stacked_plots.png}
+\end{figure}
+
 
 \clearpage
 \begin{thebibliography}{}
@@ -440,8 +463,12 @@ Rutter, C.~M. and Savarino, J.~E. (2010).
   validation and application.
 \newblock {\em Cancer Epidemiol Biomarkers Prev}, 19(8):1992--2002.
 \newblock Epub 2010 Jul 20.
-\end{thebibliography}
 
+\bibitem[menugget, 2013]{menugget.2013}
+\newblock Data mountains and streams - stacked area plots in R 
+\newblock \url{http://menugget.blogspot.com.au/2013}
+\newblock accessed 1/1/2014.
+\end{thebibliography}
 
 \appendix
 \section{outputs}
