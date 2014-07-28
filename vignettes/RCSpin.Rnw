@@ -103,7 +103,7 @@ legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
 \begin{figure}[tbhp]
   \centering
   \includegraphics[totalheight=9cm]{./figs/GenericModel.png}
-  \caption{A population of 1000 peoiple subjected to the mortality rates of a supplied table.}
+  \caption{A population of 1000 people subjected to the mortality rates of a supplied table.}
   \label{figure:GenericModel.png}
 \end{figure}
 
@@ -143,7 +143,7 @@ box() #- to make it look "as usual"
 \begin{figure}[tbhp]
   \centering
   \includegraphics[totalheight=9cm]{./figs/CrcSpinModel.png}
-  \caption{A population of 5000 peoiple subjected to the CRC-SPIN model.}
+  \caption{A population of 5000 people subjected to the CRC-SPIN model.}
   \label{figure:CrcSpinModel.png}
 \end{figure}
 
@@ -425,52 +425,57 @@ val2col<-function(z, zlim, col = heat.colors(12), breaks){
 
 
 
-cc<-CrcSpinModel$new(iterations=99, num_subjects=50000)
-cc$run()
+unix.time(cc<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122))
+unix.time(cc$run())
+object.size(cc)
 cc$study_group[[12]]
-#Spin Person object of class "PersonWithColon" 
-#Age:[1] 76
-#Sex:[1] "F"
-#State:[1] "living"
-#In treatment program:[1] "yes"
-#Study id:[1] 12
-#Clinical history:
-#Spin ClinicalHistory object of class "ClinicalHistory" 
-#Status:character(0)
-#Events:list()
-#Risk level:[1] "standard"
-#Colon clinical characteristic:[1] "symptomatic CRC"
-#Colon:
-#Spin Colon object of class "Colon" 
 
 cc$study_group[[12]]$colon$sites[[1]]$initiated_in_year
-res2<-cc$study_results
-number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="M")
-number.F<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="F")
-res.F<-res2[(1:99)*2-1,] # seems that I had these the wrong way around
-res.M<-res2[(1:99)*2,]   #
+aa<-organize_results(cc)
+attach(aa)
+                                        #res2<-cc$study_results
+#number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="M")
+#number.F<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="F")
+#res.F<-res2[(1:99)*2-1,] # seems that I had these the wrong way around
+#res.M<-res2[(1:99)*2,]   #
 
-apply(res2,2,sum)
-#so  
-
-## 10805	1 	count(adenoma.state=="adenoma"); 	A count of adenomas in all patients of the study group that have state "adenoma"
-##   791	2 	count(adenoma.state=="large adenoma"); 	A count of adenomas in all patients of the study group that have state "large adenoma"
-##   249	3 	count(adenoma.state=="pre symptomatic CRC"); 	A count of adenomas in all patients of the study group that have state "pre symptomatic CRC"
-##    57	4 	count(person.colon_clinical=="CRC"); 	A count of patients that have colon_clinical state "CRC"
-## 24485	5 	count(colon.state=="clear"); 	A count of how many peoples colons were in state "clear"
-##  4769	6 	count(colon.state=="adenoma"); 	A count of how many peoples colons were in state "adenoma"
-##   644	7 	count(colon.state=="large adenoma"); 	A count of how many peoples colons were in state "large adenoma"
-##   181	8 	count(colon.state=="pre symptomatic CRC"); 	A count of how many peoples colons were in state "pre symptomatic CRC"
-##    57 	9 	count(colon.state=="CRC"); 	A count of how many peoples colons were in state "CRC"
-##    33 	10 	count(colon.cancer_site=="cecum"); 	A count of how many people's colons overall that have the majority of their adenomas in the "cecum" location
-##    22 	11 	count(colon.cancer_site=="ascending"); 	A count of how many people's colons overall that have the majority of their adenomas in the "ascending" location
-##    74 	12 	count(colon.cancer_site=="transverse"); 	A count of how many people's colons overall that have the majority of their adenomas in the "transverse" location
-##    42 	13 	count(colon.cancer_site=="descending"); 	A count of how many people's colons overall that have the majority of their adenomas in the "descending" location
-##    45 	14 	count(colon.cancer_site=="sigmoid"); 	A count of how many people's colons overall that have the majority of their adenomas in the "sigmoid" location
-##    22 	15 	count(colon.cancer_site=="rectum"); 	A count of how many people's colons overall that have the majority of their adenomas in the "rectum" location
-##   437	16 	count(person.state=="deceased"); 	A count of people in the study that have died (i.e. their state is "deceased")
-##    57 	17 	count(person.colon_clinical=="CRC"); 	A count of patients that have colon_clinical state "CRC"
-##    57 	18 	count(where(person.initiateCRCTreatment() called))  // => person.in_treatment_program 	A count of people put into a treatment program THIS ITERATION!!!
+apply(results.M,2,sum)
+##              adenoma.state.adenoma 
+##                             592767 
+##        adenoma.state.large.adenoma 
+##                              44483 
+##  adenoma.state.pre.symptomatic.CRC 
+##                              13221 
+##          person.colon_clinical.CRC 
+##                               2910 
+##                  colon.state.clear 
+##                            1144997 
+##                colon.state.adenoma 
+##                             271436 
+##          colon.state.large.adenoma 
+##                              36594 
+##    colon.state.pre.symptomatic.CRC 
+##                               9721 
+##                    colon.state.CRC 
+##                               2910 
+##            colon.cancer_site.cecum 
+##                                957 
+##        colon.cancer_site.ascending 
+##                               2841 
+##       colon.cancer_site.transverse 
+##                               3062 
+##       colon.cancer_site.descending 
+##                               1541 
+##          colon.cancer_site.sigmoid 
+##                               3111 
+##           colon.cancer_site.rectum 
+##                               1119 
+##              person.state.deceased 
+##                              21900 
+##          person.colon_clinical.CRC 
+##                               2910 
+## person.initiateCRCTreatment.called 
+##                               2910 
 
 
 
@@ -478,10 +483,10 @@ apply(res2,2,sum)
 
 table(unlist(lapply(cc$study_group,f<-function(x){x$state})),
       unlist(lapply(cc$study_group,f<-function(x){x$in_treatment_program})))
-#            no yes
-#  deceased 434   3
-#  living     9  54
-
+#          
+#              no   yes
+#  deceased 43771   188
+#  living    1027  5014
 
 aa<-rep(0,500)
 bb<-rep(0,500)
@@ -509,17 +514,17 @@ for  (jj in 1:500){
  table(bb)
 #bb
 #  0   2   3   4   5 
-#288 126  21   8  57
+#302 125  21   8  44
 
 oo<-order(aa)
 
-png("./figs/crcSpin_plot.png")
+#png("./figs/crcSpin_plot.png")
 plot(aa[oo],col=bb[oo]+1,
      xlab="index",ylab="max adenoma size")
 legend(0,30,c("clear" , "adenoma (0.25)"  , 
 "large adenoma (0.42)" ,"CRC (0.016)","symptomatic CRC (0.114)"),
        fill=c(1, 3:6))
-dev.off()
+#dev.off()
 
 
 
@@ -531,53 +536,53 @@ dev.off()
 #be diagnosed with cancer of the colon and rectum at some time during
 #their lifetime.
 
-sum(res.F[,4]+res.M[,4])/(number.F+number.M)
-#[1] 0.114
+sum(results.F[,4]+results.M[,4])/(number.F+number.M)
+#[1] 0.10404
 
 #1.91% of men will develop cancer of the colon
 #and rectum between their 50th and 70th birthdays compared to 1.41% for
 #women. 
 
-sum(res.F[50:70,4])/(number.F-cumsum(res.F[,16]))[60]
+sum(results.F[50:70,4])/(number.F-cumsum(results.F[,16]))[60]
 #0.03137255
-sum(res.M[50:70,4])/(number.M-cumsum(res.M[,16]))[60]
+sum(results.M[50:70,4])/(number.M-cumsum(results.M[,16]))[60]
 #0.07729469
 
 
 
 #Women colon cancer
-mean(apply(res.F[20:49,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[20:49]))*100000
-mean(apply(res.F[50:59,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[50:59]))*100000
-mean(apply(res.F[60:69,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[60:69]))*100000
-mean(apply(res.F[70:84,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[70:84]))*100000
+mean(apply(results.F[20:49,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[20:49]))*100000
+mean(apply(results.F[50:59,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[50:59]))*100000
+mean(apply(results.F[60:69,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[60:69]))*100000
+mean(apply(results.F[70:84,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[70:84]))*100000
 
 #Male colon cancer
-mean(apply(res.M[20:49,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[20:49]))*100000
-mean(apply(res.M[50:59,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[50:59]))*100000
-mean(apply(res.M[60:69,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[60:69]))*100000
-mean(apply(res.M[70:84,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[70:84]))*100000
+mean(apply(results.M[20:49,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[20:49]))*100000
+mean(apply(results.M[50:59,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[50:59]))*100000
+mean(apply(results.M[60:69,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[60:69]))*100000
+mean(apply(results.M[70:84,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[70:84]))*100000
 
 
 #Women rectal cancer
-mean(res.F[20:49,33]/((number.F-cumsum(res.F[,45]))[20:49]))*100000
-mean(res.F[50:59,33]/((number.F-cumsum(res.F[,45]))[50:59]))*100000
-mean(res.F[60:69,33]/((number.F-cumsum(res.F[,45]))[60:69]))*100000
-mean(res.F[70:84,33]/((number.F-cumsum(res.F[,45]))[70:84]))*100000
+mean(results.F[20:49,33]/((number.F-cumsum(results.F[,45]))[20:49]))*100000
+mean(results.F[50:59,33]/((number.F-cumsum(results.F[,45]))[50:59]))*100000
+mean(results.F[60:69,33]/((number.F-cumsum(results.F[,45]))[60:69]))*100000
+mean(results.F[70:84,33]/((number.F-cumsum(results.F[,45]))[70:84]))*100000
 
 #Male rectal cancer
-mean(res.M[20:49,33]/((number.M-cumsum(res.M[,45]))[20:49]))*100000
-mean(res.M[50:59,33]/((number.M-cumsum(res.M[,45]))[50:59]))*100000
-mean(res.M[60:69,33]/((number.M-cumsum(res.M[,45]))[60:69]))*100000
-mean(res.M[70:84,33]/((number.M-cumsum(res.M[,45]))[70:84]))*100000
+mean(results.M[20:49,33]/((number.M-cumsum(results.M[,45]))[20:49]))*100000
+mean(results.M[50:59,33]/((number.M-cumsum(results.M[,45]))[50:59]))*100000
+mean(results.M[60:69,33]/((number.M-cumsum(results.M[,45]))[60:69]))*100000
+mean(results.M[70:84,33]/((number.M-cumsum(results.M[,45]))[70:84]))*100000
 
 
 
 # adenoma (adenomas + large adenomsa + pre symptomatic CRC)
- mean((res.M[40:49,7]+res.F[40:49,7]+res.M[40:49,8]+res.F[40:49,8]+res.M[40:49,9]+res.F[40:49,9])/50000)
+ mean((results.M[40:49,7]+results.F[40:49,7]+results.M[40:49,8]+results.F[40:49,8]+results.M[40:49,9]+results.F[40:49,9])/50000)
 #[1] 0.102998
-mean((res.M[50:75,7]+res.F[50:75,7]+res.M[50:75,8]+res.F[50:75,8]+res.M[50:75,9]+res.F[50:75,9])/50000)
+mean((results.M[50:75,7]+results.F[50:75,7]+results.M[50:75,8]+results.F[50:75,8]+results.M[50:75,9]+results.F[50:75,9])/50000)
  #0.1753985
-mean((res.M[76:80,7]+res.F[76:80,7]+res.M[76:80,8]+res.F[76:80,8]+res.M[76:80,9]+res.F[76:80,9])/50000)
+mean((results.M[76:80,7]+results.F[76:80,7]+results.M[76:80,8]+results.F[76:80,8]+results.M[76:80,9]+results.F[76:80,9])/50000)
 #0.213704
 
 
@@ -586,751 +591,12 @@ mean((res.M[76:80,7]+res.F[76:80,7]+res.M[76:80,8]+res.F[76:80,8]+res.M[76:80,9]
 
 
 # proportion of Adenomas greater the 10 mm
-mean(res.F[-c(1:40),8]/(res.F[-c(1:40),7]+res.F[-c(1:40),8]))
+mean(results.F[-c(1:40),8]/(results.F[-c(1:40),7]+results.F[-c(1:40),8]))
 
 
 
 
 
-
-
-##############################################################################################################
-##############################################################################################################
-##############################################################################################################
-##############################################################################################################
-source("model5.s")
-source("result_person_4.s")
-
-
-res.M<-matrix(0,99,60)
-res.F<-matrix(0,99,60)
-number.M<-0
-number.F<-0
-set.seed(125)
-cc<-vector(mode="list")
-ll<-rep(0,500)
-kk<-1
-
-for (jj in 1:50000){
-  set.seed(50125+jj)# set.seed(125+jj)
-  person1<-initialize.person()
-  bb<-matrix(0,99,60)
-  for ( i in 20:99){
-#  print(person1@colon@state)
-#  print(person1@colon@cancer.site)
-#  cat(jj, " ",i, " ","\n"    )
-    if(is.element(person1@state,c("deceased","deceased CRC"))){
-      break
- #      res2[i,1]<-res2[i,1]+1   #incidence deceased
-    }
-    if(person1@in.treatment.program=="yes"){
-        ll[kk]<-jj
-        person1@system.data[[1]]<-jj
-        person1@system.data[[2]]<-.Random.seed
-        cc[[kk]]<-person1
-        kk<-kk+1
-        break
-      }
-    
-    study.year<-i
-    person1@age<-i
-    if (length(person1@colon@sites) < 3){
-    person1<-initiate.adenomas(person1,study.year=study.year)
-    }
-    person1<-update.adenoma.growth.curve(person1)
-    person1<-update.transitions(person1)
-    person1<-get.patient.state(person1)
-    # sets person1@colon@state to one of "clear" ,"adenoma","large adenoma",
-    # "pre symptomatic CRC","CRC","deceased"
-    # sets person1@colon@stage to one of "clear" ,A,B, C,D ,"deceased"
-    # if person1@colon@stat is "deceased" then person1@state<-"deceased CRC"
-
-    # colon.clinical takes the values "clear" and "CRC" while
-    # colon@state takes the values "adenoma","large adenoma",
-    # "pre symptomatic CRC", "deceased"
-    # We use them both together to distinguish between  "CRC" and "pre clinical CRC
-
-    # perhaps only do this if the person is not already clinical?
-    person1<-update.transitions.pre.clinical.to.clinical(person1)
-
-
-    #if person is clinical but not in a treatment program
-    temp1<-rep(0,14)  
-    if ((person1@colon.clinical=="CRC") & (person1@in.treatment.program=="no")){
-      #      compliance<-sample(c("accept","decline"),1,prob=c(0.938,0.062))
-      #      person1<-offer.colonoscopy(person1,compliance=compliance)
-      temp1[6]<-1
-      # the person has symptoms and has a colonoscopy with probability 1
-      
-      #person1<-adverse.outcome.of.colonoscopy(person1)
-      temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-      temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
-
-      
-      # treatment is removed
-      #This is a very simple treatment model. If Dukes A or B then all adenomas and tumors are removed.
-      #If Dukes C or D then treatment is ineffective and the cancer in incurable.
-      
-      if ( (person1@colon@state=="adenoma") | (person1@colon@state=="large adenoma")){
-        #I dont think this ever happens --
-        #if person1@colon@state=="adenoma" "large adenoma then person1@colon.clinical will not be CRC
-        temp1[7]<-1
-      } else if (person1@colon@state=="CRC"){
-        if (person1@colon@stage=="A"){
-          temp1[8]<-1
-        }
-        if (person1@colon@stage=="B"){
-          temp1[9]<-1
-        }
-        if (person1@colon@stage=="C"){
-          temp1[10]<-1
-        }
-        if(person1@colon@stage=="D"){
-         temp1[11]<-1
-        }
-      }
-      temp1[12]<-1  #people entering in.treatment.program
-      person1@in.treatment.program<-"yes"
-    } #end if ((person1@colon.clinical=="CRC") & (person1@in.treatment.program=="no"))
-
-    person1<-death.rate.other.causes(person1)
-    bb[i,1:46]<-result.person.4(person1)
-    bb[i,47:60]<-temp1
-  } #end  for (i in 1:99)
-
-  if (person1@sex=="M"){
-    res.M<-res.M+bb
-    number.M<-number.M+1
-  }
-  else{
-    res.F<-res.F+bb
-    number.F<-number.F+1
-
-  }
-}
-
-#with 500
-number.M #[1] 253
-number.F #[1] 247
-apply(res.M,2,sum)
-# [1] 7729  397  152    0   31    0 3077  348  121   31    0    0    0    0    0    0    3   33   16   20   25   24    0    0    0    0    0
-#[28]    2    7    6    5    6    5    5   40   22   25   31   29    0    0    0    0    0  222   31    0    0    0    0    0   31    0    0
-#[55]    0    0    0   31    0    0
-#apply(res.F,2,sum)
-# [1] 4056  227  153    0   24    0 2046  185  123   24    0    0    0    0    0    0    2   22   30   12   38   19    0    0    0    0    0
-#[28]    1    6    5    2    7    3    3   28   35   14   45   22    0    0    0    0    0  218   24    0    0    0    0    0   24    0    0
-#[55]    0    0    0   24    0    0
-
-tt <- res.F+res.M
-apply(tt,2,sum)
-
-##  [1] 7913# 1 "adenoma"                   object@colon@sites -- state                                          
-##  [2]  647# 2 "large adenoma"             a person can be in more than one columns ie 1 1 1                    
-##  [3]  358# 3 "pre symptomatic CRC"      "adenoma"  "large adenoma" and "pre symptomatic CRC"                  
-##  [4]    0# 4 deceased                                                                                         
-##  [5]   98# 5 object@colon.clinical                                                                            
-##  [6]    0# 6 "clear"           #object@colon@state                                                            
-##  [7] 5051# 7 "adenoma"                                                                                        
-##  [8]  603# 8 "large adenoma"                                                                                  
-##  [9]  252# 9 "pre symptomatic CRC"                                                                            
-## [10]   98# 10 "CRC"                                                                                           
-## [11]    0# 11 "deceased"   -- ie CRC deceased                                                                 
-## [12]    0# 12 A                              if (object@colon@state=="pre symptomatic CRC"){                  
-## [13]    0# 13 B                                                                                               
-## [14]    0# 14 C                                                                                               
-## [15]    0# 15 D                                                                                               
-## [16]    0# 16 deceased   -- these are all 0                                                                   
-## [17]   19# 17  "cecum"                                                                                        
-## [18]   56# 18  "ascending"                                                                                    
-## [19]   67# 19  "transverse"                                                                                   
-## [20]   18# 20  descending"                                                                                    
-## [21]   56# 21 "sigmoid"                                                                                       
-## [22]   36# 22 "rectum"                                                                                        
-## [23]    0# 23  A                              if (object@colon@state=="CRC"){                                 
-## [24]    0# 24  B                                                                                              
-## [25]    0# 25  C                                                                                              
-## [26]    0# 26  D                                                                                              
-## [27]    0# 27 deceased   -- these are all 0                                                                   
-## [28]   10# 28  "cecum"                                                                                        
-## [29]   22# 29  "ascending"                                                                                    
-## [30]   23# 30  "transverse"                                                                                   
-## [31]    7# 31  descending"                                                                                    
-## [32]   23# 32 "sigmoid"                                                                                       
-## [33]   13# 33 "rectum"                                                                                        
-## [34]   29# 34  "cecum"            person1@colon@cancer.site                                                   
-## [35]   78# 35  "ascending"                                                                                    
-## [36]   90# 36  "transverse"                                                                                   
-## [37]   25# 37  descending"                                                                                    
-## [38]   79# 38 "sigmoid"                                                                                       
-## [39]   49# 39 "rectum"                                                                                        
-## [40]    0# 40  A                              person1@colon@stage  includes CRC and pre-symptomatic           
-## [41]    0# 41  B                                                                                              
-## [42]    0# 42  C                                                                                              
-## [43]    0# 43  D                                                                                              
-## [44]    0# 44 deceased   from CRC                                                                             
-## [45]  392# 45 ifelse(is.element(object@state,c("deceased","deceased CRC")),1,0)                               
-## [46]   98# 46 ifelse(is.element(object@colon.clinical,c("CRC")),1,0)                                          
-## [47]    0#  ifelse(is.element(test.outcome@test.type,c("iFOBT")),1,0)                                         
-## [48]    0#  ifelse(is.element(test.outcome@compliance,c("accept")),1,0)                                       
-## [49]    0#  ifelse(is.element(test.outcome@test.type,c("blood")),1,0)                                         
-## [50]    0#  ifelse(is.element(test.outcome@compliance,c("screen")),1,0)                                       
-## [51]    0#  test.result=="positive"                                                                           
-## [52]   98#  person has a colonoscopy as a result of test or for symptoms -- may need fixing                   
-## [53]    0#  "adenoma" "large adenoma  found from test or symptoms                                             
-## [54]    0#  A                         found from  test or symptoms                                            
-## [55]    0#  B                         found from  test or symptoms                                            
-## [56]    0#  C                         found from  test or symptoms                                            
-## [57]    0#  D                    found from symptoms                                                          
-## [58]   98#    people entering in.treatment.program                                                            
-## [59]    0#    bleeding                                                                                        
-## [60]    0#    perforation                                                                                     
-
-#98 CRC is too many
-
-#locations
-#19+56+67+18+56+36   # 252 These are for CRC 
-#29+ 78+ 90+ 25+ 79+49 #350 cols 34:39 -- adenomas
-#10+ 22+ 23+  7+  23+  13 # 98 these are for symptomatic CRC
-
-#we need locations of large adenomas as well
-
-#33+ 22+ 74 +42 + 45 +22 = 238 for CRC in crcSpin.R -- sort of similar in total
-
-#Consider 
-##  [7] 5051# 7 "adenoma"                                                                                        
-##  [8]  603# 8 "large adenoma"                                                                                  
-##  [9]  252# 9 "pre symptomatic CRC"                                                                            
-## [10]   98# 10 "CRC"
-#it doesnt make sense to sum 7 8 or 9 (summming 10 makes sense)
-#tt[60,7]+ tt[60,8] #114 adenomas
-#tt[60,9]  # 5    CRC
-
-# [34,]   46    0    0    0
-# [35,]   48    1    0    0
-# [36,]   51    1    0    0
-# [37,]   57    1    0    0
-# [38,]   63    1    0    0
-# [39,]   67    2    1    0
-# [40,]   68    3    0    1
-
-
-#is this the problem?
-#4 years as large adenoma, 1 as CRC and then symptomatic?  -- is the progression too quick?
-
-load("script12_temp_model5.Rdata") #from /home/dun280/Projects/clinical-genomics/simulation/script7
-# number.M  [1] 25023    > number.F [1] 24977
-tt <- res.F+res.M
-apply(tt,2,sum)
-# 9753/50000 [1] 0.19506
-# 98/500 [1] 0.196
-
-
-#Based on rates from 2008-2010, 4.82% of men and women born today will
-#be diagnosed with cancer of the colon and rectum at some time during
-#their lifetime.
-
-sum(res.F[,5]+res.M[,5])/(number.F+number.M)
-#[1]  0.19506
-
-#1.91% of men will develop cancer of the colon
-#and rectum between their 50th and 70th birthdays compared to 1.41% for
-#women. 
-
-sum(res.F[50:70,5])/(number.F-cumsum(res.F[,45]))[60]
-#[1] 0.0643941
-sum(res.M[50:70,5])/(number.M-cumsum(res.M[,45]))[60]
-# 0.08331525
-
-
-
- #Women colon cancer
-mean(apply(res.F[20:49,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[20:49]))*100000
-mean(apply(res.F[50:59,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[50:59]))*100000
-mean(apply(res.F[60:69,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[60:69]))*100000
-mean(apply(res.F[70:84,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[70:84]))*100000
-
-
-#Male colon cancer
-mean(apply(res.M[20:49,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[20:49]))*100000
-mean(apply(res.M[50:59,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[50:59]))*100000
-mean(apply(res.M[60:69,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[60:69]))*100000
-mean(apply(res.M[70:84,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[70:84]))*100000
-
-
-#Women rectal cancer
-mean(res.F[20:49,33]/((number.F-cumsum(res.F[,45]))[20:49]))*100000
-mean(res.F[50:59,33]/((number.F-cumsum(res.F[,45]))[50:59]))*100000
-mean(res.F[60:69,33]/((number.F-cumsum(res.F[,45]))[60:69]))*100000
-mean(res.F[70:84,33]/((number.F-cumsum(res.F[,45]))[70:84]))*100000
-
-#Male rectal cancer
-mean(res.M[20:49,33]/((number.M-cumsum(res.M[,45]))[20:49]))*100000
-mean(res.M[50:59,33]/((number.M-cumsum(res.M[,45]))[50:59]))*100000
-mean(res.M[60:69,33]/((number.M-cumsum(res.M[,45]))[60:69]))*100000
-mean(res.M[70:84,33]/((number.M-cumsum(res.M[,45]))[70:84]))*100000
-
-
-
-# adenoma (adenomas + large adenomsa + pre symptomatic CRC)
- mean((res.M[40:49,7]+res.F[40:49,7]+res.M[40:49,8]+res.F[40:49,8]+res.M[40:49,9]+res.F[40:49,9])/50000)
-#[1]  0.165662
-mean((res.M[50:75,7]+res.F[50:75,7]+res.M[50:75,8]+res.F[50:75,8]+res.M[50:75,9]+res.F[50:75,9])/50000)
- #0.2529846
-mean((res.M[76:80,7]+res.F[76:80,7]+res.M[76:80,8]+res.F[76:80,8]+res.M[76:80,9]+res.F[76:80,9])/50000)
-#0.239156
-
-
-# proportion of Adenomas greater the 10 mm
-mean(res.F[-c(1:40),8]/(res.F[-c(1:40),7]+res.F[-c(1:40),8]))
-#0.08626278
-###############################################################################
-###############################################################################
-###############################################################################
-###############################################################################
-###############################################################################
-###############################################################################
-
-# do some checking on risk
-
-aa<-rep(0,10)
-for (i in 1:10){
-  person1<-initialize.person(sex="F")
-  aa[i]<-(person1@colon@risk.parameters@sex.linked.risk)
-  cat(person1@colon@risk.parameters@age.risks,"\n")
-}
-
-#sex.linked.risk is now set to  0.24 for M, for F -0.24
-#age.risks now set to  0.037 0.031 0.029 0.03 
-
-aa<-rep(0,10000)
-for (i in 1:10000){
-person1<-initialize.person(sex="F")
-aa[i]<-(person1@colon@risk.parameters@baseline.risk)
-}
-mean(aa) #close to -6.6 -- same for male and females
-
-
-aa<-rep(0,10000)
-for (jj in 1:10000){
-  set.seed(123+jj)
-  person1<-initialize.person()
-  person1@age<-45
-  aa[jj]<-risk.of.an.adenoma(person1)
-}
-head(aa)  
-mean(aa) #[1] 0.01242109 Female
-mean(aa) #[1] 0.02007341 Male 
-mean(aa) # 0.01343958
-
-1-(table(rbinom(10000, 10, prob= mean(aa))))[1]/10000  #age=78 0.3172 
-1-(table(rbinom(10000, 10, prob= mean(aa))))[1]/10000  #age=62 0.2122 
-1-(table(rbinom(10000, 10, prob= mean(aa))))[1]/10000  #age=45 0.133 
-
-ll<-0
-aa<-rep(0,50000)
-for (kk in 76:80){
-  for (jj in 1:10000){
-    set.seed(123+jj)
-    person1<-initialize.person()
-    person1@age<-kk
-    aa[(10000*ll)+jj]<-risk.of.an.adenoma(person1)
-  }
-  ll<-ll+1
-}
-mean(aa) #[1] 0.03747625
-1-(table(rbinom(10000, 5, prob= mean(aa))))[1]/10000  #age=45 0.133 
-
-
-
-set.seed(123)
-person1<-initialize.person(sex="M")
-
-set.seed(124)
-person1<-initialize.person(sex="F")
-  
-aa<-rep(0,100)
-for ( i in 1:100){
-  person1@age<-i
-  aa[i]<-risk.of.an.adenoma(person1)
-}
-#plot(1:100,aa,type="l",col="skyblue",lwd=3,xlab="age",ylab="risk",ylim=c(0,0.1)   )
-lines(1:100,aa,col="pink1",lwd=4)
-#OK Male risk higher than Female
-
-
-bb<-matrix(0,1000,100)
-for (jj in 1:1000){
-  set.seed(123+jj+2)
-  person1<-initialize.person(sex="M")
-  aa<-rep(0,100)
-  for ( i in 1:100){
-    person1@age<-i
-    aa[i]<-risk.of.an.adenoma(person1)
-  }
-  bb[jj,]<-aa
-}
-tt<-apply(bb,2,mean)
-plot(1:100,tt,type="l",col="skyblue",lwd=3,xlab="age",ylab="risk",ylim=c(0,0.4)   )
-lines(1:100,(apply(bb,2,range))[1,],col="grey90",lwd=4)
-lines(1:100,(apply(bb,2,range))[2,],col="grey90",lwd=4)
-
-plot(density(bb[,40]))
-hist(bb[,40])
- 
-
-bb<-matrix(0,1000,100)
-for (jj in 1:1000){
-  set.seed(123+jj+2)
-  person1<-initialize.person(sex="F")
-  aa<-rep(0,100)
-  for ( i in 1:100){
-    person1@age<-i
-    aa[i]<-risk.of.an.adenoma(person1)
-  }
-  bb[jj,]<-aa
-}
-tt<-apply(bb,2,mean)
-lines(1:100,tt,col="pink1",lwd=4)
-
-#################################################################################
-# number of adenomas
-
-
-set.seed(123)
-aa<-rep(0,100)
-for ( jj in 1:100){
-  person1<-initialize.person()
-  for ( i in 1:99){
-    person1@age<-i
-    person1<-initiate.adenomas(person1,study.year=i)
-    temp<-ifelse((length(person1@colon@sites)>0),1,0)
-    aa[i]<-aa[i]+temp
-    if(temp>0){
-      break
-    }
-  }
-}
-# poportion of the population with an adenoma
-
-png("./figs/number.of.adenomas.png")
-plot(1:100,cumsum(aa)/100,type="l",col=1,lwd=3,xlab="age",ylab="proportion with an adenoma")
-dev.off()
-
-mean(cumsum(aa)[40:49])/100  #0.185 
-mean(cumsum(aa)[50:75])/100  #0.3326923
-mean(cumsum(aa)[76:80])/100 #0.45 so why do I get much lower numbers with adenoms?
-
-#how break works
-for (i in 1:10)
-{
-    for (j in 1:10)
-    {
-        for (k in 1:10)
-        {
-            cat(i," ",j," ",k,"\n")
-            if (k ==5) break
-        }   
-    }
-}   
-
-
-########################################################################################################
-#update.size.ofadenomas
-
-for ( jj in 1:100){
-    set.seed(123+jj)
-    person1<-initialize.person()
-    
-    aa<-rep(0,99)
-    for ( i in 1:99){
-        person1@age<-i
-        person1<-initiate.adenomas(person1,study.year=i)
-        person1<-update.adenoma.growth.curve(person1)
-        ss<-person1@colon@sites
-        if (length(ss)>0){
-            temp<-lapply(ss,f<-function(x){x@size})
-            aa[i]<-max(unlist(temp))
-        }
-    }
-    col<-"skyblue"
-    if(person1@sex=="F"){
-        col<-"pink1"}
-    
-    if (jj==1){
-        plot(1:99,aa,type="l",col=col,lwd=3,
-             main="samples of adenoma growth curves",xlab="age",ylab="size",ylim=c(0,50))
-    }
-    lines(1:99,aa,col=col,lwd=3)
-}
-
-
-
-#see table 2 
-
-cc<-bb[,40:49]
-1-sum(apply(cc, 1, function(x){ all(x==0)}))/1000
-# 0.124
-
-cc<-bb[,50:75]
-1-sum(apply(cc, 1, function(x){ all(x==0)}))/1000
-#   0.313
-
-cc<-bb[,76:80]
-1-sum(apply(cc, 1, function(x){ all(x==0)}))/1000
-#  0.359
-
-#proportion larger than 10mm
-cc<-bb[,50:75]
-cc<-cc[ !apply(cc, 1, function(x){ all(x==0)}),]
-tt<-apply(cc,1,max)
-sum(tt>= 10)/length(tt)
-#0.22   too high
-
-cc<-bb[,57]
-cc<-cc[ cc!=0]
-sum(cc<6)/length(cc) #0.68
-sum(cc>6 & cc<=10)/length(cc) # ] 0.15
-sum( cc>=10)/length(cc) #   0.166
-#adenomas seem larger than table 2
- 
-
-########################################################################################
-#png("./figs/model5.png")
-for  (jj in 1:50){
-    set.seed(125+jj)
-    person1<-initialize.person()# sex="M")
-    aa<-rep(0,99)
-    bb<-rep(0,99)
-    for ( i in 1:100){
-        person1@age<-i
-        study.year<-i
-        person1<-initiate.adenomas(person1,study.year=study.year)
-        person1<-update.adenoma.growth.curve(person1)
-        ss<-person1@colon@sites
-        if (length(ss)>0){
-            temp<-lapply(ss,f<-function(x){x@size})
-            aa[i]<- max(unlist(temp))
-            
-            temp<-lapply(ss,f<-function(x){x@state})
-                                             cat(unlist(temp),"\n")
-            tt<-factor(temp,
-                       levels=c("clear"  , "adenoma"  , "large adenoma" ,
-                            "pre symptomatic CRC"))
-            bb[i]<- max(as.numeric(tt))
-                                            cat("bb=", bb[i],"\n")
-        }
-                                         cat("age", i, "\n")
-        person1<-update.transitions(person1)
-        person1<-get.patient.state(person1)
-                                          cat("person1@colon@state = ", person1@colon@state,"\n")
-        person1<-update.transitions.pre.clinical.to.clinical(person1)
-        if (person1@colon.clinical=="CRC"){
-            bb[i]<-5
-        }
-        cat("person1@colon.clinical = ",person1@colon.clinical ,",person1@colon@state =  ",person1@colon@state,"\n")
-    }
-    if (jj==1){
-        plot(aa,col=bb+1,ylim=c(0,30),cex=0.5,xlab="age",ylab="adenoma size")
-    }
-    points(aa,col=bb+1,cex=0.5)
-}
-
-legend(0,25,c("clear" , "adenoma"  , 
-"large adenoma" ,"CRC","symptomatic CRC"),
-       fill=c(1, 3:6))
-
-#dev.off()
-
-################################################################################################################################
-################################################################################################################################
-################################################################################################################################
-################################################################################################################################
-
-load("script11_temp_model3.Rdata") #from /home/dun280/Projects/clinical-genomics/simulation/script7
-#number.M  [1]  25088    > number.F [1] 24912
-tt <- res.F+res.M
-apply(tt,2,sum)
-#  2685/50000 [1]  0.0537
-
-
-#Based on rates from 2008-2010, 4.82% of men and women born today will
-#be diagnosed with cancer of the colon and rectum at some time during
-#their lifetime.
-
-sum(res.F[,5]+res.M[,5])/(number.F+number.M)
-#[1]  0.0537
-
-#1.91% of men will develop cancer of the colon
-#and rectum between their 50th and 70th birthdays compared to 1.41% for
-#women. 
-
-sum(res.F[50:70,5])/(number.F-cumsum(res.F[,45]))[60]
-#[1] 0.01139107
-sum(res.M[50:70,5])/(number.M-cumsum(res.M[,45]))[60]
-# 0.02221249
-
- 
-#Women colon cancer
-mean(apply(res.F[20:49,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[20:49]))*100000
-mean(apply(res.F[50:59,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[50:59]))*100000
-mean(apply(res.F[60:69,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[60:69]))*100000
-mean(apply(res.F[70:84,28:32],1,sum)/((number.F-cumsum(res.F[,45]))[70:84]))*100000
-
-#Male colon cancer
-mean(apply(res.M[20:49,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[20:49]))*100000
-mean(apply(res.M[50:59,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[50:59]))*100000
-mean(apply(res.M[60:69,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[60:69]))*100000
-mean(apply(res.M[70:84,28:32],1,sum)/((number.M-cumsum(res.M[,45]))[70:84]))*100000
-
-
-#Women rectal cancer
-mean(res.F[20:49,33]/((number.F-cumsum(res.F[,45]))[20:49]))*100000
-mean(res.F[50:59,33]/((number.F-cumsum(res.F[,45]))[50:59]))*100000
-mean(res.F[60:69,33]/((number.F-cumsum(res.F[,45]))[60:69]))*100000
-mean(res.F[70:84,33]/((number.F-cumsum(res.F[,45]))[70:84]))*100000
-
-
-
-#Male rectal cancer
-mean(res.M[20:49,33]/((number.M-cumsum(res.M[,45]))[20:49]))*100000
-mean(res.M[50:59,33]/((number.M-cumsum(res.M[,45]))[50:59]))*100000
-mean(res.M[60:69,33]/((number.M-cumsum(res.M[,45]))[60:69]))*100000
-mean(res.M[70:84,33]/((number.M-cumsum(res.M[,45]))[70:84]))*100000
-
-
-
-# adenoma (adenomas + large adenomsa + pre symptomatic CRC)
-mean((res.M[40:49,7]+res.F[40:49,7]+res.M[40:49,8]+res.F[40:49,8]+res.M[40:49,9]+res.F[40:49,9])/50000)
-mean((res.M[50:75,7]+res.F[50:75,7]+res.M[50:75,8]+res.F[50:75,8]+res.M[50:75,9]+res.F[50:75,9])/50000)
-mean((res.M[76:80,7]+res.F[76:80,7]+res.M[76:80,8]+res.F[76:80,8]+res.M[76:80,9]+res.F[76:80,9])/50000)
-
-
-# proportion of Adenomas greater the 10 mm
-mean(res.F[-c(1:40),8]/(res.F[-c(1:40),7]+res.F[-c(1:40),8]))
-#0.1021486
-
-
-
-
-
-
-##############################################################################################################
-##############################################################################################################
-##############################################################################################################
-##############################################################################################################
-source("model3.s")
-source("result_person_4.s")
-
-
-res.M<-matrix(0,99,60)
-res.F<-matrix(0,99,60)
-number.M<-0
-number.F<-0
-set.seed(125)
-cc<-vector(mode="list")
-ll<-rep(0,500)
-kk<-1
-
-for (jj in 1:500){
-  set.seed(50125+jj)# set.seed(125+jj)
-  person1<-initialize.person()
-  bb<-matrix(0,99,60)
-  for ( i in 20:99){
-#  print(person1@colon@state)
-#  print(person1@colon@cancer.site)
-#  cat(jj, " ",i, " ","\n"    )
-    if(is.element(person1@state,c("deceased","deceased CRC"))){
-      break
- #      res2[i,1]<-res2[i,1]+1   #incidence deceased
-    }
-    if(person1@in.treatment.program=="yes"){
-        ll[kk]<-jj
-        person1@system.data[[1]]<-jj
-        person1@system.data[[2]]<-.Random.seed
-        cc[[kk]]<-person1
-        kk<-kk+1
-        break
-      }
-    
-    study.year<-i
-    person1@age<-i
-    person1<-initiate.adenomas(person1,study.year=study.year)
-    person1<-update.adenoma.growth.curve(person1)
-    person1<-update.transitions(person1)
-    person1<-get.patient.state(person1)
-    # sets person1@colon@state to one of "clear" ,"adenoma","large adenoma",
-    # "pre symptomatic CRC","CRC","deceased"
-    # sets person1@colon@stage to one of "clear" ,A,B, C,D ,"deceased"
-    # if person1@colon@stat is "deceased" then person1@state<-"deceased CRC"
-
-    # colon.clinical takes the values "clear" and "CRC" while
-    # colon@state takes the values "adenoma","large adenoma",
-    # "pre symptomatic CRC", "deceased"
-    # We use them both together to distinguish between  "CRC" and "pre clinical CRC
-
-    # perhaps only do this if the person is not already clinical?
-    person1<-update.transitions.pre.clinical.to.clinical(person1)
-
-
-    #if person is clinical but not in a treatment program
-    temp1<-rep(0,14)  
-    if ((person1@colon.clinical=="CRC") & (person1@in.treatment.program=="no")){
-      #      compliance<-sample(c("accept","decline"),1,prob=c(0.938,0.062))
-      #      person1<-offer.colonoscopy(person1,compliance=compliance)
-      temp1[6]<-1
-      # the person has symptoms and has a colonoscopy with probability 1
-      
-      #person1<-adverse.outcome.of.colonoscopy(person1)
-      temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-      temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
-
-      
-      # treatment is removed
-      #This is a very simple treatment model. If Dukes A or B then all adenomas and tumors are removed.
-      #If Dukes C or D then treatment is ineffective and the cancer in incurable.
-      
-      if ( (person1@colon@state=="adenoma") | (person1@colon@state=="large adenoma")){
-        #I dont think this ever happens --
-        #if person1@colon@state=="adenoma" "large adenoma then person1@colon.clinical will not be CRC
-        temp1[7]<-1
-      } else if (person1@colon@state=="CRC"){
-        if (person1@colon@stage=="A"){
-          temp1[8]<-1
-        }
-        if (person1@colon@stage=="B"){
-          temp1[9]<-1
-        }
-        if (person1@colon@stage=="C"){
-          temp1[10]<-1
-        }
-        if(person1@colon@stage=="D"){
-         temp1[11]<-1
-        }
-      }
-      temp1[12]<-1  #people entering in.treatment.program
-      person1@in.treatment.program<-"yes"
-    } #end if ((person1@colon.clinical=="CRC") & (person1@in.treatment.program=="no"))
-
-    person1<-death.rate.other.causes(person1)
-    bb[i,1:46]<-result.person.4(person1)
-    bb[i,47:60]<-temp1
-  } #end  for (i in 1:99)
-
-  if (person1@sex=="M"){
-    res.M<-res.M+bb
-    number.M<-number.M+1
-  }
-  else{
-    res.F<-res.F+bb
-    number.F<-number.F+1
-
-  }
-}
-
-#with 500
-number.M #[1] 253
-number.F #[1] 247
-apply(res.M,2,sum)
 
 
 @ 
@@ -1350,7 +616,7 @@ apply(res.M,2,sum)
 \begin{figure}[p]
   \centering
   \includegraphics[totalheight=17cm]{./figs/stacked_plots.png}
-  \caption{Stacked plots \protect{\cite[]{menugget.2013}} of the distribution of CRC by Dukes' stages across a range of ages for a male populatioon of size 25000.}
+  \caption{Stacked plots \protect{\cite[]{menugget.2013}} of the distribution of CRC by Dukes' stages across a range of ages for a male population of size 25000.}
   \label{figure:stacked_plots.png}
 \end{figure}
 
