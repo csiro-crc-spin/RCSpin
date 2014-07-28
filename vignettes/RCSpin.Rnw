@@ -794,7 +794,7 @@ apply(tt,2,sum)
 
 #we need locations of large adenomas as well
 
-33+ 22+ 74 +42 + 45 +22 = 238 for CRC in crcSpin.R -- sort of similar in total
+#33+ 22+ 74 +42 + 45 +22 = 238 for CRC in crcSpin.R -- sort of similar in total
 
 #Consider 
 ##  [7] 5051# 7 "adenoma"                                                                                        
