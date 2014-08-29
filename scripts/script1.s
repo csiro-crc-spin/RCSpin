@@ -226,9 +226,15 @@ tamar: git push origin master
 #   31fc568..18c666c  master -> master
 
 
+git clone  https://github.com/csiro-crc-spin/RCSpin.git
+R CMD build RCSpin 
+R CMD INSTALL RCSpin_0.1.tar.gz -l ~/Downloads
+
+
+
 library(devtools)
-install_github("parsifal9/test1/RCSpin",args=" -l ~/Downloads/temp")
-library("RCSpin",lib.loc="~/Downloads/temp")
+install_github("csiro-crc-spin/RCSpin",args=" -l /tmp")
+library("RCSpin",lib.loc="/tmp")
 cc<-GenericModel(iterations=99, num_subjects=10,base_seed=122)
 cc<-CrcSpinModel$new(iterations=99, num_subjects=10,base_seed=122)
 cc$run()

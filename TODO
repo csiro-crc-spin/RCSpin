@@ -1,3 +1,90 @@
+
+Monday, July 28, 2014
+res2<-cc$study_results
+res.F<-res2[(1:99)*2-1,] # seems that I had these the wrong way around
+res.M<-res2[(1:99)*2,]   #
+
+number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="M")
+number.F<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="F")
+
+#http://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/3302.0.55.0012008-2010?OpenDocument
+#
+#lx the number of persons surviving to exact age x;
+#qx the proportion of persons dying between exact age x and exact age x+1
+#It is the mortality rate, from which other functions of the life table are derived;
+#Lx the number of person years lived within the age interval x to x+1; and
+#ex life expectancy at exact age x.
+
+dr_data<-read.table(file="../data/sources/3302055001DO001_20082010.csv",sep=",",skip=5,header=TRUE,as.is=TRUE)
+dr_data<-dr_data[-c(1,103,104,105),]
+death_rate_male<-as.numeric(dr_data$qx)
+death_rate_female<-as.numeric(dr_data$qx.1)
+
+#
+
+
+plot(1:99,res.M,col="blue",ylim=c(0,280))
+temp<-rep(0,99)
+temp[1]<-number.M
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_male[ii-1]*temp[ii-1]
+}
+lines(temp,col="blue")
+
+
+points(1:99,res.F,col="red")
+
+
+temp<-rep(0,99)
+temp[1]<-number.F
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_female[ii-1]*temp[ii-1]
+}
+lines(temp,col="red")
+ 
+
+#default commencement_age=1
+#now
+# head(dr_data)
+#  X      lx      qx     Lx   ex    lx.1    qx.1   Lx.1 ex.1
+#2 0 100,000 0.00497 99,555 79.5 100,000 0.00353 99,685 84.0
+#3 1  99,503 0.00040 99,481 78.9  99,647 0.00031 99,629 83.3
+
+so qx[1] is the proportion of persons dying between exact age 0 and exact age 0+1
+So we should be statting with qx[2].
+However, as we are doing it now i.e
+subject$age = subject$age + iteration_resolution
+subject$modelDeathFromOtherCauses()
+
+we are updating age first -- so perhap we want death in the past year i.e
+start with qx[3].
+
+death_rate_male<-death_rate_male[-c(1,2)]
+death_rate_female <- death_rate_female[-c(1,2)]
+
+plot(1:99,res.M,col="blue",ylim=c(0,280))
+temp<-rep(0,99)
+temp[1]<-number.M
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_male[ii-1]*temp[ii-1]
+}
+lines(temp,col="blue")
+points(1:99,res.F,col="red")
+temp<-rep(0,99)
+temp[1]<-number.F
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_female[ii-1]*temp[ii-1]
+}
+lines(temp,col="red")
+#that looks better.
+
+----------------------------------------------------------------------------------------
+
+
+#also should fix birth sex ratios https://en.wikipedia.org/wiki/Human_sex_ratio
+0.5145631 M to 0.4854369 F
+
+----------------------------------------------------------------------------------------
 Wednesday, July 16, 2014
 
 dddm<-DukesCrcSpinModel$new(iterations=99, num_subjects=50, base_seed=125, commencement_age=20)
@@ -22,7 +109,7 @@ results.M$colon.state.CRC
 
 
 ----------------------------------------------------------------------------------------
-Thursday, July 10, 2014
+Thursday, July 10, 2014  --  FIXED
 The data rates problem has returned!
 
 library(RCSpin)
@@ -53,7 +140,7 @@ check with Caroline about the name and the references
 
 
 ----------------------------------------------------------------------------------------
-Wednesday, June 25, 2014
+Wednesday, June 25, 2014  -- FIXED
 1) added death-rates.R to RCSpin/R
 it did not like the url
 \url{http://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/3302.0.55.001Main+Features12008-2010}
