@@ -41,7 +41,6 @@
 \maketitle
 \tableofcontents
 
-\section{RCSpin}
 
 This library implements the CRC-SPIN model \cite[]{Rutter.2008,Rutter.and.Savarino.2010}
 using the Reference Classes object oriented system of R.  R how has 3 object systems, 
@@ -54,8 +53,9 @@ It has mutable objects -- i.e changes don't make copies.
 
 
 
+\section{RCSpin}
 
-\section{genericSpin}
+\subsection{genericSpin}
 This class implements a natural aging model on a group of people
 represented as a \texttt{study\_group} of \texttt{Person} class objects.
 The main aim of this Class is to act as a framework for building more
@@ -82,6 +82,12 @@ system.time(cc<-GenericModel(iterations=99, num_subjects=1000,base_seed=122))
 system.time(cc$run())
 #140.140   0.084 140.779 
 
+res2<-cc$study_results
+number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="M")
+number.F<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="F")
+res.F<-res2[(1:99)*2-1,]
+res.M<-res2[(1:99)*2,]
+
 
 plot(1:99,res.M,col="blue",ylim=c(0,550),type="n",
      xlab="age",ylab="population")
@@ -98,6 +104,7 @@ for ( ii in 2:99){
 }
 lines(temp,col="red")
 legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
+
 @ 
 
 \begin{figure}[tbhp]
@@ -108,7 +115,7 @@ legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
 \end{figure}
 
 \FloatBarrier
-\section{crcSpin}
+\subsection{crcSpin}
 
 
 %#ccsm<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122)
@@ -119,10 +126,11 @@ legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
 
 
 <<echo=TRUE, eval=FALSE>>=
-unix.time(cc<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122))
-#1746.597    7.270 1753.104 
-unix.time(cc$run())
-#8391.224   35.268 8423.108 
+
+#unix.time(cc<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122))
+##1746.597    7.270 1753.104 
+#unix.time(cc$run())
+##8391.224   35.268 8423.108 
 object.size(cc)  #648 bytes 
 #save(cc,file="/tmp/cc.Rdata") #this file is 405MB is size!
 
@@ -147,7 +155,7 @@ cc$study_group[[1]]$colon$sites[[1]]$initiated_in_year
 #[1] 48
 
 CrcSpinModel_output<-organize_results(cc)
-#data(CrcSpinModel_output)
+data(CrcSpinModel_output)
 attach(CrcSpinModel_output)
 
 
@@ -282,7 +290,7 @@ box() #- to make it look "as usual"
 \end{figure}
 
 \FloatBarrier
-\section{DukesCrcSpinModel}
+\subsection{DukesCrcSpinModel}
 
 
 <<echo=TRUE, eval=FALSE>>=
@@ -292,7 +300,7 @@ dddm$run()
 dim(dddm$study_results)  #198  60
 DukesCrcSpinModel_output<-organize_results(dddm)
 
-#data(DukesCrcSpinModel_output)
+data(DukesCrcSpinModel_output)
 attach(DukesCrcSpinModel_output)
 
 plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,
@@ -352,205 +360,7 @@ title(main="undetected  CRC")
 <<eval=TRUE,echo=FALSE,results=hide>>=
 
 ###############################################################################
-## http://www.r-bloggers.com/data-mountains-and-streams-stacked-area-plots-in-r/
-##http://menugget.blogspot.com.au/2013/12/data-mountains-and-streams-stacked-area.html
-##plot.stacked makes a stacked plot where each y series is plotted on top
-##of the each other using filled polygons
-##
-##Arguments include:
-## 'x' - a vector of values
-## 'y' - a matrix of data series (columns) corresponding to x
-## 'order.method' = c("as.is", "max", "first")
-## "as.is" - plot in order of y column
-## "max" - plot in order of when each y series reaches maximum value
-## "first" - plot in order of when each y series first value > 0
-## 'col' - fill colors for polygons corresponding to y columns (will recycle)
-## 'border' - border colors for polygons corresponding to y columns (will recycle) (see ?polygon for details)
-## 'lwd' - border line width for polygons corresponding to y columns (will recycle)
-## '...' - other plot arguments
 
-plot.stacked <- function(x, y,order.method = "as.is",ylab="", xlab="",
-                         border = NULL, lwd=1,
-                         col=rainbow(length(y[1,])),
-                         ylim=NULL,
-                         ...
-                         ){
-    
-    if(sum(y < 0) > 0) error("y cannot contain negative numbers")
-    
-    if(is.null(border)) border <- par("fg")
-    border <- as.vector(matrix(border, nrow=ncol(y), ncol=1))
-    col <- as.vector(matrix(col, nrow=ncol(y), ncol=1))
-    lwd <- as.vector(matrix(lwd, nrow=ncol(y), ncol=1))
-    
-    if(order.method == "max") {
-        ord <- order(apply(y, 2, which.max))
-        y <- y[, ord]
-        col <- col[ord]
-        border <- border[ord]
-    }
-    
-    if(order.method == "first") {
-        ord <- order(apply(y, 2, function(x) min(which(r>0))))
-        
-        
-        y <- y[, ord]
-        col <- col[ord]
-        border <- border[ord]
-    }
-    
-    top.old <- x*0
-    polys <- vector(mode="list", ncol(y))
-    for(i in seq(polys)){
-        top.new <- top.old + y[,i]
-        polys[[i]] <- list(x=c(x, rev(x)), y=c(top.old, rev(top.new)))
-        top.old <- top.new
-    }
-    
-    if(is.null(ylim)) ylim <- range(sapply(polys, function(x) range(x$y, na.rm=TRUE)), na.rm=TRUE)
-    plot(x,y[,1], ylab=ylab, xlab=xlab, ylim=ylim, t="n", ...)
-    for(i in seq(polys)){
-        polygon(polys[[i]], border=border[i], col=col[i], lwd=lwd[i])
-    }
-    
-}
-#plot.stream makes a "stream plot" where each y series is plotted
-#as stacked filled polygons on alternating sides of a baseline.
-#
-#Arguments include:
-#'x' - a vector of values
-#'y' - a matrix of data series (columns) corresponding to x
-#'order.method' = c("as.is", "max", "first")
-# "as.is" - plot in order of y column
-# "max" - plot in order of when each y series reaches maximum value
-# "first" - plot in order of when each y series first value > 0
-#'center' - if TRUE, the stacked polygons will be centered so that the middle,
-#i.e. baseline ("g0"), of the stream is approximately equal to zero.
-#Centering is done before the addition of random wiggle to the baseline.
-#'frac.rand' - fraction of the overall data "stream" range used to define the range of
-#random wiggle (uniform distrubution) to be added to the baseline 'g0'
-#'spar' - setting for smooth.spline function to make a smoothed version of baseline "g0"
-#'col' - fill colors for polygons corresponding to y columns (will recycle)
-#'border' - border colors for polygons corresponding to y columns (will recycle) (see ?polygon for details)
-#'lwd' - border line width for polygons corresponding to y columns (will recycle)
-#'...' - other plot arguments
- 
-plot.stream <- function( x, y, order.method = "as.is", frac.rand=0.1,
-                        spar=0.2, center=TRUE, ylab="", xlab="", border = NULL, lwd=1,
-                        col=rainbow(length(y[1,])), ylim=NULL, ...  ){
-    
-    if(sum(y < 0) > 0) error("y cannot contain negative numbers")
-    
-    if(is.null(border)) border <- par("fg")
-    border <- as.vector(matrix(border, nrow=ncol(y), ncol=1))
-    col <- as.vector(matrix(col, nrow=ncol(y), ncol=1))
-    lwd <- as.vector(matrix(lwd, nrow=ncol(y), ncol=1))
-    
-    if(order.method == "max") {
-        ord <- order(apply(y, 2, which.max))
-        y <- y[, ord]
-        col <- col[ord]
-        border <- border[ord]
-    }
-    
-    if(order.method == "first") {
-	ord <- order(apply(y, 2, function(x) min(which(r>0))))
-        y <- y[, ord]
-        col <- col[ord]
-        border <- border[ord]
-    }
-    
-    bottom.old <- x*0
-    top.old <- x*0
-    polys <- vector(mode="list", ncol(y))
-    for(i in seq(polys)){
-        if(i %% 2 == 1){ #if odd
-            top.new <- top.old + y[,i]
-            polys[[i]] <- list(x=c(x, rev(x)), y=c(top.old, rev(top.new)))
-            top.old <- top.new
-        }
-        if(i %% 2 == 0){ #if even
-            bottom.new <- bottom.old - y[,i]
-            polys[[i]] <- list(x=c(x, rev(x)), y=c(bottom.old, rev(bottom.new)))
-            bottom.old <- bottom.new
-        }
-}
- 
-    ylim.tmp <- range(sapply(polys, function(x) range(x$y, na.rm=TRUE)), na.rm=TRUE)
-    outer.lims <- sapply(polys, function(r) rev(r$y[(length(r$y)/2+1):length(r$y)]))
-    mid <- apply(outer.lims, 1, function(r) mean(c(max(r, na.rm=TRUE), min(r, na.rm=TRUE)), na.rm=TRUE))
-                                        #center and wiggle
-    if(center) {
-        g0 <- -mid + runif(length(x), min=frac.rand*ylim.tmp[1], max=frac.rand*ylim.tmp[2])
-    } else {
-        g0 <- runif(length(x), min=frac.rand*ylim.tmp[1], max=frac.rand*ylim.tmp[2])
-    }
-    fit <- smooth.spline(g0 ~ x, spar=spar)
-    
-    for(i in seq(polys)){
-        polys[[i]]$y <- polys[[i]]$y + c(fit$y, rev(fit$y))
-    }
-    
-    if(is.null(ylim)) ylim <- range(sapply(polys, function(x) range(x$y, na.rm=TRUE)), na.rm=TRUE)
-    plot(x,y[,1], ylab=ylab, xlab=xlab, ylim=ylim, t="n", ...)
-    for(i in seq(polys)){
-        polygon(polys[[i]], border=border[i], col=col[i], lwd=lwd[i])
-    }
-    
-}
-
-
-#this function converts a vector of values("z") to a vector of color
-#levels. One must define the number of colors. The limits of the color
-#scale("zlim") or the break points for the color changes("breaks") can 
-#also be defined. when breaks and zlim are defined, breaks overrides zlim.
-val2col<-function(z, zlim, col = heat.colors(12), breaks){
-    if(!missing(breaks)){
-        if(length(breaks) != (length(col)+1)){stop("must have one more break than colour")}
-    }
-    if(missing(breaks) & !missing(zlim)){
-        zlim[2] <- zlim[2]+c(zlim[2]-zlim[1])*(1E-3)#adds a bit to the range in both directions
-        zlim[1] <- zlim[1]-c(zlim[2]-zlim[1])*(1E-3)
-        breaks <- seq(zlim[1], zlim[2], length.out=(length(col)+1)) 
-    }
-    if(missing(breaks) & missing(zlim)){
-        zlim <- range(z, na.rm=TRUE)
-        zlim[2] <- zlim[2]+c(zlim[2]-zlim[1])*(1E-3)#adds a bit to the range in both directions
-        zlim[1] <- zlim[1]-c(zlim[2]-zlim[1])*(1E-3)
-        breaks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
-    }
-    CUT <- cut(z, breaks=breaks)
-    colorlevels <- col[match(CUT, levels(CUT))] # assign colors to heights for each point
-    return(colorlevels)
-}
-
-
-## set.seed(1)
-## m <- 500
-## n <- 30
-## x <- seq(m)
-## y <- matrix(0, nrow=m, ncol=n)
-## colnames(y) <- seq(n)
-## for(i in seq(ncol(y))){
-## mu <- runif(1, min=0.25*m, max=0.75*m)
-## SD <- runif(1, min=5, max=20)
-## TMP <- rnorm(1000, mean=mu, sd=SD)
-## HIST <- hist(TMP, breaks=c(0,x), plot=FALSE)
-## fit <- smooth.spline(HIST$counts ~ HIST$mids)
-## y[,i] <- fit$y
-## }
-## y <- replace(y, y<0.01, 0)
- 
- 
-## #Plot Ex. 1 - Color by max value
-## pal <- colorRampPalette(c(rgb(0.85,0.85,1), rgb(0.2,0.2,0.7)))
-## BREAKS <- pretty(apply(y,2,max),8)
-## LEVS <- levels(cut(1, breaks=BREAKS))
-## COLS <- pal(length(BREAKS )-1)
-## z <- val2col(apply(y,2,max), col=COLS)
- 
-## #plot.stacked(x,y, xlim=c(100, 400), ylim=c(0, 1.2*max(apply(y,1,sum), na.rm=TRUE)),
-## #             yaxs="i", col=z, border="white", lwd=0.5)
 
 @ 
 
@@ -656,6 +466,295 @@ mean(results.F[-c(1:40),8]/(results.F[-c(1:40),7]+results.F[-c(1:40),8]))
   \caption{Stacked plots \protect{\cite[]{menugget.2013}} of the distribution of CRC by Dukes' stages across a range of ages for a male population of size 25000.}
   \label{figure:stacked_plots.png}
 \end{figure}
+
+
+
+\clearpage
+\section{SpinModels}
+\subsection{genericSpin}
+
+<<eval=FALSE,echo=FALSE>>=
+
+library(SpinModels)
+#Loading required package: Rcpp
+#Loading required package: RcppArmadillo
+
+cc<-GenericModel$new(iterations=99, iteration_resolution=1,num_subjects=50000,base_seed=122,commencement_age=20,study_results=matrix(0,0,0))
+cc<-CrcSpinModel$new(99,50000, 122, 20)
+
+@ 
+
+
+\subsection{crcSpin}
+<<>>=
+
+@ 
+\subsection{DukesCrcSpinModel}
+
+<<>>=
+
+system.time(dd<-DukesCrcSpinModel$new(99, 50000, 125, 20))
+#1.620   0.036   1.657
+#3.749   0.634   4.394 
+system.time(dd$run())
+#43.250   0.000  43.294
+
+dim(dd$study_results)
+
+res2<-dd$study_results
+res.F<-res2[(1:99)*2-1,] 
+res.M<-res2[(1:99)*2,]   
+
+number.M<-sum(unlist (lapply(dd$study_group,f<-function(x){x$sex}))=="M")
+#Error in envRefInferField(x, what, getClass(class(x)), selfEnv) : 
+#  ‘study_group’ is not a valid field or method name for reference class “Rcpp_DukesCrcSpinModel”
+
+number.M<-25000
+number.F<-25000
+
+qq<-25000
+
+png("DukesCrcSpinModel.png")
+plot(res.F[,2]/qq,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
+     ylab="proportion of population",ylim=c(0,0.05),
+          main="CRC -- population with no screening")
+lines(res2[,3]/qq,col="plum4",lwd=2) #"pre clinical CRC" ie CRC
+lines(res2[,4]/qq,col="black",lwd=2) #death CRC
+
+legend(20,0.04,c("population","large adenoma", "CRC","death CRC"), col=c(
+"green","orange","plum4","black"),lwd=2)
+axis(2, pretty( c(0,0.05),10))
+par(new=TRUE)
+plot(pp<- qq-cumsum(res.F[,45]),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+
+axis(4, pretty(range(c(0,qq),10)))
+mtext(side=4, line=3, "population")
+
+axis(1,pretty(range(1:99),10))
+box() #- to make it look "as usual"
+#dev.off()
+
+
+
+
+
+## library(RCSpin)
+## cc<-GenericModel(iterations=99, num_subjects=10,base_seed=122)
+## cc<-CrcSpinModel$new(iterations=99, num_subjects=10,base_seed=122)
+## cc$run()
+## dd<-DukesCrcSpinModel$new(iterations=99, num_subjects=10, base_seed=125, commencement_age=20)
+## dd$run()
+## help(RCSpin)
+## help(death_rates)
+## help(GenericModel)  # takes the #' section at the tot of the file and add all the
+##                     # "" from each method
+## GenericModel$methods()
+## GenericModel$fields()
+## GenericModel$help()
+## GenericModel$help(updateSubject)
+
+## help(CrcSpinModel)  # takes the #' section just before setRefClass(CrcSpinModel ..)
+##                     #and adds all the  "" from each method
+## help(CrcRiskParams) #nothing
+
+
+## help(Test-class)#works if I type it in but not from emacs -- how can that happen?
+## Test$help()
+## help(Test)
+
+## help(ClinicalHistory)  # these are quite different. help(ClinicalHistory) gives the roxoygen help
+## ClinicalHistory$help() # this gives what appears to be some template of the function
+## help(Person)
+## Person$help()
+## Person$help(initialize)
+## help(PersonWithColon)        #nothing
+## help(Risk)
+## Risk$help()
+## help(lappend)
+## help(Adenoma) 
+## help(AdenomaParams)
+## help(Colon)  #nothing
+## help(CrcRisk)
+## help(DukesCrcSpinModel)
+## help(DukesAdenomaParams)     #nothing
+## help(DukesAdenoma)          #nothing
+## help(DukesColon)           #nothing
+## help(DukesPersonWithColon)  #nothing
+## help(SymptomaticPresentation)  #nothing
+## help(organize_results)#nothing
+## vignette("RCSpin")
+
+## system.time(cc<-GenericModel(iterations=99, num_subjects=1000,base_seed=122))
+## #   user  system elapsed
+## #   2.008   0.012   2.023
+## system.time(cc$run())
+## # 30.762   0.036  30.827
+## cc$study_group[1]
+
+
+## system.time(cc<-CrcSpinModel$new(iterations=99, num_subjects=1000,base_seed=122))
+## # 20.233   0.000  20.251
+## system.time(cc$run())
+## #107.987   0.040 108.160
+## cc$study_group[1]
+
+## system.time(dd<-DukesCrcSpinModel$new(iterations=99, num_subjects=1000, base_seed=125, commencement_age=20))
+## #20.778   0.012  20.808
+## system.time(dd$run())
+## #159.030   0.528 159.928
+
+## system.time(dd<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000, base_seed=125, commencement_age=20))
+## system.time(dd$run())
+
+## dim(dd$study_results)
+
+
+
+
+## #######################################################################################
+## ccgm<-GenericModel(iterations=99, num_subjects=50,base_seed=122)
+## dim(ccgm$study_results)
+
+## res2<-ccgm$study_results
+## res.F<-res2[(1:99)*2-1,]
+## res.M<-res2[(1:99)*2,]
+
+## number.M<-sum(unlist (lapply(ccgm$study_group,f<-function(x){x$sex}))=="M")
+## number.F<-sum(unlist(lapply(ccgm$study_group,f<-function(x){x$sex}))=="F")
+
+## plot(1:99,res.M,col="blue",ylim=c(0,550),type="n",
+##      xlab="age",ylab="population")
+## temp<-rep(0,99)
+## temp[1]<-number.M
+## for ( ii in 2:99){
+##     temp[ii]<- temp[ii-1]-death_rate_male[ii-1]*temp[ii-1]
+## }
+## lines(temp,col="blue")
+## temp<-rep(0,99)
+## temp[1]<-number.F
+## for ( ii in 2:99){
+##     temp[ii]<- temp[ii-1]-death_rate_female[ii-1]*temp[ii-1]
+## }
+## lines(temp,col="red")
+## legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
+
+
+
+
+## #ccsm<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122)
+## #ccsm$run()
+## #dim(ccsm$study_results)# 198  18
+## #aa<-organize_results(ccsm)
+## #save(aa,file="aa_ccsm.Rdata")
+## #load(file="aa_ccsm.Rdata")
+## data("CrcSpinModel_output")
+## attach(CrcSpinModel_output)
+
+## #png("CrcSpinModel.png")
+## plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
+##      ylab="proportion of population",ylim=c(0,0.1),
+##           main="CRC -- male population with no screening")
+## lines(results.M$colon.state.pre.symptomatic.CRC/number.M,col="plum4",lwd=2)
+## lines(results.M$colon.state.CRC/number.M,col="purple",lwd=2)
+## legend(20,0.07,c("population","large adenoma", "CRC","symptomatic CRC"), col=c(
+## "green","orange","plum4","purple"),lwd=2)
+## axis(2, pretty( c(0,0.1),10))
+## par(new=TRUE)
+## plot(pp<- number.M-cumsum(results.M$person.state.deceased),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+## axis(4, pretty(range(c(0,number.M),10)))
+## mtext(side=4, line=3, "population")
+
+## axis(1,pretty(range(1:99),10))
+## box() #- to make it look "as usual"
+## #dev.off()
+
+
+
+## #dddm<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000, base_seed=125, commencement_age=20)
+## #dddm$run()
+## #dim(dddm$study_results)  #198  60
+## #aa<-organize_results(dddm)
+## #dim(dddm$study_results)  #198  60
+## #[1] 198  60
+## # aa<-organize_results(dddm)
+## #save(aa,file="aa_dddm.Rdata")
+
+## data(DukesCrcSpinModel_output)
+## attach(DukesCrcSpinModel_output)
+
+## #png("DukesCrcSpinModel.png")
+## plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
+##      ylab="proportion of population",ylim=c(0,0.1),
+##           main="CRC -- male population with no screening")
+## lines(results.M$colon.state.CRC/number.M,col="plum4",lwd=2)
+## lines(results.M$colon.state.symptomatic.CRC/number.M,col="purple",lwd=2)
+## legend(20,0.07,c("population","large adenoma", "CRC","symptomatic CRC"), col=c(
+## "green","orange","plum4","purple"),lwd=2)
+## axis(2, pretty( c(0,0.1),10))
+## par(new=TRUE)
+## plot(pp<- number.M-cumsum(results.M$person.state.deceased),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+## axis(4, pretty(range(c(0,number.M),10)))
+## mtext(side=4, line=3, "population")
+## axis(1,pretty(range(1:99),10))
+## box() #- to make it look "as usual"
+
+
+## #load(file="aa_ccsm.Rdata")
+## #CrcSpinModel_output<-aa
+## #save(CrcSpinModel_output,file="RCSpin/data/CrcSpinModel_output.RData")
+
+## #load(file="aa_dddm.Rdata")
+## #DukesCrcSpinModel_output<-aa
+## #save(DukesCrcSpinModel_output,file="RCSpin/data/DukesCrcSpinModel_output.RData")
+
+
+## #http://win-builder.r-project.org/upload.aspx
+## #to create a windows library
+
+
+
+
+library(devtools)
+install_github("csiro-crc-spin/SpinModels",args=" -l ~/Downloads/temp")
+library("SpinModels",lib.loc="~/Downloads/temp")
+cc<-GenericModel$new(iterations=99, num_subjects=10,base_seed=122,commencement_age=20)
+cc<-CrcSpinModel$new(iterations=99, num_subjects=10,base_seed=122)
+cc$run()
+dd<-DukesCrcSpinModel$new(iterations=99, num_subjects=10, base_seed=125, commencement_age=20)
+dd$run()
+help(RCSpin)
+
+############
+system.time(cc<-GenericModel(iterations=99, num_subjects=1000,base_seed=122))
+#   user  system elapsed 
+# 10.473   0.016  10.631 
+
+system.time(cc$run())
+#140.140   0.084 140.779 
+
+res2<-cc$study_results
+number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="M")
+number.F<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="F")
+res.F<-res2[(1:99)*2-1,]
+res.M<-res2[(1:99)*2,]
+
+
+plot(1:99,res.M,col="blue",ylim=c(0,550),type="n",
+     xlab="age",ylab="population")
+temp<-rep(0,99)
+temp[1]<-number.M
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_male[ii-1]*temp[ii-1]
+}
+lines(temp,col="blue")
+temp<-rep(0,99)
+temp[1]<-number.F
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_female[ii-1]*temp[ii-1]
+}
+lines(temp,col="red")
+legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
+@
 
 
 \clearpage
@@ -891,7 +990,273 @@ Rutter, C.~M. and Savarino, J.~E. (2010).
 
 
 
-
+\nocite{stacked.area.plots.2013}
 
 
 \end{document}
+
+#######################################################################################################
+#Friday, June 20, 2014
+require(roxygen2)
+roxygenize("RCSpin")
+#Error in .Object$initialize(...) : object 'CrcRiskParams' not found
+
+library(devtools)
+document("RCSpin")
+Updating RCSpin documentation
+ Loading RCSpin
+ Writing NAMESPACE
+ Writing GenericModel-class.Rd
+ Writing Test-class.Rd
+ Writing ClinicalHistory-class.Rd
+ Writing Person-class.Rd
+ Writing Risk-class.Rd
+ Writing lappend.Rd
+ Writing CrcSpinModel-class.Rd
+ Writing DukesAdenomaParams-class.Rd
+
+
+############################################################
+# Generated by roxygen2 (4.0.1): do not edit by hand
+
+export(lappend)
+#################################################################
+
+system("cp NAMESPACE RCSpin/NAMESPACE")
+or svn revert RCSpin/NAMESPACE
+
+
+system("R CMD build RCSpin")
+system("sudo R CMD INSTALL RCSpin_0.1.tar.gz")
+#restart
+
+library(RCSpin)
+cc<-GenericModel(iterations=99, num_subjects=10,base_seed=122)
+cc<-CrcSpinModel$new(iterations=99, num_subjects=10,base_seed=122)
+cc$run()
+dd<-DukesCrcSpinModel$new(iterations=99, num_subjects=10, base_seed=125, commencement_age=20)
+dd$run()
+help(RCSpin)
+help(death_rates)
+help(GenericModel)  # takes the #' section at the tot of the file and add all the
+                    # "" from each method
+GenericModel$methods()
+GenericModel$fields()
+GenericModel$help()
+GenericModel$help(updateSubject)
+
+help(CrcSpinModel)  # takes the #' section just before setRefClass(CrcSpinModel ..)
+                    #and adds all the  "" from each method
+help(CrcRiskParams) #nothing
+
+
+help(Test-class)#works if I type it in but not from emacs -- how can that happen?
+Test$help()
+help(Test)
+
+help(ClinicalHistory)  # these are quite different. help(ClinicalHistory) gives the roxoygen help
+ClinicalHistory$help() # this gives what appears to be some template of the function
+help(Person)
+Person$help()
+Person$help(initialize)
+help(PersonWithColon)        #nothing
+help(Risk)
+Risk$help()
+help(lappend)
+help(Adenoma) 
+help(AdenomaParams)
+help(Colon)  #nothing
+help(CrcRisk)
+help(DukesCrcSpinModel)
+help(DukesAdenomaParams)     #nothing
+help(DukesAdenoma)          #nothing
+help(DukesColon)           #nothing
+help(DukesPersonWithColon)  #nothing
+help(SymptomaticPresentation)  #nothing
+help(organize_results)#nothing
+vignette("RCSpin")
+
+system.time(cc<-GenericModel(iterations=99, num_subjects=1000,base_seed=122))
+#   user  system elapsed
+#   2.008   0.012   2.023
+system.time(cc$run())
+# 30.762   0.036  30.827
+cc$study_group[1]
+
+
+system.time(cc<-CrcSpinModel$new(iterations=99, num_subjects=1000,base_seed=122))
+# 20.233   0.000  20.251
+system.time(cc$run())
+#107.987   0.040 108.160
+cc$study_group[1]
+
+system.time(dd<-DukesCrcSpinModel$new(iterations=99, num_subjects=1000, base_seed=125, commencement_age=20))
+#20.778   0.012  20.808
+system.time(dd$run())
+#159.030   0.528 159.928
+
+system.time(dd<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000, base_seed=125, commencement_age=20))
+system.time(dd$run())
+
+dim(dd$study_results)
+
+
+
+
+#######################################################################################
+ccgm<-GenericModel(iterations=99, num_subjects=50,base_seed=122)
+dim(ccgm$study_results)
+
+res2<-ccgm$study_results
+res.F<-res2[(1:99)*2-1,]
+res.M<-res2[(1:99)*2,]
+
+number.M<-sum(unlist (lapply(ccgm$study_group,f<-function(x){x$sex}))=="M")
+number.F<-sum(unlist(lapply(ccgm$study_group,f<-function(x){x$sex}))=="F")
+
+plot(1:99,res.M,col="blue",ylim=c(0,550),type="n",
+     xlab="age",ylab="population")
+temp<-rep(0,99)
+temp[1]<-number.M
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_male[ii-1]*temp[ii-1]
+}
+lines(temp,col="blue")
+temp<-rep(0,99)
+temp[1]<-number.F
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_female[ii-1]*temp[ii-1]
+}
+lines(temp,col="red")
+legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
+
+
+
+
+#ccsm<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122)
+#ccsm$run()
+#dim(ccsm$study_results)# 198  18
+#aa<-organize_results(ccsm)
+#save(aa,file="aa_ccsm.Rdata")
+load(file="aa_ccsm.Rdata")
+attach(aa)
+#png("CrcSpinModel.png")
+plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
+     ylab="proportion of population",ylim=c(0,0.1),
+          main="CRC -- male population with no screening")
+lines(results.M$colon.state.pre.symptomatic.CRC/number.M,col="plum4",lwd=2)
+lines(results.M$colon.state.CRC/number.M,col="purple",lwd=2)
+legend(20,0.07,c("population","large adenoma", "CRC","symptomatic CRC"), col=c(
+"green","orange","plum4","purple"),lwd=2)
+axis(2, pretty( c(0,0.1),10))
+par(new=TRUE)
+plot(pp<- number.M-cumsum(results.M$person.state.deceased),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+axis(4, pretty(range(c(0,number.M),10)))
+mtext(side=4, line=3, "population")
+
+axis(1,pretty(range(1:99),10))
+box() #- to make it look "as usual"
+#dev.off()
+
+
+
+#dddm<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000, base_seed=125, commencement_age=20)
+#dddm$run()
+#dim(dddm$study_results)  #198  60
+#aa<-organize_results(dddm)
+#dim(dddm$study_results)  #198  60
+#[1] 198  60
+# aa<-organize_results(dddm)
+#save(aa,file="aa_dddm.Rdata")
+
+data(DukesCrcSpinModel_output)
+attach(DukesCrcSpinModel_output)
+
+png("DukesCrcSpinModel.png")
+plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
+     ylab="proportion of population",ylim=c(0,0.1),
+          main="CRC -- male population with no screening")
+lines(results.M$colon.state.CRC/number.M,col="plum4",lwd=2)
+lines(results.M$colon.state.symptomatic.CRC/number.M,col="purple",lwd=2)
+legend(20,0.07,c("population","large adenoma", "CRC","symptomatic CRC"), col=c(
+"green","orange","plum4","purple"),lwd=2)
+axis(2, pretty( c(0,0.1),10))
+par(new=TRUE)
+plot(pp<- number.M-cumsum(results.M$person.state.deceased),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+axis(4, pretty(range(c(0,number.M),10)))
+mtext(side=4, line=3, "population")
+axis(1,pretty(range(1:99),10))
+box() #- to make it look "as usual"
+
+
+load(file="aa_ccsm.Rdata")
+CrcSpinModel_output<-aa
+save(CrcSpinModel_output,file="RCSpin/data/CrcSpinModel_output.RData")
+
+load(file="aa_dddm.Rdata")
+DukesCrcSpinModel_output<-aa
+save(DukesCrcSpinModel_output,file="RCSpin/data/DukesCrcSpinModel_output.RData")
+
+
+
+#http://win-builder.r-project.org/upload.aspx
+#to create a windows library
+
+
+svn export CRC-Spin2-R5-package test1
+git config --global user.email "rob.dunne@csiro.au"
+git config --global user.name "dun280"
+cd test1
+git init
+git add .
+git remote add origin https://github.com/parsifal9/test1.git
+git push origin master
+git pull https://github.com/parsifal9/test1.git/  #there is a README.md file on https://github.com/parsifal9/test1 that has to be pulled down first
+
+tamar: git push origin master
+#Counting objects: 32, done.
+#Delta compression using up to 2 threads.
+#Compressing objects: 100% (31/31), done.
+#Writing objects: 100% (31/31), 141.14 KiB | 0 bytes/s, done.
+#Total 31 (delta 3), reused 0 (delta 0)
+#To https://github.com/parsifal9/test1.git
+#   31fc568..18c666c  master -> master
+
+
+git clone  https://github.com/csiro-crc-spin/RCSpin.git
+R CMD build RCSpin 
+R CMD INSTALL RCSpin_0.1.tar.gz -l ~/Downloads
+
+
+
+library(devtools)
+install_github("csiro-crc-spin/RCSpin",args=" -l /tmp")
+library("RCSpin",lib.loc="/tmp")
+cc<-GenericModel(iterations=99, num_subjects=10,base_seed=122)
+cc<-CrcSpinModel$new(iterations=99, num_subjects=10,base_seed=122)
+cc$run()
+dd<-DukesCrcSpinModel$new(iterations=99, num_subjects=10, base_seed=125, commencement_age=20)
+dd$run()
+help(RCSpin)
+#No documentation for ‘RCSpin’ in specified packages and libraries:
+#you could try ‘??RCSpin’
+
+
+##########################################################################################
+
+<<>>=
+
+aa<-matrix(0,4,2)
+i<-1
+for ( h in c(0.1,0.2,0.4,0.5)){
+    j<-1
+    for (sig in c(0.05,0.01)){
+        aa[i,j]<- pwr.2p2n.test(h =h , n1=158,n2=79,sig.level =sig ,
+                             alternative = "greater")$power
+        j<-j+1
+    }
+    i<-i+1
+}
+aa
+
+@

@@ -44,7 +44,7 @@
 \section{RC Classes}
 
 RCSpin implements the CRC-SPIN model \cite[]{Rutter.2008,Rutter.and.Savarino.2010}
-using the Reference Classes object oriented system of R.  R how has 3 object systems, 
+       using the Reference Classes object oriented system of R.  R how has 3 object systems, 
 S3, S4, and Reference Classes (RC) systems.
 
 RC is good for simulations with complex states.
