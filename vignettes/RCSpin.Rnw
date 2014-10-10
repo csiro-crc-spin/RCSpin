@@ -115,7 +115,7 @@ legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
 
 <<echo=TRUE, eval=FALSE>>=
 
-cc<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122))
+cc<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122)
 object.size(cc)  #648 bytes 
 save(cc,file="/tmp/cc.Rdata") #this file is 405MB is size!
 cc$study_group[[1]]
