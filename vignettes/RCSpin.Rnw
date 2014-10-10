@@ -119,20 +119,20 @@ cc<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122)
 object.size(cc)  #648 bytes 
 save(cc,file="/tmp/cc.Rdata") #this file is 405MB is size!
 cc$study_group[[1]]
-Spin Person object of class "PersonWithColon" 
-Age:[1] 68
-Sex:[1] "M"
-State:[1] "living"
-In treatment program:[1] "yes"
-Study id:[1] 1
-Clinical history:
-Spin ClinicalHistory object of class "ClinicalHistory" 
-Status:character(0)
-Events:list()
-Risk level:[1] "standard"
-Colon clinical characteristic:[1] "symptomatic CRC"
-Colon:
-Spin Colon object of class "Colon" 
+## Spin Person object of class "PersonWithColon" 
+## Age:[1] 68
+## Sex:[1] "M"
+## State:[1] "living"
+## In treatment program:[1] "yes"
+## Study id:[1] 1
+## Clinical history:
+## Spin ClinicalHistory object of class "ClinicalHistory" 
+## Status:character(0)
+## Events:list()
+## Risk level:[1] "standard"
+## Colon clinical characteristic:[1] "symptomatic CRC"
+## Colon:
+## Spin Colon object of class "Colon" 
 
 cc$study_group[[1]]$colon$sites[[1]]$initiated_in_year
 #[1] 48
