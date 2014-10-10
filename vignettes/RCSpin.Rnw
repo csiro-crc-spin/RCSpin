@@ -41,17 +41,18 @@
 \maketitle
 \tableofcontents
 
+\section{Introduction}
+This vignette documents both the \texttt{RCSpin} and \texttt{SpinModels} libraries.
 
-This library implements the CRC-SPIN model \cite[]{Rutter.2008,Rutter.and.Savarino.2010}
+The \texttt{RCSpin} library implements the CRC-SPIN model \cite[]{Rutter.2008,Rutter.and.Savarino.2010}
 using the Reference Classes object oriented system of R.  R how has 3 object systems, 
 S3, S4, and Reference Classes (RC) systems.
-
-RC is good for simulations with complex states.
+The RC is good for simulations with complex states.
 It has mutable objects -- i.e changes don't make copies.
 \marginpar{the class names are pointers, I think. Why is this a good idea? I don't know}
 
-
-
+The RC classes are similar in use and logic to C++ classes. This has facilitated translating the 
+\texttt{RCSpin} to to the Rcpp framework \cite[]{Eddelbuettel.and.Francois.2011}.
 
 \section{RCSpin}
 
@@ -75,20 +76,15 @@ There is also  \verb+GenericModel(help)+ and
  
 <<echo=TRUE, eval=FALSE>>=
 library(RCSpin)
-system.time(cc<-GenericModel(iterations=99, num_subjects=1000,base_seed=122))
-#   user  system elapsed 
-# 10.473   0.016  10.631 
-
-system.time(cc$run())
-#140.140   0.084 140.779 
-
+cc<-GenericModel(iterations=99, num_subjects=1000,base_seed=122)
+cc$run()
 res2<-cc$study_results
-number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="M")
+number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex})  )=="M")
 number.F<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="F")
 res.F<-res2[(1:99)*2-1,]
 res.M<-res2[(1:99)*2,]
 
-
+data(death_rates)
 plot(1:99,res.M,col="blue",ylim=c(0,550),type="n",
      xlab="age",ylab="population")
 temp<-rep(0,99)
@@ -117,87 +113,30 @@ legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
 \FloatBarrier
 \subsection{crcSpin}
 
-
-%#ccsm<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122)
-%#ccsm$run()
-%#dim(ccsm$study_results)# 198  18
-%#CrcSpinModel_output<- organize_results(ccsm)
-
-
-
 <<echo=TRUE, eval=FALSE>>=
 
-#unix.time(cc<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122))
-##1746.597    7.270 1753.104 
-#unix.time(cc$run())
-##8391.224   35.268 8423.108 
+cc<-CrcSpinModel$new(iterations=99, num_subjects=50000,base_seed=122))
 object.size(cc)  #648 bytes 
-#save(cc,file="/tmp/cc.Rdata") #this file is 405MB is size!
-
-
-#cc$study_group[[1]]
-#Spin Person object of class "PersonWithColon" 
-#Age:[1] 68
-#Sex:[1] "M"
-#State:[1] "living"
-#In treatment program:[1] "yes"
-#Study id:[1] 1
-#Clinical history:
-#Spin ClinicalHistory object of class "ClinicalHistory" 
-#Status:character(0)
-#Events:list()
-#Risk level:[1] "standard"
-#Colon clinical characteristic:[1] "symptomatic CRC"
-#Colon:
-#Spin Colon object of class "Colon" 
+save(cc,file="/tmp/cc.Rdata") #this file is 405MB is size!
+cc$study_group[[1]]
+Spin Person object of class "PersonWithColon" 
+Age:[1] 68
+Sex:[1] "M"
+State:[1] "living"
+In treatment program:[1] "yes"
+Study id:[1] 1
+Clinical history:
+Spin ClinicalHistory object of class "ClinicalHistory" 
+Status:character(0)
+Events:list()
+Risk level:[1] "standard"
+Colon clinical characteristic:[1] "symptomatic CRC"
+Colon:
+Spin Colon object of class "Colon" 
 
 cc$study_group[[1]]$colon$sites[[1]]$initiated_in_year
 #[1] 48
-
 CrcSpinModel_output<-organize_results(cc)
-data(CrcSpinModel_output)
-attach(CrcSpinModel_output)
-
-
-apply(results.M,2,sum)
-##              adenoma.state.adenoma 
-##                             591972 
-##        adenoma.state.large.adenoma 
-##                              45214 
-##  adenoma.state.pre.symptomatic.CRC 
-##                              13311 
-##          person.colon_clinical.CRC 
-##                               2966 
-##                  colon.state.clear 
-##                            1147512 
-##                colon.state.adenoma 
-##                             272256 
-##          colon.state.large.adenoma 
-##                              36810 
-##    colon.state.pre.symptomatic.CRC 
-##                               9727 
-##                    colon.state.CRC 
-##                               2966 
-##            colon.cancer_site.cecum 
-##                               1055 
-##        colon.cancer_site.ascending 
-##                               3017 
-##       colon.cancer_site.transverse 
-##                               3192 
-##       colon.cancer_site.descending 
-##                               1533 
-##          colon.cancer_site.sigmoid 
-##                               2786 
-##           colon.cancer_site.rectum 
-##                               1110 
-##              person.state.deceased 
-##                              21881 
-##          person.colon_clinical.CRC 
-##                               2966 
-## person.initiateCRCTreatment.called 
-##                               2966 
-
-
 
 
 table(unlist(lapply(cc$study_group,f<-function(x){x$state})),
@@ -211,7 +150,7 @@ bb<-rep(0,500)
 
 for  (jj in 1:500){
     
-    person1<-cc$study_group[[jj]]
+    person1<-cc$study_group[[jj]]  
      
 #    for ( i in 1:100){
         ss<-person1$colon$sites
@@ -241,25 +180,21 @@ legend(0,30,c("clear" , "adenoma (0.25)"  ,
 "large adenoma (0.42)" ,"CRC (0.016)","symptomatic CRC (0.114)"),
        fill=c(1, 3:6))
 
-#########################################################################
-#http://seer.cancer.gov
 
-#Based on rates from 2008-2010, 4.82% of men and women born today will
-#be diagnosed with cancer of the colon and rectum at some time during
-#their lifetime.
 
-sum(results.F[,4]+results.M[,4])/(number.F+number.M)
-#[1] 0.10554
+@ 
 
-#1.91% of men will develop cancer of the colon
-#and rectum between their 50th and 70th birthdays compared to 1.41% for
-#women. 
+We note that:
+\begin{itemize}
+\item while \texttt{cc} is only 648 bytes in size -- if you save it, the file will be 405MB is size!
+\item these functions are very slow to run with a population size of 50000. There is a test output matrix 
+  supplied with the library. 
+\end{itemize}
 
-sum(results.F[50:70,4])/(number.F-cumsum(results.F[,16]))[60]
-#0.03137255
-sum(results.M[50:70,4])/(number.M-cumsum(results.M[,16]))[60]
-#0.07729469
-
+<<eval=FALSE,echo=TRUE>>=
+data(CrcSpinModel_output)
+attach(CrcSpinModel_output)
+apply(results.M,2,sum)
 
 plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,
      xlab="age",axes=FALSE,
@@ -299,7 +234,10 @@ dddm<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000, base_seed=125,
 dddm$run()
 dim(dddm$study_results)  #198  60
 DukesCrcSpinModel_output<-organize_results(dddm)
+@ 
 
+
+<<echo=TRUE, eval=FALSE>>=
 data(DukesCrcSpinModel_output)
 attach(DukesCrcSpinModel_output)
 
@@ -472,6 +410,19 @@ mean(results.F[-c(1:40),8]/(results.F[-c(1:40),7]+results.F[-c(1:40),8]))
 \clearpage
 \section{SpinModels}
 \subsection{genericSpin}
+This class implements a natural aging model on a group of people
+represented as a \texttt{study\_group} of \texttt{Person} class objects.
+The main aim of this Class is to act as a framework for building more
+complex models through extension of this class. The simple natural
+aging model implemented in \texttt{updateSubject} acts as an
+example and place holder for subclasses to override with a more
+complex implementation of the function.
+
+At the moment it subjects a population to the age specific mortality rates taken from a provided table.
+See figure \ref{figure:RcppGenericModel.png}.
+
+The function \verb+help(GenericModel)+ provides help about the methods.
+
 
 <<eval=FALSE,echo=FALSE>>=
 
@@ -480,18 +431,135 @@ library(SpinModels)
 #Loading required package: RcppArmadillo
 
 cc<-GenericModel$new(iterations=99, iteration_resolution=1,num_subjects=50000,base_seed=122,commencement_age=20,study_results=matrix(0,0,0))
-cc<-CrcSpinModel$new(99,50000, 122, 20)
+cc$run()
+
+dim(cc$study_results)
+#[1] 198   1
+res2<-cc$study_results
+res.F<-res2[(1:99)*2,] 
+res.M<-res2[(1:99)*2-1,]   
+#this is around the other  way to RCSpin!!
+
+number.M<-sum(unlist (lapply(cc$study_group,f<-function(x){x$sex}))=="M")
+
+number.M<-25000
+number.F<-25000
+qq<-25000
+
+png("./figs/RcppGenericModel.png")
+plot(1:99,res.M,col="blue",ylim=c(0,25500),type="n",
+     xlab="age",ylab="population")
+temp<-rep(0,99)
+temp[1]<-number.M
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_male[ii-1]*temp[ii-1]
+}
+lines(temp,col="blue")
+temp<-rep(0,99)
+temp[1]<-number.F
+for ( ii in 2:99){
+    temp[ii]<- temp[ii-1]-death_rate_female[ii-1]*temp[ii-1]
+}
+lines(temp,col="red")
+legend(20,10000,c("male","female"),col=c("blue","red"),lty=1)
+dev.off()
+
 
 @ 
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=9cm]{./figs/RcppGenericModel.png}
+  \caption{A population of 50000 people subjected to the mortality rates of a supplied table.}
+  \label{figure:RcppGenericModel.png}
+\end{figure}
 
 
 \subsection{crcSpin}
-<<>>=
+<<eval=FALSE,echo=FALSE>>=
+
+
+
+unix.time(cc<-CrcSpinModel$new(iterations=99,num_subjects=50000,base_seed=122,commencement_age=20))
+unix.time(cc$run())
+##8391.224   35.268 8423.108 
+object.size(cc)  #648 bytes 
+#save(cc,file="/tmp/cc.Rdata") #this file is 405MB is size!
+
+
+
+CrcSpinModel_output<-organize_results(cc)
+res.M<-CrcSpinModel_output$results.M
+res.F<-CrcSpinModel_output$results.F
+
+
+## apply(results.M,2,sum)
+
+## table(unlist(lapply(cc$study_group,f<-function(x){x$state})),
+##       unlist(lapply(cc$study_group,f<-function(x){x$in_treatment_program})))
+## #          
+## #              no   yes
+## #  deceased 43698   218
+## #  living    1025  5059
+## aa<-rep(0,500)
+## bb<-rep(0,500)
+
+## for  (jj in 1:500){
+    
+##     person1<-cc$study_group[[jj]]  
+     
+## #    for ( i in 1:100){
+##         ss<-person1$colon$sites
+##         if (length(ss)>0){
+##             temp<-lapply(ss,f<-function(x){x$size})
+##             aa[jj]<- max(unlist(temp))
+            
+##             temp<-lapply(ss,f<-function(x){x$state})
+##             tt<-factor(temp,levels=c("clear", "adenoma", "large adenoma", "CRC"))
+##             bb[jj]<- max(as.numeric(tt))
+##             if (person1$colon_clinical=="symptomatic CRC"){
+##                 bb[jj]<-5
+##             }
+##         }
+
+## }
+
+
+png("./figs/RcppCrcSpinModel.png")
+plot(res.F[,2]/qq,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
+     ylab="proportion of population",ylim=c(0,0.05),
+          main="CRC -- population with no screening")
+lines(res.F[,3]/qq,col="plum4",lwd=2) #"pre clinical CRC" ie CRC
+lines(res.F[,4]/qq,col="black",lwd=2) #death CRC
+
+legend(20,0.04,c("population","large adenoma", "CRC","death CRC"), col=c(
+"green","orange","plum4","black"),lwd=2)
+axis(2, pretty( c(0,0.05),10))
+par(new=TRUE)
+plot(pp<- qq-cumsum(res.F[,16]),axes=FALSE,type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+
+axis(4, pretty(range(c(0,qq),10)))
+mtext(side=4, line=3, "population")
+
+axis(1,pretty(range(1:99),10))
+box() #- to make it look "as usual"
+dev.off()
+
 
 @ 
+
+
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=9cm]{./figs/RcppCrcSpinModel.png}
+  \caption{A population of 5000 peoiple subjected to the CRC-SPIN model.}
+  \label{figure:RcppCrcSpinModel.png}
+\end{figure}
+
+
 \subsection{DukesCrcSpinModel}
 
-<<>>=
+<<eval=FALSE,echo=FALSE>>=
 
 system.time(dd<-DukesCrcSpinModel$new(99, 50000, 125, 20))
 #1.620   0.036   1.657
@@ -514,12 +582,12 @@ number.F<-25000
 
 qq<-25000
 
-png("DukesCrcSpinModel.png")
+png("./figs/RcppDukesCrcSpinModel.png")
 plot(res.F[,2]/qq,type="l",col="orange",lwd=2,xlab="age",axes=FALSE,
      ylab="proportion of population",ylim=c(0,0.05),
           main="CRC -- population with no screening")
-lines(res2[,3]/qq,col="plum4",lwd=2) #"pre clinical CRC" ie CRC
-lines(res2[,4]/qq,col="black",lwd=2) #death CRC
+lines(res.F[,3]/qq,col="plum4",lwd=2) #"pre clinical CRC" ie CRC
+lines(res.F[,4]/qq,col="black",lwd=2) #death CRC
 
 legend(20,0.04,c("population","large adenoma", "CRC","death CRC"), col=c(
 "green","orange","plum4","black"),lwd=2)
@@ -532,7 +600,7 @@ mtext(side=4, line=3, "population")
 
 axis(1,pretty(range(1:99),10))
 box() #- to make it look "as usual"
-#dev.off()
+dev.off()
 
 
 
@@ -757,6 +825,16 @@ legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
 @
 
 
+
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=9cm]{./figs/RcppDukesCrcSpinModel.png}
+  \caption{A population of 5000 peoiple subjected to the CRC-SPIN model.}
+  \label{figure:RcppDukesCrcSpinModel.png}
+\end{figure}
+
+
 \clearpage
 \begin{thebibliography}{}
 
@@ -783,6 +861,8 @@ Rutter, C.~M. and Savarino, J.~E. (2010).
 \newblock \url{http://menugget.blogspot.com.au/2013}
 \newblock accessed 1/1/2014.
 \end{thebibliography}
+
+
 
 \appendix
 \section{outputs}
@@ -1242,21 +1322,4 @@ help(RCSpin)
 #you could try ‘??RCSpin’
 
 
-##########################################################################################
 
-<<>>=
-
-aa<-matrix(0,4,2)
-i<-1
-for ( h in c(0.1,0.2,0.4,0.5)){
-    j<-1
-    for (sig in c(0.05,0.01)){
-        aa[i,j]<- pwr.2p2n.test(h =h , n1=158,n2=79,sig.level =sig ,
-                             alternative = "greater")$power
-        j<-j+1
-    }
-    i<-i+1
-}
-aa
-
-@
