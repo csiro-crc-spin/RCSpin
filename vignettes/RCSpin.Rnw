@@ -675,35 +675,6 @@ legend(20,300,c("male","female"),col=c("blue","red"),lty=1)
 \end{figure}
 
 
-\clearpage
-\begin{thebibliography}{}
-
-%\bibliographystyle{apalike}
-%\bibliography{RCSpin}
-%% M-n P to create a tex file then bibtex to create the .bbl file
-%% then include the .bbl file here
-  
-\bibitem[Rutter, 2008]{Rutter.2008}
-Rutter, C. (2008).
-\newblock Group health research institute ({CRC-SPIN}).
-\newblock Version: HI.001.10242008.41523. Document generated: 10/24/2008
-  \url{https://cisnet.flexkb.net/mp/pub/cisnet_colorectal_ghc_profile.pdf}.
-
-\bibitem[Rutter and Savarino, 2010]{Rutter.and.Savarino.2010}
-Rutter, C.~M. and Savarino, J.~E. (2010).
-\newblock An evidence-based microsimulation model for colorectal cancer:
-  validation and application.
-\newblock {\em Cancer Epidemiol Biomarkers Prev}, 19(8):1992--2002.
-\newblock Epub 2010 Jul 20.
-
-\bibitem[menugget, 2013]{menugget.2013}
-\newblock Data mountains and streams - stacked area plots in R 
-\newblock \url{http://menugget.blogspot.com.au/2013}
-\newblock accessed 1/1/2014.
-\end{thebibliography}
-
-
-
 \appendix
 \section{outputs}
 The model outputs contain a matrix, \texttt{study\_results} which the summary data for each age. The
@@ -794,4 +765,11 @@ The columns of the output matrix are described in table \ref{table:summary}.a
 
 
 \nocite{stacked.area.plots.2013}
+
+
+\clearpage
+\bibliographystyle{apalike}
+
+\bibliography{./RC_vignettes}
+
 \end{document}
