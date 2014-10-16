@@ -1,4 +1,10 @@
+Saturday, October 11, 2014
 
+CrcSpinModel-class.Rd says "described by X et al., " 
+should I fix this in CrcSpinModel-class.Rd or elsewhere? CrcSpinModel-class.Rd was generated automatically by
+Roxygen
+
+_____________________________________________________________________________
 Monday, July 28, 2014
 res2<-cc$study_results
 res.F<-res2[(1:99)*2-1,] # seems that I had these the wrong way around
