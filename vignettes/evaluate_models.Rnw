@@ -1737,6 +1737,6 @@ rownames(temp)<-c("colon 20:49" ,"colon 50:59","colon 60:69","colon 70:84",
 
 
 \bibliographystyle{apalike}
-%\bibliography{./screening_compliance.bib,/home/dun280/TeX/bibliography/work2.bib}
-\bibliography{./screening_compliance.bib,/home/dun280/Dropbox/TeX/bibliography/work2.bib,/home/dun280/Dropbox/TeX/bibliography/work_colorectal_cancer.bib,/home/dun280/Dropbox/TeX/bibliography/work_bioinformatics.bib}
+
+\bibliography{./RC_vignettes.bib}
 \end{document}
