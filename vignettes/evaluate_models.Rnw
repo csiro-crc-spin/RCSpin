@@ -1,3 +1,4 @@
+#here here
 \documentclass[11pt]{article}
 
 \usepackage{geometry}
@@ -199,9 +200,9 @@ Other problems (easily fixed)
 \hline                                                                                  
                                                                            & Observed                    & Estimated CR & CrcSpin & DukesCrcSpin & CrcSpin & DukesCrcSpin \\
 Adenoma prevalence                                                         &                             &              &         &              &         &              \\
-\hspace{4mm} Among individuals 40-49 years old                             & 0.10                        & 0.14         &         & 0.15         &         & 0.15         \\
-\hspace{4mm} Among individuals 50-75 years old                             & 0.22                        & 0.27         &         & 0.23         &         & 0.24         \\
-\hspace{4mm} Among individuals 76-80 years old                             & 0.29                        & 0.38         &         & 0.31         &         & 0.31         \\
+\hspace{4mm} Among individuals 40-49 years old                             & 0.10                        & 0.14         & 0.15    & 0.15         &         & 0.15         \\
+\hspace{4mm} Among individuals 50-75 years old                             & 0.22                        & 0.27         & 0.24    & 0.23         &         & 0.24         \\
+\hspace{4mm} Among individuals 76-80 years old                             & 0.29                        & 0.38         & 0.30    & 0.31         &         & 0.31         \\
 \hspace{4mm} Number of adenomas found in 1233 individuals                  & 534                         & 575          &         &              &         &              \\
                                                                            &                             &              &         &              &         &              \\
 Adenoma size                                                               &                             &              &         &              &         &              \\
@@ -209,7 +210,7 @@ Adenoma size                                                               &    
                       adenoma $\geq$ 10 mm  given adenoma $\geq 1$         & 0.23                        & 0.28         &         &              &         &              \\
 \hspace{4mm} Percent of adenomas $\leq$ 6mm                                & 0.62                        & 0.61         &         &              &         &              \\
 \hspace{4mm} Percent of adenomas $ [6,10)  mm  $                           & 0.29                        & 0.22         &         &              &         &              \\
-\hspace{4mm} Percent of adenomas $ \geq 10 mm  $                           & 0.09                        & 0.17         &         & 0.11         &         & 0.12         \\
+\hspace{4mm} Percent of adenomas $ \geq 10 mm  $                           & 0.09                        & 0.17         &0.22     & 0.11         &         & 0.12         \\
                                                                            &                             &              &         &              &         &              \\
 Clinical cancers in per 100,000                                            &                             &              &         &              &         &              \\
 \hspace{4mm} Colon cancer in women                                         &                             &              &         &              &         &              \\
@@ -217,21 +218,22 @@ Clinical cancers in per 100,000                                            &    
 \hspace{8mm} 50-59 y.o.                                                    & 43.3                        & 45.5         &         & 87           &         & 102          \\
 \hspace{8mm} 60-69 y.o.                                                    & 100.7                       & 99.3         &         & 138          &         & 170          \\
 \hspace{8mm} 70-84 y.o.                                                    & 216.7                       & 207.3        &         & 288          &         & 296          \\
-\hspace{4mm} Rectal cancer in women                                        &                             &              &         &              &         &              \\
+\hspace{4mm} Rectal cancer in women                                        &                             &              &         &              &         & 0             \\
 \hspace{8mm} 20-49 y.o.                                                    & 1.87                        & 2.0          &         & 3            &         & 4            \\
 \hspace{8mm} 50-59 y.o.                                                    & 20.4                        & 18.6         &         & 8            &         & 13           \\
 \hspace{8mm} 60-69 y.o.                                                    & 42.5                        & 39.7         &         & 13           &         & 18           \\
 \hspace{8mm} 70-84 y.o.                                                    & 73.9                        & 82.1         &         & 32           &         & 25           \\
-\hspace{4mm} Colon cancer in men                                           &                             &              &         &              &         &              \\
+\hspace{4mm} Colon cancer in men                                           &                             &              &         &              &         & 0             \\
 \hspace{8mm} 20-49 y.o.                                                    & 4.51                        & 4.2          &         & 31           &         & 40           \\
 \hspace{8mm} 50-59 y.o.                                                    & 45.9                        & 50.6         &         & 87           &         & 155          \\
 \hspace{8mm} 60-69 y.o.                                                    & 121.4                       & 120.0        &         & 127          &         & 250          \\
 \hspace{8mm} 70-84 y.o.                                                    & 268.4                       & 263.4        &         & 229          &         & 352          \\
-\hspace{4mm} Rectal cancer in men                                          &                             &              &         &              &         &              \\
+\hspace{4mm} Rectal cancer in men                                          &                             &              &         &              &         & 0             \\
 \hspace{8mm} 20-49 y.o.                                                    & 2.3                         & 3.2          &         & 3            &         & 5            \\
 \hspace{8mm} 50-59 y.o.                                                    & 30.0                        & 29.8         &         & 8            &         & 16           \\
 \hspace{8mm} 60-69 y.o.                                                    & 71.4                        & 63.2         &         & 11           &         & 25           \\
 \hspace{8mm} 70-84 y.o.                                                    & 128.0                       & 123.8        &         & 21           &         & 36           \\   
+\hspace{8mm} $\Sigma$                                                      &  1176.08                    & 1157         &         & 1120         &         & 1536           \\   
                                                                            &                             &              &         &              &         &              \\
 male --CRC between 50th and 70th birthdays                                 & 0.019                       &              & 0.05    & 0.05         & 0.022   & 0.09         \\
 female --CRC between 50th and 70th birthdays                               & 0.014                       &              & 0.033   & 0.03         & 0.011   & 0.08         \\           
@@ -248,77 +250,6 @@ female --CRC between 50th and 70th birthdays                               & 0.0
 \end{sidewaystable}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-%% {\tiny
-%% \begin{sidewaystable}
-%% \small
-%% \begin{center}
-%% \begin{tabular}{||p{7cm}|l|l||l|l|l||l|l|l||}
-%%   \hline
-%%                                                                                              & Observed & Estimated CR & model5.s & crcSpin.R & SpinModels & model3.s & dukesCrcSpin.R \\
-%% Adenoma prevalence                                                                           &          &              &          &          &        &          &        \\
-%% \hspace{4mm} Among individuals 40-49 years old                                               & 0.10     & 0.14         & 0.16     & 0.15     & 0.16   & 0.10     & 0.15   \\
-%% \hspace{4mm} Among individuals 50-75 years old                                               & 0.22     & 0.27         & 0.25     & 0.21     & 0.21   & 0.17     & 0.20   \\
-%% \hspace{4mm} Among individuals 76-80 years old                                               & 0.29     & 0.38         & 0.23     & 0.21     & 0.21   & 0.21     & 0.21   \\
-%% \hspace{4mm} Number of adenomas found in 1233 individuals                                    & 534      & 575          &          &          &        &          &        \\
-%%                                                                                              &          &              &          &          &        &          &        \\
-%% Adenoma size                                                                                 &          &              &          &          &        &          &        \\
-%% \hspace{4mm} Percent of individuals with an   
-%%                       adenoma $\geq$ 10 mm  given adenoma $\geq 1$                           & 0.23     & 0.28         &          &          &        &          &        \\
-%% \hspace{4mm} Percent of adenomas $\leq$ 6mm                                                  & 0.62     & 0.61         &          &          &        &          &        \\
-%% \hspace{4mm} Percent of adenomas $ [6,10)  mm  $                                             & 0.29     & 0.22         &          &          &        &          &        \\
-%% \hspace{4mm} Percent of adenomas $ \geq 10 mm  $                                             & 0.09     & 0.17         & 0.08     & 0.12     &   0.15 & 0.10     & 0.10   \\
-%%                                                                                              &          &              &          &          &        &          &        \\
-%% Clinical cancers in per 100,000                                                              &          &              &          &          &        &          &        \\
-%% \hspace{4mm} Colon cancer in women                                                           &          &              &          &          &        &          &        \\
-%% \hspace{8mm}  20-49 y.o.                                                                     & 4.8      & 4.4          & 14       &          &        & 15       &  36    \\
-%% \hspace{8mm} 50-59 y.o.                                                                      & 43.3     & 45.5         & 162      &          &        & 36       &  87    \\
-%% \hspace{8mm} 60-69 y.o.                                                                      & 100.7    & 99.3         & 331      &          &        & 60       &  113   \\
-%% \hspace{8mm} 70-84 y.o.                                                                      & 216.7    & 207.3        & 600      &          &        & 134      &  247   \\
-%% \hspace{4mm} Rectal cancer in women                                                          &          &              &          &          &        &          &        \\
-%% \hspace{8mm} 20-49 y.o.                                                                      & 1.87     & 2.0          & 4        &          &        & 1        &  2     \\
-%% \hspace{8mm} 50-59 y.o.                                                                      & 20.4     & 18.6         & 34       &          &        & 4        &  9     \\
-%% \hspace{8mm} 60-69 y.o.                                                                      & 42.5     & 39.7         & 54       &          &        & 7        &  10    \\
-%% \hspace{8mm} 70-84 y.o.                                                                      & 73.9     & 82.1         & 86       &          &        & 10       &  29    \\
-%% \hspace{4mm} Colon cancer in men                                                             &          &              &          &          &        &          &        \\
-%% \hspace{8mm} 20-49 y.o.                                                                      & 4.51     & 4.2          & 13       &          &        & 21       &   33   \\
-%% \hspace{8mm} 50-59 y.o.                                                                      & 45.9     & 50.6         & 182      &          &        & 70       &   92   \\
-%% \hspace{8mm} 60-69 y.o.                                                                      & 121.4    & 120.0        & 467      &          &        & 118      &   108  \\
-%% \hspace{8mm} 70-84 y.o.                                                                      & 268.4    & 263.4        & 810      &          &        & 224      &   236  \\
-%% \hspace{4mm} Rectal cancer in men                                                            &          &              &          &          &        &          &        \\
-%% \hspace{8mm} 20-49 y.o.                                                                      & 2.3      & 3.2          & 8        &          &        & 2        &  3     \\
-%% \hspace{8mm} 50-59 y.o.                                                                      & 30.0     & 29.8         & 44       &          &        & 8        &  6     \\
-%% \hspace{8mm} 60-69 y.o.                                                                      & 71.4     & 63.2         & 87       &          &        & 10       &  11    \\
-%% \hspace{8mm} 70-84 y.o.                                                                      & 128.0    & 123.8        & 91       &          &        & 26       &  19    \\   
-%%                                                                                              &          &              &          &          &        &          &        \\
-%% male --CRC between 50th and 70th birthdays                                                   & 0.019    &              & 0.083    & 0.05     &  0.05  & 0.022    & 0.09   \\
-%% female --CRC between 50th and 70th birthdays                                                 & 0.014    &              & 0.064    & 0.033    &  0.03  & 0.011    & 0.08   \\           
-
-%%    \hline
-%% \end{tabular}
-%% \caption{comparison of observed versus predicted rates for the
-%%   CRC-spin model. Based on Table 6 of
-%%   \protect{\cite{Rutter.et.al.2009}}.
-%% ``model5.s'' is our estimates with the CR posterior estimates and the S4  model.
-%% }
-%% \label{table:comparison.of.crc-spin}
-%% \end{center}
-%% \end{sidewaystable}
-
-%% }
-%% \normalsize
 
 
 \begin{figure}[p]
@@ -354,304 +285,7 @@ female --CRC between 50th and 70th birthdays                               & 0.0
 \end{figure}
 
 
-
-
-   \begin{itemize}
-   \item model5.s -- the CRC-Spin model with the CR posterior estimates and no staging -- implemented in S4
-   \item crcSpin.R -- the CRC-Spin model with the CR posterior estimates and no staging -- implemented in R5
-   \item SpinModels -- the CRC-Spin model with the CR posterior estimates and no staging -- implemented in Rcpp
-   \item  model3.s -- the CRC-Spin model with the CR posterior estimates and Dukes staging -- implemented in S4
-   \item dukesCrcSpin.R -- the CRC-Spin model with the CR posterior estimates and Dukes staging -- implemented in R5
-   \end{itemize}
-
-
-
 \FloatBarrier
-
-
-
-
-
-
-%% \section{Introduction}
-%% The CRC-Spin model describes the natural history of colo-rectal
-%% cancer. See  \cite{Rutter.2008}, \cite{Rutter.et.al.2009}, \cite{Rutter.and.Savarino.2010},
-%% and  \cite{Rutter.et.al.2011}. An individuals path goes through
-%% ``adenoma'', ``large adenoma'' and ``pre-clinical CRC'' stages to ``CRC''. 
-%% The only path in the model to clinical treatment is for the patient to
-%% present with symptoms. 
-
-%% We have extended the model by incorporating a progression through the Dukes' stages.
-
-%% \begin{itemize}
-%% \item figure \ref{figure:t5.png} -- Rcpp model, no intervention, no Dukes staging.
-%% This is the original CRC-Spin model where people move from adenoma to cancer with a probability
-%% $$\Phi \left( \left\{ (\log( \gamma_1 (\textrm{size of adenoma})) + \gamma_2((\textrm{initiated at age}) -50))\right\}/\gamma_3 \right)$$
-%% i.e. depending on the size of the adenoma and the age which the adenoma was initiated,
-%% and then move to a symptomatic stage with a log-normal distribution.
-%% \item figure \ref{figure:t1.png} -- S4 model, no intervention, Dukes staging. Differs in a number of details
-%%   \begin{itemize}
-%%   \item stage A, uniform distribution on $[1,3]$ years, probability 0.04 of symptoms
-%%   \item stage B,  1 year,    probability 0.18 of symptoms
-%%   \item stage  C , uniform distribution on $[1,2]$ years, probability 0.37 of symptoms,
-%%   \item stage D, 1 year, probability 0.74 of symptoms,
-%%   \end{itemize}
-%% \item figure \ref{figure:t3.png} -- S4 model, no intervention, Dukes
-%%   staging. Same as figure \ref{figure:t1.png} but with a different
-%%   random starts.  Clearly a population of 50000 people, when you
-%%   reduce it to males with Dukes A, is too small to produce stable
-%%   estimates. See \texttt{t3.csv}
-%% \item figure \ref{figure:t2.png} -- R5 model,  no intervention, Dukes staging. See \texttt{t2.csv}
-%% \item figure \ref{figure:res4.png} -- R5 model,  no intervention, Dukes staging
-%% \item figure \ref{figure:t7.png} -- R5 model,  NBCSP, Dukes staging
-%% \end{itemize}
-
-
-%% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% % %#apply(res.M,2,sum)
-%% % %# [1] 486534  46117  10907   2432      0 245146  38407   8068   2432    797
-%% % %#[11]   2526   2309   1237   2627   1004  21975   2432   2432
-%%  \begin{figure}[p]
-%%    \centering
-%%  \includegraphics[totalheight=17cm]{./crc-spin-figs/t5.png}
-%%  \caption{The CRC-spin model with a background symptomatic presentation
-%%    level. (Rcpp model, no intervention, CRC-Spin.)}
-%%    \label{figure:t5.png}
-%%  \end{figure}
-
-
-
-
-%% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% % %/home/dun280/Projects/clinical-genomics/simulation/script7/script11.r
-%% % %model3.s -- no intervention
-%% % %save(number.F,number.M,res.F,res.M,file="script11_temp_model3.Rdata")
-%% \begin{figure}[p]
-%%    \centering
-%%  \includegraphics[totalheight=17cm]{./crc-spin-figs/t1.png}
-%%  \caption{The CRC-spin model with a background symptomatic presentation
-%%    level. Plot 1 is all CRC form the male population (approx 25000).
-%%    Plot 2 is those presenting with symptoms and plot 3 is those whose
-%%    cancer is asymptomatic. (S4 model, no intervention, Dukes staging)
-%%  }
-%%    \label{figure:t1.png}
-%%  \end{figure}
-
-
-%% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% % %/home/dun280/Projects/clinical-genomics/simulation/script7/script11.r
-%% % %model3.s -- no intervention -- different random seeds
-%% % %save(number.F,number.M,res.F,res.M,file="script11_temp2_model3.Rdata")
-%% % % t3.csv
-%% % %  ~/Projects/clinical-genomics/simulation/script7/             18713.pts-5.valkyrie	(02/26/14 20:09:34)	(Detached)  S4 Dukes
-%% % % apply(res.M,2,sum)
-%% % % [1] 317874  32164   9095    108   1644      0 260835  31194   7390   1644
-%% % %[11]    108   4662   1372   1284    113      0    685   1641   1768    834
-%% % %[21]   1853    609    222    297    791    348      0    151    370    379
-%% % %[31]    191    412    141    844   2038   2180   1031   2291    758   4839
-%% % %[41]   1662   2072    461    108  22998   1644      0      0      0      0
-%% % %[51]      0   1644      0    211    295    790    348   1644      0      0
- 
-%% \begin{figure}[p]
-%%    \centering
-%%  \includegraphics[totalheight=17cm]{./crc-spin-figs/t3.png}
-%%  \caption{The CRC-spin model with a background symptomatic presentation
-%%    level. Plot 1 is all CRC form the male population (approx 25000).
-%%    Plot 2 is those presenting with symptoms and plot 3 is those whose
-%%    cancer is asymptomatic. (S4 model, no intervention, Dukes staging)}
-%%    \label{figure:t3.png}
-%%  \end{figure}
-
-
-%% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% % % ~/Downloads/CRC-Spin2/branches/CRC-Spin2-3tier/SpinModels/src/ 5454.pts-8.valkyrie R5 Dukes 
-%% % %cc<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000)
-%% % % t2.csv
-%%  \begin{figure}[p]
-%%    \centering
-%%  \includegraphics[totalheight=17cm]{./crc-spin-figs/t2.png}
-%%  \caption{The CRC-spin model with a background symptomatic presentation
-%%    level. Plot 1 is all CRC form the male population (approx 25000).
-%%    Plot 2 is those presenting with symptoms and plot 3 is those whose
-%%    cancer is asymptomatic. (R5 model, no intervention, Dukes
-%%    staging.)}
-%%    \label{figure:t2.png}
-%%  \end{figure}
-
-%% % %apply(res.M,2,sum)
-%% % % [1]  552896   36870   17719    2165    8298 1259860  253453   28752   13923
-%% % %[10]    2260    2144    7094    2178    3808    1793       0    1088    3281
-%% % %[19]    3384    1617    3174    1379     395     512    1113     463       0
-%% % %[28]     179     531     535     266     507     242    1428    4318    4436
-%% % %[37]    2138    4166    1841    6707    2501    4741    2234    2144   23324
-%% % %[46]    8298  113839   45298       0       0    2262    2262     896       0
-%% % %[55]       0       0       0     896       0       0
-
-
-
-%% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% % % ~/Downloads/CRC-Spin2/branches/CRC-Spin2-3tier/SpinModels/src/ 5454.pts-8.valkyrie R5 Dukes 
-%% % %cc<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000)
-%% % % apply(res.M,2,sum)
-%% % % [1]  557992   42962   15333     213    2585 1262545  256956   34855   11861
-%% % %[10]    2585     209    7837    2264    2155     219       0     955    2669
-%% % %[19]    2753    1342    3012    1130     419     540    1311     551       0
-%% % %[28]     217     581     605     281     646     255    1182    3298    3403
-%% % %[37]    1651    3717    1404    7654    2681    3351     760     209   21792
-%% % %[46]    2585       0       0       0       0       0    2585       0     280
-%% % %[55]     502    1258     545    2585       0       1
-%% % %res4.Rdata 
-%%  \begin{figure}[p]
-%%    \centering
-%%  \includegraphics[totalheight=17cm]{./crc-spin-figs/res4.png}
-%%  \caption{The CRC-spin model with a background symptomatic presentation
-%%    level. Plot 1 is all CRC form the male population (approx 25000).
-%%    Plot 2 is those presenting with symptoms and plot 3 is those whose
-%%    cancer is asymptomatic. (R5 model, no intervention, Dukes
-%%    staging.)}
-%%    \label{figure:res4.png}
-%%  \end{figure}
-
-
-
-
-%% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% % % /Downloads/CRC-Spin2/branches/CRC-Spin2-3tier/SpinModels/src/ 5454.pts-8.valkyrie R5 Dukes 
-%% % % code fixed 
-%% % %cc<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000)
-%% % %#[1]  545868   36048   16212    1905    7191 1261609  254065   28616   13080                                                     
-%% % %#[10]    1975    1887    6806    2034    3405    1580       0     876    3035                                                    
-%% % %#[19]    3250    1647    3010    1262     326     407     994     407       0                                                    
-%% % %##[28]     133     460     491     249     457     185    1130    3941    4210                                                   
-%% % %#[37]    2136    3905    1620    6537    2306    4246    1966    1887   23164                                                    
-%% % %#[46]    7191  113887   45402       0       0    2209    2209     834     192                                                    
-%% % %#[55]      34      40       3    1103       1       0 
-
-%%  \begin{figure}[p]
-%%    \centering
-%%  \includegraphics[totalheight=17cm]{./crc-spin-figs/t7.png}
-%%  \caption{The CRC-spin model with a background symptomatic presentation
-%%    level. Plot 1 is all CRC form the male population (approx 25000).
-%%    Plot 2 is those detected by the NBCSP and plot 3 is those whose
-%%    cancer is not detected. (R5 model, NBCSP, Dukes
-%%    staging.)}
-%%    \label{figure:t7.png}
-%%  \end{figure}
-
-
-
-
-
-
-
-
-
-
-%% \begin{sidewaystable}
-%% \begin{center}
-%% \begin{tabular}{||l|l|l|l|l|l||}
-%%   \hline
-%%       & Observed   &   Estimated CR &  Estimated 2 \\
-%% Adenoma prevalence &&& \\
-%% \hspace{4mm} Among individuals 40-49 years old & 0.10 &  0.14  & 0.16\\
-%% \hspace{4mm} Among individuals 50-75 years old & 0.22 & 0.27 &   0.27\\
-%% \hspace{4mm} Among individuals 76-80 years old & 0.29 & 0.38 &  0.32\\
-%% \hspace{4mm} Number of adenomas found in 1233 individuals & 534 & 575  &  \\
-%% &  &   &  \\
-%% Adenoma size   &&& \\
-%% \hspace{4mm} Percent of individuals with an
-%%   adenoma $\geq$ 10 mm, 
-%% given adenoma $\geq 1$ & 0.23 & 0.28 &  \\
-%% \hspace{4mm} Percent of adenomas $\leq$ 6mm                & 0.62 & 0.61 &   \\
-%% \hspace{4mm} Percent of adenomas $ [6,10)  mm  $          &0.29  & 0.22  &  \\
-%% \hspace{4mm} Percent of adenomas $ \geq 10 mm  $           &0.09  &0.17& 0.10 \\
-%% &  &   &  \\
-%% Clinical cancers in per 100,000  &&& \\
-%% \hspace{4mm} Colon cancer in women  &&& \\
-%% \hspace{8mm}  20-49 y.o.           & 4.8 & 4.4 & 7 \\
-%% \hspace{8mm} 50-59 y.o.&43.3&45.5& 81\\
-%% \hspace{8mm} 60-69 y.o.&100.7&99.3&  165\\
-%% \hspace{8mm} 70-84 y.o.&216.7&207.3&  300\\
-%% \hspace{4mm} Rectal cancer in women &&& \\
-%% \hspace{8mm} 20-49 y.o.&1.87&2.0& 2\\
-%% \hspace{8mm} 50-59 y.o.&20.4&18.6&17 \\
-%% \hspace{8mm} 60-69 y.o.&42.5&39.7& 32\\
-%% \hspace{8mm} 70-84 y.o.&73.9&82.1& 43 \\
-%% \hspace{4mm} Colon cancer in men &&& \\
-%% \hspace{8mm} 20-49 y.o.&4.51&4.2& 6\\
-%% \hspace{8mm} 50-59 y.o.&45.9&50.6& 92 \\
-%% \hspace{8mm} 60-69 y.o.&121.4& 120.0 &  233\\
-%% \hspace{8mm} 70-84 y.o.&268.4&263.4&  405\\
-%% \hspace{4mm} Rectal cancer in men &&& \\
-%% \hspace{8mm} 20-49 y.o.&2.3&3.2& 4\\
-%% \hspace{8mm} 50-59 y.o.&30.0&29.8&22 \\
-%% \hspace{8mm} 60-69 y.o.&71.4&63.2& 43\\
-%% \hspace{8mm} 70-84 y.o.&128.0&123.8&45\\
-%%    \hline
-%% \end{tabular}
-%% \caption{comparison of observed versus predicted rates for the
-%%   CRC-spin model. Based on Table 6 of
-%%   \protect{\cite{Rutter.et.al.2009}}.
-%% ``Estimated 2'' is our estimates with the CR posterior estimates and the S4  model.
-%% }
-%% \label{table:comparison.of.crc-spin}
-%% \end{center}
-%% \end{sidewaystable}
-
-%% \begin{sidewaystable}
-%% \begin{center}
-%% \begin{tabular}{||p{7cm}|l|l|l|l|l|l|l|l||}
-%%   \hline
-%%                                                                                              & Observed & Estimated CR & model5.s & crcSpin.R & model3.s & dukesCrcSpin.R & SpinModels\\
-%% Adenoma prevalence                                                                           &          &              &          &           &          &        &       \\
-%% \hspace{4mm} Among individuals 40-49 years old                                               & 0.10     & 0.14         & 0.16     & 0.15      & 0.10     & 0.15   & 0.16  \\
-%% \hspace{4mm} Among individuals 50-75 years old                                               & 0.22     & 0.27         & 0.25     & 0.21      & 0.17     & 0.20   & 0.21  \\
-%% \hspace{4mm} Among individuals 76-80 years old                                               & 0.29     & 0.38         & 0.23     & 0.21      & 0.21     & 0.21   & 0.21  \\
-%% \hspace{4mm} Number of adenomas found in 1233 individuals                                    & 534      & 575          &          &           &          &        &       \\
-%%                                                                                              &          &              &          &           &          &        &       \\
-%% Adenoma size                                                                                 &          &              &          &           &          &        &       \\
-%% \hspace{4mm} Percent of individuals with an   adenoma $\geq$ 10 mm    given adenoma $\geq 1$ & 0.23     & 0.28         &          &           &          &        &       \\
-%% \hspace{4mm} Percent of adenomas $\leq$ 6mm                                                  & 0.62     & 0.61         &          &           &          &        &       \\
-%% \hspace{4mm} Percent of adenomas $ [6,10)  mm  $                                             & 0.29     & 0.22         &          &           &          &        &       \\
-%% \hspace{4mm} Percent of adenomas $ \geq 10 mm  $                                             & 0.09     & 0.17         & 0.08     & 0.12      & 0.10     & 0.10   &   0.15\\
-%%                                                                                              &          &              &          &           &          &        &       \\
-%% Clinical cancers in per 100,000                                                              &          &              &          &           &          &        &       \\
-%% \hspace{4mm} Colon cancer in women                                                           &          &              &          &           &          &        &       \\
-%% \hspace{8mm}  20-49 y.o.                                                                     & 4.8      & 4.4          & 14       &           & 15       &  36    &       \\
-%% \hspace{8mm} 50-59 y.o.                                                                      & 43.3     & 45.5         & 162      &           & 36       &  87    &       \\
-%% \hspace{8mm} 60-69 y.o.                                                                      & 100.7    & 99.3         & 331      &           & 60       &  113   &       \\
-%% \hspace{8mm} 70-84 y.o.                                                                      & 216.7    & 207.3        & 600      &           & 134      &  247   &       \\
-%% \hspace{4mm} Rectal cancer in women                                                          &          &              &          &           &          &        &       \\
-%% \hspace{8mm} 20-49 y.o.                                                                      & 1.87     & 2.0          & 4        &           & 1        &  2     &       \\
-%% \hspace{8mm} 50-59 y.o.                                                                      & 20.4     & 18.6         & 34       &           & 4        &  9     &       \\
-%% \hspace{8mm} 60-69 y.o.                                                                      & 42.5     & 39.7         & 54       &           & 7        &  10    &       \\
-%% \hspace{8mm} 70-84 y.o.                                                                      & 73.9     & 82.1         & 86       &           & 10       &  29    &       \\
-%% \hspace{4mm} Colon cancer in men                                                             &          &              &          &           &          &        &       \\
-%% \hspace{8mm} 20-49 y.o.                                                                      & 4.51     & 4.2          & 13       &           & 21       &   33   &       \\
-%% \hspace{8mm} 50-59 y.o.                                                                      & 45.9     & 50.6         & 182      &           & 70       &   92   &       \\
-%% \hspace{8mm} 60-69 y.o.                                                                      & 121.4    & 120.0        & 467      &           & 118      &   108  &       \\
-%% \hspace{8mm} 70-84 y.o.                                                                      & 268.4    & 263.4        & 810      &           & 224      &   236  &       \\
-%% \hspace{4mm} Rectal cancer in men                                                            &          &              &          &           &          &        &       \\
-%% \hspace{8mm} 20-49 y.o.                                                                      & 2.3      & 3.2          & 8        &           & 2        &  3     &       \\
-%% \hspace{8mm} 50-59 y.o.                                                                      & 30.0     & 29.8         & 44       &           & 8        &  6     &       \\
-%% \hspace{8mm} 60-69 y.o.                                                                      & 71.4     & 63.2         & 87       &           & 10       &  11    &       \\
-%% \hspace{8mm} 70-84 y.o.                                                                      & 128.0    & 123.8        & 91       &           & 26       &  19    &       \\   
-%%                                                                                              &          &              &          &           &          &        &       \\
-%% %male --CRC between 50th and 70th birthdays                                                   & 0.019    &              & 0.083    & 0.05      & 0.022    & 0.09   &  0.05 \\
-%% %female --CRC between 50th and 70th birthdays                                                 & 0.014    &              & 0.064    & 0.033     & 0.011    & 0.08   &  0.03 \\           
-
-%%    \hline
-%% \end{tabular}
-%% \caption{comparison of observed versus predicted rates for the
-%%   CRC-spin model. Based on Table 6 of
-%%   \protect{\cite{Rutter.et.al.2009}}.
-%% ``model5.s'' is our estimates with the CR posterior estimates and the S4  model.
-%% }
-%% \label{table:comparison.of.crc-spin}
-%% \end{center}
-%% \end{sidewaystable}
-
-
 
 
 <<eval=FALSE,echo=FALSE>>=
@@ -659,92 +293,19 @@ female --CRC between 50th and 70th birthdays                               & 0.0
 library(xtable)
 library(RCSpin)
 
-cc<-CrcSpinModel$new(iterations=99, num_subjects=50)
-cc$run()
+cc<-CrcSpinModel$new(iterations=99, num_subjects=50000)
+cc$run() 
 cc$study_group[[12]]
 cc$study_group[[12]]$colon$sites[[1]]$initiated_in_year
 
 aa<-organize_results(cc)
-res2<-cc$study_results
+attach(aa)
+## res2<-cc$study_results
 
-number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="M")
-number.F<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="F")
-res.F<-res2[(1:99)*2-1,] # seems that I had these the wrong way around
-res.M<-res2[(1:99)*2,]   #
-
-
-
-table(unlist(lapply(cc$study_group,f<-function(x){x$state})),
-      unlist(lapply(cc$study_group,f<-function(x){x$in_treatment_program})))
-#            no yes
-#  deceased 434   3
-#  living     9  54
-
-
-aa<-rep(0,50)
-bb<-rep(0,50)
-
-for  (jj in 1:50){
-    
-    person1<-cc$study_group[[jj]]
-     
-#    for ( i in 1:100){
-        ss<-person1$colon$sites
-        if (length(ss)>0){
-            temp<-lapply(ss,f<-function(x){x$size})
-            aa[jj]<- max(unlist(temp))
-            
-            temp<-lapply(ss,f<-function(x){x$state})
-            tt<-factor(temp,levels=c("clear", "adenoma", "large adenoma", "CRC"))
-            bb[jj]<- max(as.numeric(tt))
-            if (person1$colon_clinical=="symptomatic CRC"){
-                bb[jj]<-5
-            }
-        }
-
-}
-
- table(bb)
-#bb
-#  0   2   3   4   5 
-#288 126  21   8  57
-
-oo<-order(aa)
-
-#png("./figs/crcSpin_plot.png")
-plot(aa[oo],col=bb[oo]+1,
-     xlab="index",ylab="max adenoma size")
-legend(0,30,c("clear" , "adenoma (0.25)"  , 
-"large adenoma (0.42)" ,"CRC (0.016)","symptomatic CRC (0.114)"),
-       fill=c(1, 3:6))
-#dev.off()
-
-#how do we initialize a person using the RC library? want to follow src/script3.s
-
-########
-data(CrcSpinModel_output)
-attach(CrcSpinModel_output)
-apply(results.M,2,sum)
-
-
-#########################################################################
-#http://seer.cancer.gov
-
-#Based on rates from 2008-2010, 4.82% of men and women born today will
-#be diagnosed with cancer of the colon and rectum at some time during
-#their lifetime.
-
-sum(results.F[,4]+results.M[,4])/(number.F+number.M)
-#[1] 0.10554
-
-#1.91% of men will develop cancer of the colon
-#and rectum between their 50th and 70th birthdays compared to 1.41% for
-#women. 
-
-sum(results.F[50:70,4])/(number.F-cumsum(results.F[,16]))[60]
-#0.03137255
-sum(results.M[50:70,4])/(number.M-cumsum(results.M[,16]))[60]
-#0.07729469
+## number.M<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="M")
+## number.F<-sum(unlist(lapply(cc$study_group,f<-function(x){x$sex}))=="F")
+## results.F<-res2[(1:99)*2-1,] # seems that I had these the wrong way around
+## results.M<-res2[(1:99)*2,]   #
 
 
 plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,
@@ -762,13 +323,135 @@ plot(pp<- number.M-cumsum(results.M$person.state.deceased),axes=FALSE,type="l",
      ylab="",xlab="",lty=1,col=3,lwd=2 )
 axis(4, pretty(range(c(0,number.M),10)))
 mtext(side=4, line=3, "population")
-
 axis(1,pretty(range(1:99),10))
 box() #- to make it look "as usual"
 
 
 
+table(unlist(lapply(cc$study_group,f<-function(x){x$state})),
+      unlist(lapply(cc$study_group,f<-function(x){x$in_treatment_program})))
+#            no yes
+#  deceased 43771   188
+#  living     027  5014
 
+aa<-rep(0,50000)
+bb<-rep(0,50000)
+
+for  (jj in 1:50000){
+    person1<-cc$study_group[[jj]]
+#    for ( i in 1:100){
+        ss<-person1$colon$sites
+        if (length(ss)>0){
+            temp<-lapply(ss,f<-function(x){x$size})
+            aa[jj]<- max(unlist(temp))
+            temp<-lapply(ss,f<-function(x){x$state})
+            tt<-factor(temp,levels=c("clear", "adenoma", "large adenoma", "CRC"))
+            bb[jj]<- max(as.numeric(tt))
+            if (person1$colon_clinical=="symptomatic CRC"){
+                bb[jj]<-5
+            }
+        }
+}
+
+ table(bb)
+#bb
+#  0   2   3   4   5 
+#29258 12750  2079   711  5202 
+
+oo<-order(aa)
+
+png("./figs/crcSpin_plot.png")
+plot(aa[oo],col=bb[oo]+1,
+     xlab="subject",ylab="max adenoma size")
+legend(0,30,c("clear" , "adenoma (0.25)"  , 
+"large adenoma (0.04)" ,"CRC (0.016)","symptomatic CRC (0.104)"),
+       fill=c(1, 3:6))
+dev.off()
+
+
+## #how do we initialize a person using the RC library? want to follow src/script3.s
+## set.seed(123)
+## aa<-rep(0,100)
+## for ( jj in 1:100){
+##   person1<-initialize.person()
+##   for ( i in 1:99){
+##     person1@age<-i
+##     person1<-initiate.adenomas(person1,study.year=i)
+##     temp<-ifelse((length(person1@colon@sites)>0),1,0)
+##     aa[i]<-aa[i]+temp
+##     if(temp>0){
+##       break
+##     }
+##   }
+## }
+## # poportion of the population with an adenoma
+
+## png("./figs/number.of.adenomas.png")
+## plot(1:100,cumsum(aa)/100,type="l",col=1,lwd=3,xlab="age",ylab="proportion with an adenoma")
+## dev.off()
+
+## mean(cumsum(aa)[40:49])/100  #0.185
+## mean(cumsum(aa)[50:75])/100  #0.3326923
+## mean(cumsum(aa)[76:80])/100 #0.45 so why do I get much lower numbers with adenoms?
+
+## #how break works
+## for (i in 1:10)
+## {
+##     for (j in 1:10)
+##     {
+##         for (k in 1:10)
+##         {
+##             cat(i," ",j," ",k,"\n")
+##             if (k ==5) break
+##         }
+##     }
+## }
+
+
+#########################################################################
+#http://seer.cancer.gov
+
+#Based on rates from 2008-2010, 4.82% of men and women born today will
+#be diagnosed with cancer of the colon and rectum at some time during
+#their lifetime.
+#we cant calculate this. person.colon_clinical.CRC is the number who have CRC. -- we will miss those who have died.
+#sum(results.F[,4]+results.M[,4])/(number.F+number.M)
+ #[1] 0.10554
+
+#1.91% of men will develop cancer of the colon
+#and rectum between their 50th and 70th birthdays compared to 1.41% for
+#women. 
+sum(results.F[50:70,4])/(number.F-cumsum(results.F[,16]))[60]
+#0.03137255
+sum(results.M[50:70,4])/(number.M-cumsum(results.M[,16]))[60]
+#0.07729469
+
+
+## plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,
+##      xlab="age",axes=FALSE,
+##      ylab="proportion of population",ylim=c(0,0.1),
+##           main="CRC -- male population with no screening")
+## lines(results.M$colon.state.pre.symptomatic.CRC/number.M,col="plum4",lwd=2)
+## lines(results.M$colon.state.CRC/number.M,col="purple",lwd=2)
+
+## legend(20,0.07,c("population","large adenoma", "CRC","symptomatic CRC"), 
+##        col=c("green","orange","plum4","purple"),lwd=2)
+## axis(2, pretty( c(0,0.1),10))
+## par(new=TRUE)
+## plot(pp<- number.M-cumsum(results.M$person.state.deceased),axes=FALSE,type="l",
+##      ylab="",xlab="",lty=1,col=3,lwd=2 )
+## axis(4, pretty(range(c(0,number.M),10)))
+## mtext(side=4, line=3, "population")
+
+## axis(1,pretty(range(1:99),10))
+## box() #- to make it look "as usual"
+
+
+
+#########
+#data(CrcSpinModel_output)
+#attach(CrcSpinModel_output)
+#apply(results.M,2,sum)
 
 f1<-rep(0,8)
 
@@ -807,30 +490,45 @@ x.big <-xtable(temp , align="||l|l|l||",
        caption="The male and female age rates for colon and rectal cancer.")
 print(x.big,tabular.environment='tabular',floating=TRUE)
 
+#> temp
+ #                female       male
+#colon 20:49   135.44086  214.97882
+#colon 50:59   483.39386  759.11479
+#colon 60:69   779.07092 1150.40946
+#colon 70:84  1167.34517 1684.25363
+#rectal 20:49   15.24885   19.21599
+#rectal 50:59   41.00627   97.20267
+#rectal 60:69   70.48558  114.72555
+#rectal 70:84   99.04341  138.93831
+
     
-# adenoma (adenomas + large adenomsa + pre symptomatic CRC)
- mean((results.M[40:49,7]+results.F[40:49,7]+results.M[40:49,8]+results.F[40:49,8]+results.M[40:49,9]+results.F[40:49,9])/50000)
-#[1] 0.153252
-mean((results.M[50:75,7]+results.F[50:75,7]+results.M[50:75,8]+results.F[50:75,8]+results.M[50:75,9]+results.F[50:75,9])/50000)
- #0.2037031
-mean((results.M[76:80,7]+results.F[76:80,7]+results.M[76:80,8]+results.F[76:80,8]+results.M[76:80,9]+results.F[76:80,9])/50000)
-#0.21144
+## # Adenoma (adenomas + large adenomsa + pre symptomatic CRC)
+M<-(number.M-cumsum(results.M$person.state.deceased))+(number.F-cumsum(results.F$person.state.deceased))
 
+aa<-40:49#0.1558861
+aa<-50:75 #0.24
+aa<-76:80 #0.305
+mean(
+    ( results.M$colon.state.adenoma[aa]+results.F$colon.state.adenoma[aa]+
+          results.M$colon.state.large.adenoma[aa]+results.F$colon.state.large.adenoma[aa]+
+          results.M$colon.state.pre.symptomatic.CRC[aa]+results.F$colon.state.pre.symptomatic.CRC[aa]+
+          results.M$colon.state.CRC[aa]+results.F$colon.state.CRC[aa])/M[aa]
+    )
 
-
-# proportion of Adenomas greater the 10 mm
+## # proportion of Adenomas greater the 10 mm
 mean(results.F[-c(1:40),8]/(results.F[-c(1:40),7]+results.F[-c(1:40),8]))
-# 0.1116742
+## 0.2210865
 
-##########Dukes RCSpin 
 
+
+##########Dukes RCSpin #with NBCSP
 dddm<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000, base_seed=125, 
    commencement_age=20)
 dddm$run()
 dim(dddm$study_results)  #198  60
 DukesCrcSpinModel_output<-organize_results(dddm)
 
-data(DukesCrcSpinModel_output)
+#data(DukesCrcSpinModel_output)
 attach(DukesCrcSpinModel_output)
 
 plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,
@@ -864,7 +562,10 @@ plot.stacked(x,y, xlim=c(0, 100), ylim=c(0, 500),
 title(main="all CRC, population of 25000 males")
 abline(v=c(50,55,60,65,70))
 
-names(results.M[,54:57] )
+names(results.M[,54:57] ) #"person.initiateCRCTreatment.colon.stage.A"
+descriptions[54:57,]
+#A count of people that where treated for CRC IN THIS ITERATION, who had colons in state "symptomatic CRC" and in stage "A"
+#check this -- are htese people found by symptoms, test  or both
 y<-results.M[,54:57]     #   found from test or symptoms      
 z<-c(1,2,3,4) 
 plot.stacked(x,y, xlim=c(0, 100),  ylim=c(0, 500),
@@ -885,55 +586,138 @@ title(main="undetected  CRC")
 
 f1<-rep(0,8)
 
-#Women colon cancer
-f1[1]<- mean(apply(results.F[20:49,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[20:49]))*100000
-f1[2]<- mean(apply(results.F[50:59,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[50:59]))*100000
-f1[3]<- mean(apply(results.F[60:69,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[60:69]))*100000
-f1[4]<- mean(apply(results.F[70:84,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[70:84]))*100000
+## #Women colon cancer
+## f1[1]<- mean(apply(results.F[20:49,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[20:49]))*100000
+## f1[2]<- mean(apply(results.F[50:59,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[50:59]))*100000
+## f1[3]<- mean(apply(results.F[60:69,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[60:69]))*100000
+## f1[4]<- mean(apply(results.F[70:84,28:32],1,sum)/((number.F-cumsum(results.F[,45]))[70:84]))*100000
 
-#Women rectal cancer
-f1[5]<- mean(results.F[20:49,33]/((number.F-cumsum(results.F[,45]))[20:49]))*100000
-f1[6]<- mean(results.F[50:59,33]/((number.F-cumsum(results.F[,45]))[50:59]))*100000
-f1[7]<- mean(results.F[60:69,33]/((number.F-cumsum(results.F[,45]))[60:69]))*100000
-f1[8]<- mean(results.F[70:84,33]/((number.F-cumsum(results.F[,45]))[70:84]))*100000
+## #Women rectal cancer
+## f1[5]<- mean(results.F[20:49,33]/((number.F-cumsum(results.F[,45]))[20:49]))*100000
+## f1[6]<- mean(results.F[50:59,33]/((number.F-cumsum(results.F[,45]))[50:59]))*100000
+## f1[7]<- mean(results.F[60:69,33]/((number.F-cumsum(results.F[,45]))[60:69]))*100000
+## f1[8]<- mean(results.F[70:84,33]/((number.F-cumsum(results.F[,45]))[70:84]))*100000
+
+## m1<-rep(0,8)
+## ##Male colon cancer
+## m1[1] <- mean(apply(results.M[20:49,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[20:49]))*100000
+## m1[2] <- mean(apply(results.M[50:59,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[50:59]))*100000
+## m1[3] <- mean(apply(results.M[60:69,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[60:69]))*100000
+## m1[4] <- mean(apply(results.M[70:84,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[70:84]))*100000
+
+## #Male rectal cancer
+## m1[5] <- mean(results.M[20:49,33]/((number.M-cumsum(results.M[,45]))[20:49]))*100000
+## m1[6] <- mean(results.M[50:59,33]/((number.M-cumsum(results.M[,45]))[50:59]))*100000
+## m1[7] <- mean(results.M[60:69,33]/((number.M-cumsum(results.M[,45]))[60:69]))*100000
+## m1[8] <- mean(results.M[70:84,33]/((number.M-cumsum(results.M[,45]))[70:84]))*100000
+
+## temp<-cbind(f1,m1)
+## colnames(temp)<-c("female","male")
+## rownames(temp)<-c("colon 20:49" ,"colon 50:59","colon 60:69","colon 70:84",
+## "rectal 20:49","rectal 50:59","rectal 60:69","rectal 70:84")
+
+## x.big <-xtable(temp , align="||l|l|l||",
+##                label="table:age.rates",
+##        caption="The male and female age rates for colon and rectal cancer.")
+## print(x.big,tabular.environment='tabular',floating=TRUE)
+
+    
+## # adenoma (adenomas + large adenomsa + pre symptomatic CRC)
+##  mean((results.M[40:49,7]+results.F[40:49,7]+results.M[40:49,8]+results.F[40:49,8]+results.M[40:49,9]+results.F[40:49,9])/50000)
+## #[1] 0.153252
+## mean((results.M[50:75,7]+results.F[50:75,7]+results.M[50:75,8]+results.F[50:75,8]+results.M[50:75,9]+results.F[50:75,9])/50000)
+##  #0.2037031
+## mean((results.M[76:80,7]+results.F[76:80,7]+results.M[76:80,8]+results.F[76:80,8]+results.M[76:80,9]+results.F[76:80,9])/50000)
+## #0.21144
+
+# proportion of Adenomas greater the 10 mm
+#mean(results.F[-c(1:40),8]/(results.F[-c(1:40),7]+results.F[-c(1:40),8]))
+# 0.1116742
+
+plot(( DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.rectum/M)*100000,type="l")
+y<-smooth.spline(x=1:99,y=((DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.rectum/M)*100000),df=6   )$y
+lines(y)
 
 m1<-rep(0,8)
-##Male colon cancer
-m1[1] <- mean(apply(results.M[20:49,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[20:49]))*100000
-m1[2] <- mean(apply(results.M[50:59,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[50:59]))*100000
-m1[3] <- mean(apply(results.M[60:69,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[60:69]))*100000
-m1[4] <- mean(apply(results.M[70:84,28:32],1,sum)/((number.M-cumsum(results.M[,45]))[70:84]))*100000
+f1<-rep(0,8)
 
 #Male rectal cancer
-m1[5] <- mean(results.M[20:49,33]/((number.M-cumsum(results.M[,45]))[20:49]))*100000
-m1[6] <- mean(results.M[50:59,33]/((number.M-cumsum(results.M[,45]))[50:59]))*100000
-m1[7] <- mean(results.M[60:69,33]/((number.M-cumsum(results.M[,45]))[60:69]))*100000
-m1[8] <- mean(results.M[70:84,33]/((number.M-cumsum(results.M[,45]))[70:84]))*100000
+m1[5] <- mean(y[20:49])
+m1[6] <- mean(y[50:59])
+m1[7] <- mean(y[60:69])
+m1[8] <- mean(y[70:84])
+
+
+aa<-DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.cecum +
+DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.ascending  +
+DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.transverse +
+DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.descending  +
+DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.sigmoid
+plot( (aa/M)*100000,type="l")
+lines(smooth.spline(x=1:99,y= (aa/M)*100000, df=6     )     ,type="l")
+y<-(smooth.spline(x=1:99,y= (aa/M)*100000, df=6     )  )$y
+##Male colon cancer
+m1[1] <- mean(y[20:49])
+m1[2] <- mean(y[50:59])
+m1[3] <- mean(y[60:69])
+m1[4] <- mean(y[70:84])
+
+#
+f1<-rep(0,8)
+plot(( DukesCrcSpinModel_output$results.F$colon.state.symptomatic.CRC.colon.cancer_site.rectum/M)*100000,type="l")
+y<-smooth.spline(x=1:99,y=((DukesCrcSpinModel_output$results.F$colon.state.symptomatic.CRC.colon.cancer_site.rectum/M)*100000),df=6   )$y
+lines(y)
+
+#female rectal cancer
+f1[5] <- mean(y[20:49])
+f1[6] <- mean(y[50:59])
+f1[7] <- mean(y[60:69])
+f1[8] <- mean(y[70:84])
+
+aa<-DukesCrcSpinModel_output$results.F$colon.state.symptomatic.CRC.colon.cancer_site.cecum +
+DukesCrcSpinModel_output$results.F$colon.state.symptomatic.CRC.colon.cancer_site.ascending  +
+DukesCrcSpinModel_output$results.F$colon.state.symptomatic.CRC.colon.cancer_site.transverse +
+DukesCrcSpinModel_output$results.F$colon.state.symptomatic.CRC.colon.cancer_site.descending  +
+DukesCrcSpinModel_output$results.F$colon.state.symptomatic.CRC.colon.cancer_site.sigmoid
+plot( (aa/M)*100000,type="l")
+lines(smooth.spline(x=1:99,y= (aa/M)*100000, df=6     )     ,type="l")
+y<-(smooth.spline(x=1:99,y= (aa/M)*100000, df=6     )  )$y
+
+##female colon cancer
+f1[1] <- mean(y[20:49])
+f1[2] <- mean(y[50:59])
+f1[3] <- mean(y[60:69])
+f1[4] <- mean(y[70:84])
 
 temp<-cbind(f1,m1)
 colnames(temp)<-c("female","male")
 rownames(temp)<-c("colon 20:49" ,"colon 50:59","colon 60:69","colon 70:84",
 "rectal 20:49","rectal 50:59","rectal 60:69","rectal 70:84")
-
-x.big <-xtable(temp , align="||l|l|l||",
-               label="table:age.rates",
-       caption="The male and female age rates for colon and rectal cancer.")
-print(x.big,tabular.environment='tabular',floating=TRUE)
-
-    
-# adenoma (adenomas + large adenomsa + pre symptomatic CRC)
- mean((results.M[40:49,7]+results.F[40:49,7]+results.M[40:49,8]+results.F[40:49,8]+results.M[40:49,9]+results.F[40:49,9])/50000)
-#[1] 0.153252
-mean((results.M[50:75,7]+results.F[50:75,7]+results.M[50:75,8]+results.F[50:75,8]+results.M[50:75,9]+results.F[50:75,9])/50000)
- #0.2037031
-mean((results.M[76:80,7]+results.F[76:80,7]+results.M[76:80,8]+results.F[76:80,8]+results.M[76:80,9]+results.F[76:80,9])/50000)
-#0.21144
+#female       male
+#colon 20:49   17.035903  15.742473
+#colon 50:59   43.654814  43.270793
+#colon 60:69   66.292201  61.048750
+#colon 70:84  129.148044 103.200538
+#rectal 20:49   1.414947   1.717922
+#rectal 50:59   3.932269   3.785441
+#rectal 60:69   6.400039   5.350464
+#rectal 70:84  14.362787   9.508479
 
 
+
+aa<- (DukesCrcSpinModel_output$results.F$colon.state.adenoma+DukesCrcSpinModel_output$results.F$colon.state.large.adenoma
+   +DukesCrcSpinModel_output$results.F$colon.state.symptomatic.CRC+DukesCrcSpinModel_output$results.F$colon.state.CRC +
+DukesCrcSpinModel_output$results.M$colon.state.adenoma+DukesCrcSpinModel_output$results.M$colon.state.large.adenoma +
+   DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC+DukesCrcSpinModel_output$results.M$colon.state.CRC)/      
+      ((number.F-cumsum(DukesCrcSpinModel_output$results.F$person.state.deceased)) +(number.M-cumsum(DukesCrcSpinModel_output$results.M$person.state.deceased)))
+
+mean(aa[40:49])#0.16
+mean(aa[50:75])#0.23
+mean(aa[76:80])# 0.31
 
 # proportion of Adenomas greater the 10 mm
-mean(results.F[-c(1:40),8]/(results.F[-c(1:40),7]+results.F[-c(1:40),8]))
-# 0.1116742
+mean((DukesCrcSpinModel_output$results.M[-c(1:40),8]+DukesCrcSpinModel_output$results.F[-c(1:40),8]) /(DukesCrcSpinModel_output$results.F[-c(1:40),7]+DukesCrcSpinModel_output$results.F[-c(1:40),8] +DukesCrcSpinModel_output$results.M[-c(1:40),7]+DukesCrcSpinModel_output$results.M[-c(1:40),8]))
+#  0.109
 
 
 
@@ -1618,6 +1402,16 @@ temp<-cbind(f1,m1)
 colnames(temp)<-c("female","male")
 rownames(temp)<-c("colon 20:49" ,"colon 50:59","colon 60:69","colon 70:84",
 "rectal 20:49","rectal 50:59","rectal 60:69","rectal 70:84")
+
+#               female       male
+#colon 20:49   135.44086  214.97882
+#colon 50:59   483.39386  759.11479
+#colon 60:69   779.07092 1150.40946
+#colon 70:84  1167.34517 1684.25363
+#rectal 20:49   15.24885   19.21599
+#rectal 50:59   41.00627   97.20267
+#rectal 60:69   70.48558  114.72555
+#rectal 70:84   99.04341  138.93831
 
 x.big <-xtable(temp , align="||l|l|l||",
                label="table:age.rates",
