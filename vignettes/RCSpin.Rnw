@@ -22,6 +22,11 @@
 \usepackage{pdflscape}
 %\usepackage{pbox}
 
+
+
+%\VignetteIndexEntry{Introduction to RCSpin and SpinModels libraries} \\
+
+
 %\sloppy
 %\SweaveOpts{echo=FALSE,prefix.string=script18/plot}
 \renewcommand{\textfraction}{0.0}

@@ -34,6 +34,7 @@ system("sudo R CMD INSTALL RCSpin_0.1.tar.gz")
 #restart
 
 library(RCSpin)
+
 cc<-GenericModel(iterations=99, num_subjects=10,base_seed=122)
 cc<-CrcSpinModel$new(iterations=99, num_subjects=10,base_seed=122)
 cc$run()
@@ -75,6 +76,7 @@ help(DukesAdenomaParams)     #nothing
 help(DukesAdenoma)          #nothing
 help(DukesColon)           #nothing
 help(DukesPersonWithColon)  #nothing
+DukesPersonWithColon$help()
 help(SymptomaticPresentation)  #nothing
 help(organize_results)#nothing
 vignette("RCSpin")

@@ -22,6 +22,10 @@
 \usepackage{pdflscape}
 %\usepackage{pbox}
 
+
+%\VignetteIndexEntry{evaluatin the models} \\
+
+
 \usepackage{graphicx}
 \usepackage{gensymb}
 \usepackage{nag}   %It warns the user about the usage of old packages or commands (for example, using \it, \tt, etc.)
@@ -634,6 +638,8 @@ f1<-rep(0,8)
 #mean(results.F[-c(1:40),8]/(results.F[-c(1:40),7]+results.F[-c(1:40),8]))
 # 0.1116742
 
+M<-(number.M-cumsum(DukesCrcSpinModel_output$results.M$person.state.deceased))
+
 plot(( DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.rectum/M)*100000,type="l")
 y<-smooth.spline(x=1:99,y=((DukesCrcSpinModel_output$results.M$colon.state.symptomatic.CRC.colon.cancer_site.rectum/M)*100000),df=6   )$y
 lines(y)
@@ -703,6 +709,17 @@ rownames(temp)<-c("colon 20:49" ,"colon 50:59","colon 60:69","colon 70:84",
 #rectal 60:69   6.400039   5.350464
 #rectal 70:84  14.362787   9.508479
 
+#from the "data(DukesCrcSpinModel_output)"
+# temp
+ #               female       male
+#colon 20:49   33.927160  31.373225
+#colon 50:59   84.690162  85.691300
+#colon 60:69  135.343709 127.390902
+#colon 70:84  322.561860 257.067971
+#rectal 20:49   2.800672   3.425695
+#rectal 50:59   7.461132   7.463334
+#rectal 60:69  12.982592  11.158925
+#rectal 70:84  36.330584  23.756787
 
 
 aa<- (DukesCrcSpinModel_output$results.F$colon.state.adenoma+DukesCrcSpinModel_output$results.F$colon.state.large.adenoma
@@ -718,6 +735,35 @@ mean(aa[76:80])# 0.31
 # proportion of Adenomas greater the 10 mm
 mean((DukesCrcSpinModel_output$results.M[-c(1:40),8]+DukesCrcSpinModel_output$results.F[-c(1:40),8]) /(DukesCrcSpinModel_output$results.F[-c(1:40),7]+DukesCrcSpinModel_output$results.F[-c(1:40),8] +DukesCrcSpinModel_output$results.M[-c(1:40),7]+DukesCrcSpinModel_output$results.M[-c(1:40),8]))
 #  0.109
+#####################################################################
+#changed DukesCrCSpin 
+#"treatment_record<-NBCSP(person)"  to  "treatment_record <- testForAndTreatCRC(person)"
+
+dddm<-DukesCrcSpinModel$new(iterations=99, num_subjects=50000, base_seed=125, 
+   commencement_age=20)
+dddm$run()
+    dim(dddm$study_results)  #198  60
+DukesCrcSpinModel_output<-organize_results(dddm)
+
+ attach(DukesCrcSpinModel_output)
+save(DukesCrcSpinModel_output,file="temp.RData")
+
+plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,
+     xlab="age",axes=FALSE, ylab="proportion of population",ylim=c(0,0.1),
+          main="CRC -- male population with no screening")
+lines(results.M$colon.state.CRC/number.M,col="plum4",lwd=2)
+lines(results.M$colon.state.symptomatic.CRC/number.M,col="purple",lwd=2)
+legend(20,0.07,c("population","large adenoma", "CRC","symptomatic CRC"), 
+       col=c("green","orange","plum4","purple"),lwd=2)
+axis(2, pretty( c(0,0.1),10))
+par(new=TRUE)
+plot(pp<- number.M-cumsum(results.M$person.state.deceased),axes=FALSE,
+      type="l",ylab="",xlab="",lty=1,col=3,lwd=2 )
+axis(4, pretty(range(c(0,number.M),10)))
+mtext(side=4, line=3, "population")
+axis(1,pretty(range(1:99),10))
+box() #- to make it look "as usual"
+
 
 
 

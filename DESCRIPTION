@@ -17,5 +17,4 @@ Description: A set of extensible classes for running population disease
     model over a study group for a given number of iterations, and an
     implementation + extension of the CRC Spin model.
 License: file LICENSE
-Depends:
-    methods
+Depends: methods

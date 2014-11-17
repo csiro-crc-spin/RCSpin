@@ -1,3 +1,10 @@
+Monday, October 20, 2014
+fixed
+\VignetteIndexEntry in *.Rnw files
+onAttach n zzz.R
+
+
+
 Sunday, October  5, 2014
 
 added this file CHANGES
