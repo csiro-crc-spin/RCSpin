@@ -816,7 +816,8 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
 
         testForAndTreatCRC = function (person) {
 
-            treatment_record=rep(FALSE,person$treatmentRecordSize())
+#            treatment_record=rep(FALSE,person$treatmentRecordSize())
+            local.treatment_record=rep(FALSE,14)
 
             # if person has symptoms of CRC but is not in treatment
             # program
@@ -830,11 +831,11 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                 #   Originally:
                 #       temp1[12]<-1  #people entering in.treatment.program
                 #       person1@in.treatment.program<-"yes"
-                treatment_record<-person$initiateCRCTreatment()
+                local.treatment_record<-person$initiateCRCTreatment()
 
             }
 
-            return(treatment_record)
+            return(local.treatment_record)
 
         },
 
@@ -1895,11 +1896,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #           & (person1@in.treatment.program=="no")){
             #               ...some code...
             #       }
-            #treatment_record <- testForAndTreatCRC(person)
+            treatment_record.1 <- testForAndTreatCRC(person)
 
-            treatment_record<-NBCSP(person)
+            treatment_record.2<-NBCSP(person)
 
-            return(treatment_record)
+            return(c(treatment_record.1,treatment_record.2))
         }
 
     )
@@ -2290,7 +2291,7 @@ DukesPersonWithColon <- setRefClass( "DukesPersonWithColon",
         },
 
         treatmentRecordSize = function () {
-            return(14)
+            return(28)
         },
 
         initiateCRCTreatment = function (prob_colonoscopy_performed=1) {
