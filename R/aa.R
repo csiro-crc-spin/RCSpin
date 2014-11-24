@@ -1895,9 +1895,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #           & (person1@in.treatment.program=="no")){
             #               ...some code...
             #       }
-            treatment_record <- testForAndTreatCRC(person)
+            #treatment_record <- testForAndTreatCRC(person)
 
-            #treatment_record<-NBCSP(person)
+            treatment_record<-NBCSP(person)
 
             return(treatment_record)
         }

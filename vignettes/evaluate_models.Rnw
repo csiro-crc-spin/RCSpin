@@ -534,6 +534,9 @@ DukesCrcSpinModel_output<-organize_results(dddm)
 #data(DukesCrcSpinModel_output)
 attach(DukesCrcSpinModel_output)
 save(DukesCrcSpinModel_output,file="temp.RData")
+load("~/Dropbox/CRC-Spin2/screening_compliance/temp.RData")
+
+load("temp3.Rdata")
 
 plot(results.M$colon.state.large.adenoma/number.M,type="l",col="orange",lwd=2,
      xlab="age",axes=FALSE, ylab="proportion of population",ylim=c(0,0.1),
@@ -785,6 +788,7 @@ apply(results.M,2,sum)
 
 #########################################################################
 #http://seer.cancer.gov
+
 
 #Based on rates from 2008-2010, 4.82% of men and women born today will
 #be diagnosed with cancer of the colon and rectum at some time during

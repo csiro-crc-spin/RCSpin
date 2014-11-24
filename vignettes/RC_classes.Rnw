@@ -477,34 +477,34 @@ cc$trace(updateSubject,browser)
 cc$run()
 
 
-debug(mean.default)
-mean(1:10)
-debugging in: mean.default(1:10)
-debug: {
-    if (na.rm)
-        x <- x[!is.na(x)]
-    trim <- trim[1]
-    n <- length(c(x, recursive = TRUE))
-    if (trim > 0) {
-        if (trim >= 0.5)
-            return(median(x, na.rm = FALSE))
-        lo <- floor(n * trim) + 1
-        hi <- n + 1 - lo
-        x <- sort(x, partial = unique(c(lo, hi)))[lo:hi]
-        n <- hi - lo + 1
-    }
-    sum(x)/n
-}
-where
-g: if (na.rm) x <- x[!is.na(x)]
-Browse[1]>
-debug: trim <- trim[1]
-Browse[1]> trim
-[1] 0
-Browse[1]>
-debug: n <- length(c(x, recursive = TRUE))
-Browse[1]> c
-exiting from: mean.default(1:10)
+## debug(mean.default)
+## mean(1:10)
+## debugging in: mean.default(1:10)
+## debug: {
+##     if (na.rm)
+##         x <- x[!is.na(x)]
+##     trim <- trim[1]
+##     n <- length(c(x, recursive = TRUE))
+##     if (trim > 0) {
+##         if (trim >= 0.5)
+##             return(median(x, na.rm = FALSE))
+##         lo <- floor(n * trim) + 1
+##         hi <- n + 1 - lo
+##         x <- sort(x, partial = unique(c(lo, hi)))[lo:hi]
+##         n <- hi - lo + 1
+##     }
+##     sum(x)/n
+## }
+## where
+## g: if (na.rm) x <- x[!is.na(x)]
+## Browse[1]>
+## debug: trim <- trim[1]
+## Browse[1]> trim
+## [1] 0
+## Browse[1]>
+## debug: n <- length(c(x, recursive = TRUE))
+## Browse[1]> c
+## exiting from: mean.default(1:10)
 
 
 
