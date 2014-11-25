@@ -1901,10 +1901,135 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             treatment_record.2<-NBCSP(person)
 
             return(c(treatment_record.1,treatment_record.2))
-        }
+        },
 
-    )
-)
+        gemini.screening <- function(person){
+            temp1<-rep(0,14)
+            if ( (person$age %in% c(60)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")){
+                                                  #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
+                                        #We do not offer it if the person already has a diagnosis of "CRC"
+                blood.test.screening(person) #
+
+                                        #offer Gemini test. Relevant parameters are the compliance rate and the
+                                        #sensitivity and specificity, depending on the person1@colon@state and stage
+                                        #The test results are retained in an object of class "test", appended to the list
+                                        #person1@clinical.history@events
+
+                test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a Test
+                temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
+                temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
+                temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
+                temp1[4]<-ifelse(is.element(test.outcome$compliance,c("screen")),1,0)
+###assumes that they only have one test. Needs to be changed
+###we are also assuming that if the test is positive than the person has a colonoscopy. This
+###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
+                if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
+                                        #conditions on person1@colon@state and move on
+                    temp1[5]<-1 #test.result=="positive"
+                    temp1[6]<-1 #person has a colonoscopy woth probability 1
+                    temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+                    temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+                    #so these are the results of colonoscopy. 
+                    if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
+                        temp1[7]<-1
+                        temp1[12]<-1
+                        person$in_treatment_program<-"yes"
+                    } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
+                        if (person$colon$stage=="A"){
+                            temp1[8]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        }
+                        if (person$colon$stage=="B"){
+                            temp1[9]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        }
+                        if (person$colon$stage=="C"){
+                            temp1[10]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        }
+                        if(person$colon$stage=="D"){
+###            person$colon.clinical<-"CRC"
+                            temp1[11]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                                        #we do nothing.
+                        }
+                    }
+                } #end test.result=="positive"
+                
+            }
+            temp1   
+        }, #end gemini.testing
+
+      blood.test.screening = function(person) {#person is offered blood test
+            age<-person$age
+            test.result<-"none"
+            test.state<-"none"
+            compliance<-sample(c("accept","decline"),1, prob =c(0.75,0.25))
+            if (compliance=="accept"){
+                person$updateState()  #object<-get.patient.state(object)
+                state<-person$colon$state    #object@colon@state
+                if( state=="symptomatic CRC" ){
+                    sensitivity<-0.86
+                    test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                    if(test.result=="positive"){
+                        test.state<-"TP"
+                    }
+                    else{
+                        test.state<-"FN"
+                    }
+                } else if ( state== "CRC" ){
+                    sensitivity<-0.86
+                    test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                    if(test.result=="positive"){
+                        test.state<-"TP"
+                    }
+                    else{
+                        test.state<-"FN"
+                    }
+                } else if ( state=="large adenoma" ){
+                    sensitivity<-0.474
+                    test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                    if(test.result=="positive"){
+                        test.state<-"TP"
+                    }
+                    else{
+                        test.state<-"FN"
+                    }
+                }else if ( state=="adenoma" ){
+                    specificity<-0.9585
+                    test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+                    if(test.result=="positive"){
+                        test.state<-"FP"
+                    }
+                    else{
+                        test.state<-"TN"
+                    }
+                } else if ( state=="clear" ){
+                    specificity<-0.968
+                    test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+                    if(test.result=="positive"){
+                        test.state<-"FP"
+                    }
+                    else{
+                        test.state<-"TN"
+                    }
+                }#end state =clear
+            }
+            person$clinical_history$events<-lappend(person$clinical_history$events,
+                                                    Test$new(
+                                                        age=age,
+                                                        type="blood",
+                                                        compliance=compliance,
+                                                        result=test.result,
+                                                        state= test.state)
+                                                    )
+        },  # blood.test.screening 
+    ) #end method list
+                                 )
 
 
 
