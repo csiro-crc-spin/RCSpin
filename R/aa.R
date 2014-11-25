@@ -2027,7 +2027,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                                         result=test.result,
                                                         state= test.state)
                                                     )
-        },  # blood.test.screening 
+        }  # blood.test.screening 
     ) #end method list
                                  )
 
