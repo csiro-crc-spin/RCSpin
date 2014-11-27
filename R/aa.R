@@ -66,6 +66,7 @@ GenericModel <- setRefClass( "GenericModel",
                         base_seed=NA,
                         commencement_age=1,
                         study_results=NA,
+                        set.sex= NA_character_ ,
                         ...){
 
         "Create and initialize a new instance of a GenericModel
@@ -156,7 +157,9 @@ GenericModel <- setRefClass( "GenericModel",
                             c(.self$study_group,
                               Person$new(study_id=i,
                                          base_seed=base_seed,
-                                         age=commencement_age))
+                                         age=commencement_age,
+                                         sex=set.sex
+                                         ))
                     }
                 }
             } else {
@@ -1968,11 +1971,13 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         gemini.blood.screening = function(person){
             #person is offered blood screening. Not everyone is offered the blood test every year so
             # this probability includes visiting the doctor, being offered the test and accepting the test
+            #
+            #where od I want to do -- offer and compliance? 
             test.result<-"none"
             test.state<-"none"
             person$updateState() 
             state<-person$colon$state
-            stage<-object$colon$stage
+            stage<-person$colon$stage
             if (state=="CRC" | state=="pre symptomatic CRC"){
                 if (stage =="A"){
                     sensitivity<-0.50
@@ -2053,9 +2058,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             }#end state =clear
             person$clinical_history$events<-lappend(person$clinical_history$events,
                                                     Test$new(
-                                                        age=age,
+                                                        age=person$age,
                                                         type="blood",
-                                                        compliance=compliance,
+                                                        compliance="accept",
                                                         result=test.result,
                                                         state= test.state)
                                                     )
