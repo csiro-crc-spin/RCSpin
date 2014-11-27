@@ -277,8 +277,45 @@ PersonWithColon <- setRefClass( "PersonWithColon",
 )
 
 
+MyClass <- setRefClass(
+  "MyClass",
+  fields = list(
+    xy = "data.frame"
+  ),
+  methods = list(
+    initialize = function( df ){
+      if( !missing( df ) ){
+        xy <<- df
+      }
+    },
+    getSecondRow = function(){
+      # A mistake happend here
+      return( xy[1,] )
+    }
+  )
+)
+
+mc <- MyClass$new( data.frame( a = 1:10, b = rnorm(10) ) )
+mc$getSecondRow()
+
+## The trick instead of loading the class and reproducing the object from scratch is 
+## to construct an new object from the existing, using the copy constructor 
+## functionality of the default initialize( ... ) constructor. After debugging and
+## reloading the class you can just copy the existing object with the implementation 
+## into the same variable by
+
+# NOTRUN
+mc <- MyClass$new( mc )
+
+initialize = function( df, ... ){
+    callSuper( ... )
+    if( !missing( df ) ){
+        xy <<- df
+    }
+}
 
 
+mc <- MyClass$new( mc$xy, mc )
 
 
 @ 

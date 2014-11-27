@@ -66,6 +66,7 @@ GenericModel <- setRefClass( "GenericModel",
                         base_seed=NA,
                         commencement_age=1,
                         study_results=NA,
+                        set.sex= NA_character_ ,
                         ...){
 
         "Create and initialize a new instance of a GenericModel
@@ -156,7 +157,9 @@ GenericModel <- setRefClass( "GenericModel",
                             c(.self$study_group,
                               Person$new(study_id=i,
                                          base_seed=base_seed,
-                                         age=commencement_age))
+                                         age=commencement_age,
+                                         sex=set.sex
+                                         ))
                     }
                 }
             } else {
@@ -1895,9 +1898,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #           & (person1@in.treatment.program=="no")){
             #               ...some code...
             #       }
-            #treatment_record <- testForAndTreatCRC(person)
+            treatment_record <- testForAndTreatCRC(person)
 
-            treatment_record<-NBCSP(person)
+            #treatment_record<-NBCSP(person)
 
             return(treatment_record)
         }
