@@ -1821,7 +1821,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             age<-person$age
             test.result<-"none"
             test.state<-"none"
-            compliance<-sample(c("accept","decline"),1, prob =c(0.4,0.6))
+             compliance<-sample(c("accept","decline"),1, prob =c(0.4,0.6))
             if (compliance=="accept"){
                 person$updateState()  #object<-get.patient.state(object)
                 state<-person$colon$state    #object@colon@state
@@ -1898,17 +1898,18 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
 
-            treatment_record.2<-NBCSP(person)
+#            treatment_record.2<-NBCSP(person)
+            treatment_record.2<-gemini.screening(person)
 
             return(c(treatment_record.1,treatment_record.2))
         },
 
-        gemini.screening <- function(person){
+        gemini.screening = function(person){
             temp1<-rep(0,14)
             if ( (person$age %in% c(60)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")){
                                                   #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
                                         #We do not offer it if the person already has a diagnosis of "CRC"
-                blood.test.screening(person) #
+                gemini.blood.screening(person) #  blood.test.screening(person) #
 
                                         #offer Gemini test. Relevant parameters are the compliance rate and the
                                         #sensitivity and specificity, depending on the person1@colon@state and stage
@@ -1963,17 +1964,19 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             }
             temp1   
         }, #end gemini.testing
-
-      blood.test.screening = function(person) {#person is offered blood test
-            age<-person$age
+        
+        gemini.blood.screening = function(person){
+            #person is offered blood screening. Not everyone is offered the blood test every year so
+            # this probability includes visiting the doctor, being offered the test and accepting the test
             test.result<-"none"
             test.state<-"none"
-            compliance<-sample(c("accept","decline"),1, prob =c(0.75,0.25))
-            if (compliance=="accept"){
-                person$updateState()  #object<-get.patient.state(object)
-                state<-person$colon$state    #object@colon@state
-                if( state=="symptomatic CRC" ){
-                    sensitivity<-0.86
+            person$updateState() 
+            state<-person$colon$state
+            stage<-object$colon$stage
+            if (state=="CRC" | state=="pre symptomatic CRC"){
+                if (stage =="A"){
+                    sensitivity<-0.50
+                    specificity<-0.0
                     test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
                         test.state<-"TP"
@@ -1981,8 +1984,12 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     else{
                         test.state<-"FN"
                     }
-                } else if ( state== "CRC" ){
-                    sensitivity<-0.86
+                }#end stage A
+                if (stage =="B"){
+                    sensitivity<-0.68
+                    specificity<-0.0
+                    sensitivity<-0.68
+                    specificity<-0.0
                     test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
                         test.state<-"TP"
@@ -1990,8 +1997,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     else{
                         test.state<-"FN"
                     }
-                } else if ( state=="large adenoma" ){
-                    sensitivity<-0.474
+                }#end stage B
+                if (stage =="C"){
+                    sensitivity<-0.80
+                    specificity<-0.0
                     test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
                         test.state<-"TP"
@@ -1999,26 +2008,49 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     else{
                         test.state<-"FN"
                     }
-                }else if ( state=="adenoma" ){
-                    specificity<-0.9585
-                    test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+                }#end stage C
+                if (stage =="D"){
+                    sensitivity<-1.0
+                    specificity<-0.0
+                    test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
-                        test.state<-"FP"
+                        test.state<-"TP"
                     }
                     else{
-                        test.state<-"TN"
+                        test.state<-"FN"
                     }
-                } else if ( state=="clear" ){
-                    specificity<-0.968
-                    test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
-                    if(test.result=="positive"){
-                        test.state<-"FP"
-                    }
-                    else{
-                        test.state<-"TN"
-                    }
-                }#end state =clear
-            }
+                }#end stage D
+            } else if ( state=="large adenoma" ){
+                sensitivity<-0.33
+                specificity<-0.0
+                test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                if(test.result=="positive"){
+                    test.state<-"TP"
+                }
+                else{
+                    test.state<-"FN"
+                }
+            } else if ( state=="adenoma" ){
+                sensitivity<-0.0
+                specificity<-0.93
+                test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+                if(test.result=="positive"){
+                    test.state<-"FP"
+                }
+                else{
+                    test.state<-"TN"
+                }
+            }  else if ( state=="clear" ){
+                sensitivity<-0.0
+                specificity<-0.93
+                test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+                if(test.result=="positive"){
+                    test.state<-"FP"
+                }
+                else{
+                    test.state<-"TN"
+                }
+            }#end state =clear
             person$clinical_history$events<-lappend(person$clinical_history$events,
                                                     Test$new(
                                                         age=age,
@@ -2027,7 +2059,73 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                                         result=test.result,
                                                         state= test.state)
                                                     )
-        }  # blood.test.screening 
+        } # blood.test.screening 
+
+        
+      ## blood.test.screening = function(person) {#person is offered blood test
+      ##       age<-person$age
+      ##       test.result<-"none"
+      ##       test.state<-"none"
+      ##       compliance<-sample(c("accept","decline"),1, prob =c(0.75,0.25))
+      ##       if (compliance=="accept"){
+      ##           person$updateState()  #object<-get.patient.state(object)
+      ##           state<-person$colon$state    #object@colon@state
+      ##           if( state=="symptomatic CRC" ){
+      ##               sensitivity<-0.86
+      ##               test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+      ##               if(test.result=="positive"){
+      ##                   test.state<-"TP"
+      ##               }
+      ##               else{
+      ##                   test.state<-"FN"
+      ##               }
+      ##           } else if ( state== "CRC" ){
+      ##               sensitivity<-0.86
+      ##               test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+      ##               if(test.result=="positive"){
+      ##                   test.state<-"TP"
+      ##               }
+      ##               else{
+      ##                   test.state<-"FN"
+      ##               }
+      ##           } else if ( state=="large adenoma" ){
+      ##               sensitivity<-0.474
+      ##               test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+      ##               if(test.result=="positive"){
+      ##                   test.state<-"TP"
+      ##               }
+      ##               else{
+      ##                   test.state<-"FN"
+      ##               }
+      ##           }else if ( state=="adenoma" ){
+      ##               specificity<-0.9585
+      ##               test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+      ##               if(test.result=="positive"){
+      ##                   test.state<-"FP"
+      ##               }
+      ##               else{
+      ##                   test.state<-"TN"
+      ##               }
+      ##           } else if ( state=="clear" ){
+      ##               specificity<-0.968
+      ##               test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+      ##               if(test.result=="positive"){
+      ##                   test.state<-"FP"
+      ##               }
+      ##               else{
+      ##                   test.state<-"TN"
+      ##               }
+      ##           }#end state =clear
+      ##       }
+      ##       person$clinical_history$events<-lappend(person$clinical_history$events,
+      ##                                               Test$new(
+      ##                                                   age=age,
+      ##                                                   type="blood",
+      ##                                                   compliance=compliance,
+      ##                                                   result=test.result,
+      ##                                                   state= test.state)
+      ##                                               )
+      ##   }  # blood.test.screening 
     ) #end method list
                                  )
 
