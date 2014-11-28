@@ -731,6 +731,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                 base_seed=base_seed,
                 commencement_age=commencement_age,
                 study_group=temp_study_group,
+                      set.sex=set.sex,
                 ...)
 
         },
