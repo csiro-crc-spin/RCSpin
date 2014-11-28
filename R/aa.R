@@ -54,7 +54,8 @@ GenericModel <- setRefClass( "GenericModel",
         iteration_resolution="numeric",
         study_group="list",
         study_results="matrix",
-        commencement_age="numeric"
+        commencement_age="numeric",
+        set.sex="character"
     ),
 
     methods = list(
@@ -148,7 +149,8 @@ GenericModel <- setRefClass( "GenericModel",
                 iteration_resolution=iteration_resolution,
                 study_group=study_group,
                 study_results=study_res,
-                commencement_age=commencement_age)
+                commencement_age=commencement_age,
+                  set.sex=set.sex)
 
             if (length(study_group)==0) {
                 if (num_subjects>0) {
