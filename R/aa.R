@@ -2568,7 +2568,7 @@ DukesPersonWithColon <- setRefClass( "DukesPersonWithColon",
             #       #If Dukes C or D then treatment is ineffective and the cancer in incurable.
             #       if ( (person1@colon@state=="adenoma") | (person1@colon@state=="large adenoma")){
             #           ...etc...
-            colon$treatCRC()
+#            colon$treatCRC()
 
             if(length(colon$sites)==0 &&
                colon$stage=="clear" &&
