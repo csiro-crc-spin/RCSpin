@@ -500,7 +500,7 @@ Person <- setRefClass( "Person",
 
             if (is.na(sex) |
                 !(sex=="F" | sex=="M")) {
-                s<-sample(c("F","M"),1,prob=c(0.5,0.5))
+                s<-"M" #sample(c("F","M"),1,prob=c(0.5,0.5))
             } else {
                 s<-sex
             }
