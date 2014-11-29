@@ -499,7 +499,7 @@ Person <- setRefClass( "Person",
 
             if (is.na(sex) |
                 !(sex=="F" | sex=="M")) {
-                s<-sample(c("F","M"),1,prob=c(0.5,0.5))
+                s<-"M"
             } else {
                 s<-sex
             }
@@ -1895,9 +1895,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #           & (person1@in.treatment.program=="no")){
             #               ...some code...
             #       }
-            #treatment_record <- testForAndTreatCRC(person)
+            treatment_record <- testForAndTreatCRC(person)
 
-            treatment_record<-NBCSP(person)
+            #treatment_record<-NBCSP(person)
 
             return(treatment_record)
         }
@@ -2341,7 +2341,7 @@ DukesPersonWithColon <- setRefClass( "DukesPersonWithColon",
             #       #If Dukes C or D then treatment is ineffective and the cancer in incurable.
             #       if ( (person1@colon@state=="adenoma") | (person1@colon@state=="large adenoma")){
             #           ...etc...
-            colon$treatCRC()
+#            colon$treatCRC()
 
             if(length(colon$sites)==0 &&
                colon$stage=="clear" &&
