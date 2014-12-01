@@ -817,8 +817,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
 
         testForAndTreatCRC = function (person) {
 
-            local.treatment_record=rep(FALSE,person$testForAndTreatSize())
-#            local.treatment_record=rep(FALSE,14)
+            treatment_record=rep(FALSE,person$testForAndTreatSize())
 
             # if person has symptoms of CRC but is not in treatment
             # program
@@ -832,11 +831,11 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                 #   Originally:
                 #       temp1[12]<-1  #people entering in.treatment.program
                 #       person1@in.treatment.program<-"yes"
-                local.treatment_record<-person$initiateCRCTreatment()
+                treatment_record<-person$initiateCRCTreatment()
 
             }
 
-            return(local.treatment_record)
+            return(treatment_record)
 
         },
 
