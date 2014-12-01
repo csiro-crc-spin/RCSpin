@@ -817,8 +817,8 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
 
         testForAndTreatCRC = function (person) {
 
-#            treatment_record=rep(FALSE,person$treatmentRecordSize())
-            local.treatment_record=rep(FALSE,14)
+            local.treatment_record=rep(FALSE,person$testForAndTreatSize())
+#            local.treatment_record=rep(FALSE,14)
 
             # if person has symptoms of CRC but is not in treatment
             # program
@@ -1641,10 +1641,14 @@ PersonWithColon <- setRefClass( "PersonWithColon",
             }
         },
 
+        testForAndTreatSize = function () {
+            return(1)
+        },
+        
         treatmentRecordSize = function () {
             return(1)
         },
-
+        
         initiateCRCTreatment = function () {
             in_treatment_program<<-"yes"
             return(TRUE)
@@ -1758,7 +1762,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         },
 
         NBCSP = function (person) {
-            temp1<-rep(0,14)
+            temp1<-rep(FALSE,person$NBCSPRecordSize())
             if ( (person$age %in% c(50,55,60,65,70)) & ( person$colon_clinical=="clear") #
                 &(person$in_treatment_program=="no")){
                                         #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
@@ -2518,6 +2522,12 @@ DukesPersonWithColon <- setRefClass( "DukesPersonWithColon",
 
         treatmentRecordSize = function () {
             return(28)
+        },
+        testForAndTreatSize = function () {
+            return(14)
+        },
+       NBCSPRecordSize = function () {
+            return(14)
         },
 
         initiateCRCTreatment = function (prob_colonoscopy_performed=1) {
