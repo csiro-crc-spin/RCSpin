@@ -687,6 +687,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                         num_subjects=1,
                         base_seed=NA,
                         commencement_age=20,
+                        set.sex=NA_character_,
                         ...) {
 
             crcrisk_model_params<<-crcRiskParamsType()$new()
@@ -706,7 +707,8 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                           personWithColonType()$new(study_id=i,
                                         base_seed=base_seed,
                                         crcrisk_params=crcrisk_model_params,
-                                        age=commencement_age))
+                                        age=commencement_age,
+                                         sex=set.sex ))
                 }
             } else {
                 # checks & processing should be done here to:
