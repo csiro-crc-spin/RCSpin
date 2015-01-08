@@ -66,6 +66,7 @@ GenericModel <- setRefClass( "GenericModel",
                         base_seed=NA,
                         commencement_age=1,
                         study_results=NA,
+                        set.sex=NA_character_,
                         ...){
 
         "Create and initialize a new instance of a GenericModel
@@ -156,8 +157,9 @@ GenericModel <- setRefClass( "GenericModel",
                             c(.self$study_group,
                               Person$new(study_id=i,
                                          base_seed=base_seed,
-                                         age=commencement_age
-                                         ))
+                                         age=commencement_age,
+                                         sex=set.sex)
+                              )
                     }
                 }
             } else {
@@ -500,7 +502,7 @@ Person <- setRefClass( "Person",
 
             if (is.na(sex) |
                 !(sex=="F" | sex=="M")) {
-                s<-"M" #sample(c("F","M"),1,prob=c(0.5,0.5))
+                s <- sample(c("F","M"),1,prob=c(0.5,0.5))
             } else {
                 s<-sex
             }
@@ -688,6 +690,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                         num_subjects=1,
                         base_seed=NA,
                         commencement_age=20,
+                        set.sex=NA_character_,
                         ...) {
 
             crcrisk_model_params<<-crcRiskParamsType()$new()
@@ -707,7 +710,8 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                           personWithColonType()$new(study_id=i,
                                         base_seed=base_seed,
                                         crcrisk_params=crcrisk_model_params,
-                                        age=commencement_age))
+                                        age=commencement_age,
+                                        sex=set.sex ))
                 }
             } else {
                 # checks & processing should be done here to:

@@ -56,6 +56,9 @@ It has mutable objects -- i.e changes don't make copies.
 
 
 
+<-
+
+<<-
 
 <<eval=FALSE,echo=FALSE,results=hide>>=
 # create a generic method called "testFun" that
