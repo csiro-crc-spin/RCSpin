@@ -1452,27 +1452,10 @@ Colon <- setRefClass( "Colon",
 
         initiateAdenomas = function(adenoma_params,
             subject_age){
-
-            I<-0
-            S<-c(NULL)
-            lambda_t<-risk_of_an_adenoma( subject_age=subject_age, risk_params=risk)
-            lambda<-lambda_t+0.001
-            TT<-1
-            t<-0
             
-            while (TRUE){
-                u<-runif(1,0,1)
-                t<- t - (1/lambda)*log(u)
-                if (t > TT)   break
-                
-                u<-runif(1,0,1)
-                lambda_t <- risk_of_an_adenoma(subject_age=subject_age-1, risk_params=risk)
-                if (u < lambda_t/lambda){
-                    I<-I+1
-                    S<-c(S,t)
-                }
-            }
-            temp <- ifelse(length(S)>0,1,0)
+            temp<-rpois(1, risk_of_an_adenoma(
+                subject_age=subject_age,
+                risk_params=risk))
             
             if (temp>0){
                 for ( i in 1:temp){
