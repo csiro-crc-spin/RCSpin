@@ -1451,26 +1451,37 @@ Colon <- setRefClass( "Colon",
         },
 
         initiateAdenomas = function(adenoma_params,
-                                subject_age){
+            subject_age){
 
-            ## temp<-rpois(1, risk_of_an_adenoma(
-            ##                     subject_age=subject_age,
-            ##                     subject_sex=subject_sex,
-            ##                     risk_params=risk))
-          temp<-risk_of_an_adenoma(
-                                   risk_params=risk,
-                                   subject_age=subject_age)
-
-          temp<-sample(c(0,1),1,prob=c(1-temp,temp))
-
-          if (temp>0){
+            I<-0
+            S<-c(NULL)
+            lambda_t<-risk_of_an_adenoma( subject_age=subject_age, risk_params=risk)
+            lambda<-lambda_t+0.001
+            TT<-1
+            t<-0
+            
+            while (TRUE){
+                u<-runif(1,0,1)
+                t<- t - (1/lambda)*log(u)
+                if (t > TT)   break
+                
+                u<-runif(1,0,1)
+                lambda_t <- risk_of_an_adenoma(subject_age=subject_age-1, risk_params=risk)
+                if (u < lambda_t/lambda){
+                    I<-I+1
+                    S<-c(S,t)
+                }
+            }
+            temp <- ifelse(length(S)>0,1,0)
+            
+            if (temp>0){
                 for ( i in 1:temp){
                     sites <<- c(sites,getAdenomaType()$new(
-                                            adenoma_model_params=adenoma_params,
-                                            initiated_in_year=subject_age,
-                                            size=1,
-                                            state="adenoma"
-                                            )
+                        adenoma_model_params=adenoma_params,
+                        initiated_in_year=subject_age,
+                        size=1,
+                        state="adenoma"
+                    )
                                 )
                 }
             }
