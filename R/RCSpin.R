@@ -27,7 +27,7 @@
 #'
 #' @section Usage:
 #' Users of the models who do not wish to extend their functionality only need
-#' to call a small number of functions to set up the parameters of a model,
+#' call a small number of functions to set up the parameters of a model,
 #' then run it.
 #'
 #' To create a new model object, call the model's Reference Class constructor, passing the appropriate arguments. e.g.:
