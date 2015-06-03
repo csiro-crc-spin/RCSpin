@@ -56,7 +56,7 @@
 #'
 #' @section Extending the Model Classes:
 #' Developers wishing to extend the models may wish to look at the detailed
-#' documentation of the main model classes and all their helper helper class.
+#' documentation of the main model classes and all their helper class.
 #' \emph{Please note that users of the models generally will not need to know
 #' this level of detail}.
 #'
