@@ -1,0 +1,615 @@
+\documentclass[11pt]{article}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+% total={210mm,297mm}
+% }
+ left=17mm,
+ right=23mm,
+ top=20mm,
+ bottom=20mm,
+ }
+\usepackage{Sweave}
+\usepackage{url}
+\usepackage{rotating}
+\usepackage{natbib}
+\usepackage{placeins}
+\usepackage{longtable}
+\usepackage[latin1]{inputenc}
+\usepackage{multirow}
+\usepackage{hyperref}
+%\usepackage{showframe}
+\usepackage{pdflscape}
+%\usepackage{pbox}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{rotating}
+\usepackage{multicol}
+\usepackage{caption}
+
+
+
+\usepackage{pdflscape}
+
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily, 
+  basewidth=0.5em,                 %the default setting of listings with "fixed columns" has a space 0.6em wide, 
+                                   %while the characters in Computer Modern Typewriter are 0.5em wide.
+                                   %http://tex.stackexchange.com/questions/179071/spacing-looks-wrong-in-listings-when-using-fixed-columns
+  backgroundcolor=\color{gray!10},
+  keywordstyle=\color{green!40!black},
+  columns=fixed,
+  language=R,                     % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{green},   % comment style
+  stringstyle=\color{red},      % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+} 
+
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage{nag}   %It warns the user about the usage of old packages or commands (for example, using \it, \tt, etc.)
+\usepackage{fixltx2e}
+%fixltx2e package. It fixes some 'mistakes' in Latex. From the description:
+%        ensure one-column floats don't get ahead of two-column floats;
+%        correct page headers in twocolumn documents;
+%        stop spaces disappearing in moving arguments;
+%        allowing \fnysmbol to use text symbols;
+%        allow the first word after a float to hyphenate;
+%        \emph can produce caps/small caps text;
+\usepackage{booktabs}
+% \centering instead of \begin{center} \end{center} to center things inside tables/figures etc. \centering doesn't add any additional vertical space.
+\usepackage{microtype}  %for small-scale typographic enhancements (character protrusion, font expansion, letter-spacing).
+\usepackage{fancyvrb}   %get precise control in verbatim listings.
+%\usepackage{siunitx} To typeset units
+\usepackage{numprint} %format numbers nicely 
+%~, the non-breakable space.
+
+\parindent=0pt
+\parskip=8pt
+\setlength\itemsep{0em}
+
+%\sloppy
+%\SweaveOpts{echo=FALSE,prefix.string=script18/plot}
+\renewcommand{\textfraction}{0.0}
+
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\footnotesize #1]%
+{\raggedright\footnotesize #1}}
+
+\newcommand{\supp}{\mathop{\mathrm{supp}}}
+
+
+\newsavebox\ltmcbox
+\title{Non-homogeneous Poisson and Risk of Adenoma}
+\author{Rob Dunne}
+\date{Thursday, March 19, 2015}
+
+
+
+\begin{document}
+%\setkeys{Gin}{width=8cm}
+\setkeys{Gin}{height=8cm,width=0.9\columnwidth}
+\maketitle
+%%\tableofcontents
+
+\section*{summary}
+The non-homogeneous Poisson is not very different to the standard Poisson in this case. I think the problem lies elsewhere.
+
+\section*{the risk}
+The risk of an adenoma is composed of a baseline risk, and sex and age related risks.
+For a baseline risk of $N(\mu = -6.6 , \sigma = 1.1)$ we have a 95\% CI of a risk being 
+in the interval $\{ -8.756 ,-4.444 \}$. Then with a sex-linked risk of $\pm 0.24$
+we can plot the range of risks: low; average; and high,  for males and females, see figure \ref{figure:risk.png}.
+There is a wide range of risks and individuals in the highest risk category (high risk males) have 
+approximately 1/5 chance of initiating an adenoma in their 70th year.
+
+
+
+\section*{initiate adenomas}
+Figure \ref{figure:compare_simulated_poisson.png} shows a comparison of the distribution of Poisson values generated by:
+\begin{itemize}
+\item the \texttt{rpois} command in \texttt{R}, $\lambda=2$;
+\item an inverse CDF method, $\lambda=2$;
+\item an non-homogeneous Poisson, with a time parameter, $\lambda(t)$, generated by the method described in \cite{Ross.2006}.
+  in this case $\lambda(t) = 2t \textrm{ for } t  \in [0,1],$. See code listing \ref{listing:poisson}.
+\end{itemize}
+
+However, this is a case where the $\lambda(t)$ varies significantly over the interval. In the case of adenoma risk the
+variability may be much less.  Figure \ref{figure:plot3.png} shows the incidence of adenomas for males with a high
+risk, calculated using the non-homogeneous Poisson distribution.  Figure \ref{figure:plot4.png} shows the same plot but
+using a standard Poisson distribution for the incidence of adenomas. There is not a large difference between the
+non-homogeneous Poisson and the standard Poisson.
+
+
+Figure \ref{figure:prevalence.png} shows the prevalence for low,
+average and high risk males using the non-homogeneous Poisson. For each age, $x$, we just calculate the 
+probability of initiation an adenoma any time in the range $[0,x]$. Individuals do not accumulate adenomas -- they
+start adenoma free at age $x$,
+
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=8cm]{./figs/risk.png}
+  \caption{The range of adenoma risks, low medium and high, for males and females.}
+  \label{figure:risk.png}
+\end{figure}
+
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=8cm]{./figs/compare_simulated_poisson.png}
+  \caption{For males  with a baseline risk of -4.4 (the most at risk group) we calculate the
+  proportion initiating adenomas at each age using a standard Poisson distribution.}
+  \label{figure:compare_simulated_poisson.png}
+\end{figure}
+
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=8cm]{./figs/plot3.png}
+  \caption{For males  with a baseline risk of -4.4 (the most at risk group) we calculate the
+  proportion initiating adenomas at each age using the non-homogeneous Poisson distribution.}
+  \label{figure:plot3.png}
+\end{figure}
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=8cm]{./figs/plot4.png}
+  \caption{For males  with a baseline risk of -4.4 (the most at risk group) we calculate the
+  proportion initiating adenomas at each age using a standard Poisson distribution.}
+  \label{figure:plot4.png}
+\end{figure}
+
+
+
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=8cm]{./figs/prevalence.png}
+  \caption{The range of adenoma prevalences. Low, average and high risk.}
+  \label{figure:prevalence.png}
+\end{figure}
+
+
+\begin{figure}[tbhp]
+  \centering
+  \includegraphics[totalheight=8cm]{./figs/number_of_adenomas_2.png}
+  \caption{the number of adenomas in a population of 1000, using different risks.}
+  \label{figure:number_of_adenomas_2.png}
+\end{figure}
+\FloatBarrier
+
+
+
+
+
+
+<<eval=FALSE,echo=FALSE,results=hide>>=
+source("model5.s")
+calculate_risk<-function(baseline_risk= - 6.6, sex = "M", seed= 100){
+    #baseline_risk  \mu = -6.6 \pm 1.96\sigma  gives \{ -8.756 ,-4.444 \}
+    
+    set.seed(seed)
+    person1<-initialize.person(sex=sex)
+    tt<-rep(0,99)
+    for ( i in 1:99){
+        age<-i
+        r1 <- baseline_risk 
+        aa<-  person1@colon@risk.parameters@age.risks
+        r1<-r1+ person1@colon@risk.parameters@sex.linked.risk
+        r2<-0
+        r3<-0
+        if (age >= 20){
+            # k<-as.numeric(cut(age,breaks=c(20,50,60,70,200),right=FALSE))
+            # Replace inefficient cut code above with following if statement
+            if (age>=70){
+                k<-4
+            } else if (age>=60){
+                k<-3
+            } else if (age>=50){
+                k<-2
+            } else {
+                k<-1
+            }
+            A<-c(20,50,60,70,120)
+            r2<-age*aa[k]
+            cat("k=",age, " ",k,"\n")
+            r3<-0
+            if ( k >= 2 ){
+                for (j in 2:k){
+                    r3<-r3+A[j]*(aa[j-1]-aa[j])
+                }
+            }
+        }
+        tt[i] <-exp(r1+r2+r3)
+    }
+    tt
+}
+
+tt.f1<-calculate_risk(sex="F",baseline_risk = -4.444)
+tt.f2<-calculate_risk(sex="F",baseline_risk = -6.6)
+tt.f3<-calculate_risk(sex="F",baseline_risk = -8.756)
+tt.m1<-calculate_risk(sex="M",baseline_risk = -4.444)
+tt.m2<-calculate_risk(sex="M",baseline_risk = -6.6)
+tt.m3<-calculate_risk(sex="M",baseline_risk = -8.756)
+
+#png("./figs/risk.png")
+plot(tt.f1,ylim=c(0,0.4),type="n",xlab="age",ylab="risk of adenoma")
+#abline(h=0.24)
+lines(tt.f1,col="red")
+lines(tt.f2,col="red")
+lines(tt.f3,col="red")
+lines(tt.m1,col="blue")
+lines(tt.m2,col="blue")
+lines(tt.m3,col="blue")
+legend(20,0.3,c("male risk", "female risk"),lty=1,col=c("blue","red"))
+#dev.off()
+
+
+#############################################################
+
+# for the 70th year
+
+ff<-approxfun(c(1:99), y = tt.m3,  method = "linear",rule = 2)
+lambda_t<-ff(70)
+#lambda<-0.2 #for  tt.m1
+#lambda<-0.05 #tt.m2
+lambda<-0.005 #tt.m3 -- this is a low risk male 
+
+    ww<- rep(0,1000)  #1000 reps at each age
+    for ( i in 1:1000){
+        
+        I<-0
+        S<-c(NULL)
+        
+        lambda_t<-ff(70)
+        TT<-1
+        t<-0
+        
+        while (TRUE){
+            u<-runif(1,0,1)
+            t<- t - (1/lambda)*log(u)
+            #   cat("t =",t,"\n")
+            if (t > TT)   break
+            
+            u<-runif(1,0,1)
+            #    cat("round(t,0) =",round(t,0),"\n")
+            lambda_t <- ff(70-1+t) #
+            if (u < lambda_t/lambda){
+                I<-I+1
+                S<-c(S,t)
+            }
+        }
+        
+        #cat(I,"\n")
+        ww[i] <- length(S)
+    }
+
+
+
+#TT<-1 at 70
+# high risk M    --   0.183 get an adenoma in their 70th year
+# medium risk M  -- 0.022 get an adenoma in their 70th year
+# low risk M     --  0.002 get an adenoma in their 70th year
+
+
+
+
+###############################################
+# year by year 
+
+ff<-approxfun(c(1:99), y = tt.m1,  method = "linear",rule = 2)
+lambda_t<-ff(70)
+lambda<-0.2 #for  tt.m1
+#lambda<-0.05 tt.m2
+#lambda<-0.005 #tt.m3
+
+temp<-rep(0,100)
+
+for ( age in 20:99){
+    ww<- rep(0,1000)  #1000 reps at each age
+    for ( i in 1:1000){
+        
+        I<-0
+        S<-c(NULL)
+        
+        lambda_t<-ff(age)
+        lambda<-lambda_t+0.001
+        TT<-1
+        t<-0
+        
+        while (TRUE){
+            u<-runif(1,0,1)
+            t<- t - (1/lambda)*log(u)
+            #   cat("t =",t,"\n")
+            if (t > TT)   break
+            
+            u<-runif(1,0,1)
+            #    cat("round(t,0) =",round(t,0),"\n")
+            lambda_t <- ff(age-1+t) #
+            if (u < lambda_t/lambda){
+                I<-I+1
+                S<-c(S,t)
+            }
+        }
+        
+        #cat(I,"\n")
+        ww[i] <- length(S)
+    }
+
+temp[age] <- sum(ww>0)
+#temp[age] <- sum(ww)
+}
+
+#TT<-1 at 70
+# high risk M    
+#png("./figs/plot3.png")
+plot(temp[1:99]/1000,xlab="age",ylab="adenoma ")
+lines(ff(1:100))
+#dev.off()
+
+# medium risk M  --  sum(temp) = 1472
+# low risk M     sum(temp) =177
+
+
+#lets do it using rpois
+ff<-approxfun(c(1:99), y = tt.m1,  method = "linear",rule = 2)
+temp<-rep(0,100)
+
+for ( age in 20:99){
+    lambda_t<-ff(age)
+    ww<- rep(0,1000)  #1000 reps at each age
+    for ( i in 1:1000){
+        ww[i] <- rpois(1,lambda_t)
+    }
+temp[age] <- sum(ww>0)
+}
+
+#png("./figs/plot4.png")
+plot(temp[1:99]/1000,xlab="age",ylab="adenoma incidence")
+lines(ff(1:100))
+#dev.off()
+
+
+plot(temp[1:99]/1000,xlab="age",ylab="adenoma incidence")
+points(t1/1000,col="red")
+#######################################################################
+
+temp<-rpois(1, risk_of_an_adenoma(
+                               subject_age=subject_age,
+                               risk_params=risk))
+
+
+        I<-0
+        S<-c(NULL)
+        lambda_t<-risk_of_an_adenoma( subject_age=subject_age, risk_params=riskff(age))
+        lambda<-lambda_t+0.001
+        TT<-1
+        t<-0
+        
+        while (TRUE){
+            u<-runif(1,0,1)
+            t<- t - (1/lambda)*log(u)
+            if (t > TT)   break
+            
+            u<-runif(1,0,1)
+            lambda_t <- risk_of_an_adenoma(subject_age=subject_age-1, risk_params=riskff(age))
+            if (u < lambda_t/lambda){
+                I<-I+1
+                S<-c(S,t)
+            }
+        }
+        temp <- ifelse(length(S)>0,0,1)
+
+
+
+
+
+
+#################################################################
+
+# how many have an adenoma by age 70
+ff<-approxfun(c(1:99), y = tt.m1,  method = "linear",rule = 2)
+lambda_t<-ff(70)
+lambda<-0.2  #for  tt.m1
+
+#lambda<-0.05 tt.m2
+
+#ff<-approxfun(c(1:99), y = tt.m3,  method = "linear",rule = 2)
+#lambda_t<-ff(70)
+#lambda<-0.005 #for  tt.m3
+
+ll<-rep(0,100)
+for (age in 20:99){ #ages 20 to 99
+    mm1<-rep(0,100)  
+    mm2<-rep(0,100)  
+    for ( k in 1:100){
+        ww<- rep(0,1000)  #1000 reps at each age
+        for ( i in 1:1000){
+            
+            I<-0
+            S<-c(NULL)
+            
+            lambda_t<-ff(age)
+            lambda<-lambda_t
+            TT<-age
+            t<-0
+            
+            while (TRUE){
+                u<-runif(1,0,1)
+                t<- t - (1/lambda)*log(u)
+                if (t > TT)   break
+                
+                u<-runif(1,0,1)
+                lambda_t <- ff(t) 
+                if (u < lambda_t/lambda){
+                    I<-I+1
+                    S<-c(S,t)
+                }
+            }
+            ww[i] <- length(S)
+        } # end for ( i in 1:1000)
+        
+        mm1[k]<-sum(ww)   # total number of  adenomas in 1000 people
+        mm2[k]<-sum(ww>0) # number of people with an adenoma amongst   
+    }
+    
+    ll[age]<-mean(mm2)
+}
+
+#so  ll[age] is the mean number of people with an andenoma by "age" --avearged over 10000 people and 
+#taking into account the non-homogeneous risk
+
+
+#TT<-70
+#high risk -- 0.99  have an adenoma by 70, many have multiple
+#median risk -- 0.426 have an adenoma by 70
+#low risk  --  0.067 have an adenoma by 70
+
+#png("./figs/incidence.png")
+#save(ll,file="temp.tt.m1.Rdata")
+load(file="temp.tt.m1.Rdata")
+ll[70] #990.62
+plot(ll[1:99]/1000,xlab="age",ylab="adenoma incidence",type="l",col="red",lwd=2)
+
+
+load(file="temp.tt.m2.Rdata")
+ll[70] #415.22
+lines(ll[1:99]/1000,col="orange",lwd=2)
+
+#save(ll,file="temp.tt.m3.Rdata")
+load(file="temp.tt.m3.Rdata")
+ll[70] #59.44
+lines(ll[1:99]/1000,col="green",lwd=2)
+legend(40,0.6,c("high risk","average risk","low risk"),lty=1,col=c("red","orange","green"))
+#dev.off()
+
+
+
+@
+
+
+<<eval=FALSE,echo=FALSE>>=
+
+TT<-1
+t<-0
+
+lambda<-2
+
+ww1<-rep(0,50000)
+for( i in 1:50000){
+    I<-0
+    S<-c(NULL)
+    t<-0
+    while (TRUE){
+        u<-runif(1,0,1)
+        t<- t - (1/lambda)*log(u)
+        if (t > TT)   break
+        
+        I<-I+1
+        S<-c(S,t)
+        ww1[i]<-length(S)
+    }
+}
+
+hist(ww1,breaks=c(0:12))
+aa<- rpois(50000, lambda=2)
+hist(aa,breaks=c(0:12),add=TRUE,border="green")
+
+
+f<-function(x){2*x}
+
+ww2<- rep(0,50000)  #1000 reps at each age
+for ( i in 1:50000){
+    I<-0
+    S<-c(NULL)
+    t<-0
+    TT <- 1
+    lambda<-2
+        while (TRUE){
+            u<-runif(1,0,1)
+            t<- t - (1/lambda)*log(u)
+            if (t > TT)   break
+            u<-runif(1,0,1)
+            lambda_t <- f(t) #
+            if (u < lambda_t/lambda){
+                I<-I+1
+                S<-c(S,t)
+            }
+        }
+        ww2[i] <- length(S)
+    }
+
+png("./figs/compare_simulated_poisson.png")
+barplot(table(aa),width=1,ylim=c(0,20000),axes=FALSE,col = "red",lwd=2,border="red",
+        density=8)
+barplot(table(ww1),width=1,border="green",add=TRUE,axes=FALSE,col = "green",density=8,
+        angle=-45)
+barplot(table(ww2),width=1,border="blue",add=TRUE,axes=FALSE,col = "blue",density=8,
+        angle=30)
+legend(7, 15000,c("rpois","inverse CDF", "non-homogenous"),
+       lty=1,col=c("red","green","blue"))
+box()
+dev.off()
+
+
+@ 
+
+
+\begin{lstlisting}[caption={An implementation of the method of \cite{Ross.2006} for generating non-homogenous Poisson variables},label={listing:poisson}]
+f<-function(x){2*x}
+ww2<- rep(0,50000)  
+
+for ( i in 1:50000){
+    I<-0
+    S<-c(NULL)
+    t<-0
+    TT <- 1
+    lambda<-2
+        while (TRUE){
+            u<-runif(1,0,1)
+            t<- t - (1/lambda)*log(u)
+            if (t > TT)   break
+            u<-runif(1,0,1)
+            lambda_t <- f(t) 
+            if (u < lambda_t/lambda){
+                I<-I+1
+                S<-c(S,t)
+            }
+        }
+        ww2[i] <- length(S)
+    }
+\end{lstlisting}
+
+
+\bibliographystyle{apalike}
+
+\bibliography{/home/dun280/Dropbox/TeX/bibliography/C.and.K,/home/dun280/Dropbox/TeX/bibliography/ripley,/home/dun280/Dropbox/TeX/bibliography/work,/home/dun280/Dropbox/TeX/bibliography/rad,/home/dun280/Dropbox/TeX/bibliography/work2,/home/dun280/Dropbox/TeX/bibliography/thesis,/home/dun280/Dropbox/TeX/bibliography/work_bioinformatics,/home/dun280/Dropbox/TeX/bibliography/network}
+
+
+
+\end{document}  
+
+
