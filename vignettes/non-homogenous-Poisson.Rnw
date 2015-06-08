@@ -726,8 +726,7 @@ dev.off()
 @
 
 \bibliographystyle{apalike}
-
-\bibliography{/home/dun280/Dropbox/TeX/bibliography/C.and.K,/home/dun280/Dropbox/TeX/bibliography/ripley,/home/dun280/Dropbox/TeX/bibliography/work,/home/dun280/Dropbox/TeX/bibliography/rad,/home/dun280/Dropbox/TeX/bibliography/work2,/home/dun280/Dropbox/TeX/bibliography/thesis,/home/dun280/Dropbox/TeX/bibliography/work_bioinformatics,/home/dun280/Dropbox/TeX/bibliography/network}
+\bibliography{./RC_vignettes}
 
 
 
