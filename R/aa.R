@@ -1906,8 +1906,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
 
-#            treatment_record.2<-NBCSP(person)
-            treatment_record.2<-gemini.screening(person)
+            treatment_record.2<-NBCSP(person)
+#            treatment_record.2<-gemini.screening(person)
 
             return(c(treatment_record.1,treatment_record.2))
         },
