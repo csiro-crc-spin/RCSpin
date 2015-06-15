@@ -1907,8 +1907,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
 
-            treatment_record.2<-NBCSP(person)
-#            treatment_record.2<-gemini.screening(person)
+#            treatment_record.2<-NBCSP(person)
+            treatment_record.2<-gemini.screening(person)
 #             treatment_record.2<-rep(0,14)
 
 
@@ -1917,7 +1917,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         gemini.screening = function(person){
             temp1<-rep(0,14)
-            if ( (person$age %in% c(60)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")){
+            if ( (person$age %in% c(50,55,60,65,70)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")){
                                                   #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
                                         #We do not offer it if the person already has a diagnosis of "CRC"
                 gemini.blood.screening(person) #  blood.test.screening(person) #
