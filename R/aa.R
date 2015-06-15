@@ -1829,7 +1829,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             age<-person$age
             test.result<-"none"
             test.state<-"none"
-             compliance<-sample(c("accept","decline"),1, prob =c(0.4,0.6))
+#            compliance<-sample(c("accept","decline"),1, prob =c(0.4,0.6))
+            compliance<-"accept"
             if (compliance=="accept"){
                 person$updateState()  #object<-get.patient.state(object)
                 state<-person$colon$state    #object@colon@state
@@ -1906,8 +1907,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
 
-#            treatment_record.2<-NBCSP(person)
-            treatment_record.2<-gemini.screening(person)
+            treatment_record.2<-NBCSP(person)
+#            treatment_record.2<-gemini.screening(person)
 #             treatment_record.2<-rep(0,14)
 
 
