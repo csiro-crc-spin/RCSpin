@@ -1982,7 +1982,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #
             #where od I want to do -- offer and compliance? 
             test.result<-"none"
-            test.state<-"none"
+            test.state<-"none"#
+            compliance<-sample(c("accept","decline"),1, prob =c(0.8,0.2))
+            if (compliance=="accept"){
             person$updateState() 
             state<-person$colon$state
             stage<-person$colon$stage
@@ -2064,6 +2066,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     test.state<-"TN"
                 }
             }#end state =clear
+        }
             person$clinical_history$events<-lappend(person$clinical_history$events,
                                                     Test$new(
                                                         age=person$age,
