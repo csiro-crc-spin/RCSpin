@@ -2034,14 +2034,14 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     }
                 }#end stage D
             } else if ( state=="large adenoma" ){
-                sensitivity<-0.33
-                specificity<-0.0
-                test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                sensitivity<-0.0
+                specificity<-0.93
+                test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
                 if(test.result=="positive"){
-                    test.state<-"TP"
+                    test.state<-"FP"
                 }
                 else{
-                    test.state<-"FN"
+                    test.state<-"TN"
                 }
             } else if ( state=="adenoma" ){
                 sensitivity<-0.0
