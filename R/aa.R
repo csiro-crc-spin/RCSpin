@@ -1,6 +1,6 @@
 # vim: set filetype=r fileformat=unix : #
 
-############################
+###########################
 #
 # Generic spin model classes
 #
@@ -1282,7 +1282,9 @@ Adenoma <- setRefClass( "Adenoma",
         sojourn_time                       = "numeric",
         transition_to_preclinical_crc_year = "numeric",
         nu_colon                           = "numeric",
-        xi_colon                           = "numeric"
+        xi_colon                           = "numeric",
+        div                                = "numeric",
+        p1.i.minus.1                       = "numeric"
         ),
 
     methods = list(
@@ -1343,7 +1345,9 @@ Adenoma <- setRefClass( "Adenoma",
                         d10                  = l_d10,
                         lambda               = l_lambda,
                         nu_colon             = l_nu_colon,
-                        xi_colon             = l_xi_colon)
+                        xi_colon             = l_xi_colon,
+                        div                  = 1,
+                        p1.i.minus.1         = 0  )
 
         },
 
@@ -1372,7 +1376,11 @@ Adenoma <- setRefClass( "Adenoma",
               #if it is an adenoma (or large adenoma)  we check to see if it transitions to a "pre clinical CRC"
               if ( is.element(state , c("adenoma", "large adenoma"))){
                 p1<-pnorm( (log(gamma1*size)+gamma2*(initiated_in_year-50))/gamma3)
-                dice<-sample(c("transition","no transition"),1,prob=c(p1,1-p1))
+                q1<-p1 - p1.i.minus.1
+                div <<-div*(1-q1)
+                q1 <- q1/div
+                p1.i.minus.1 <<- p1
+                dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
                   state<<-"CRC"
                   transition_to_preclinical_crc_year<<-subject_age
