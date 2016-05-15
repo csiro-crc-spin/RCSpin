@@ -1376,7 +1376,11 @@ Adenoma <- setRefClass( "Adenoma",
               #if it is an adenoma (or large adenoma)  we check to see if it transitions to a "pre clinical CRC"
               if ( is.element(state , c("adenoma", "large adenoma"))){
                 p1<-pnorm( (log(gamma1*size)+gamma2*(initiated_in_year-50))/gamma3)
-                if ( p1.i.minus.1 > p1){cat(p1,p1.i.minus.1,div)}
+                temp<-tempfile(pattern = "~/Dropbox/CRC-Spin2/screening_compliance/",fileext = ".error")
+                if ( p1.i.minus.1 > p1){
+                    temp<-tempfile(pattern = "~/Dropbox/CRC-Spin2/screening_compliance/",fileext = ".error")
+                    cat(p1,p1.i.minus.1,div,file =temp)
+                }
                 q1<-p1 - p1.i.minus.1
                 div <<-div*(1-q1)
                 q1 <- q1/div
