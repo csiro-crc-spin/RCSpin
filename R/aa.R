@@ -1386,7 +1386,7 @@ Adenoma <- setRefClass( "Adenoma",
                 q1 <- q1/div
                 p1.i.minus.1 <<- p1
                 temp<-tempfile(fileext = ".output")
-                cat(q1,p1,p1.i.minus.1,div,"\n", file =temp,append = FALSE)
+                cat(q1,p1,p1.i.minus.1,div,"\n", file =temp,append = TRUE)
                 dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
                   state<<-"CRC"
