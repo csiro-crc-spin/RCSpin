@@ -1348,7 +1348,7 @@ Adenoma <- setRefClass( "Adenoma",
                         nu_colon             = l_nu_colon,
                         xi_colon             = l_xi_colon,
                         div                  = 1,
-                        p1.i.minus.1         = 0
+                        p1.i.minus.1         = 0,
                         temp.file            = tempfile(fileext = ".output"))
 
         },
