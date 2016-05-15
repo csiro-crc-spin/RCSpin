@@ -1479,8 +1479,8 @@ Colon <- setRefClass( "Colon",
           temp<-risk_of_an_adenoma(
                                    risk_params=risk,
                                    subject_age=subject_age)
-            cat("I got here","\n")
-          cat(temp,"\n", file =colon.temp.file,append = TRUE)
+          cat(risk,"\n", file =colon.temp.file,append = TRUE)
+#          cat(temp,"\n", file =colon.temp.file,append = TRUE)
             
           temp<-sample(c(0,1),1,prob=c(1-temp,temp))
 
