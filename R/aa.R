@@ -1386,8 +1386,8 @@ Adenoma <- setRefClass( "Adenoma",
                 q1<-p1 - p1.i.minus.1
                 div <<-div*(1-q1)
                 q1 <- q1/div
-                p1.i.minus.1 <<- p1
                 cat(q1,p1,p1.i.minus.1,div,"\n", file =temp.file,append = TRUE)
+                p1.i.minus.1 <<- p1
                 dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
                   state<<-"CRC"
@@ -1434,7 +1434,8 @@ Colon <- setRefClass( "Colon",
             state="character",
             cancer_site="character",
             risk="CrcRisk",
-            sites="list"
+            sites="list",
+            colon.temp.file="character"
             ),
 
     methods = list(
@@ -1450,7 +1451,9 @@ Colon <- setRefClass( "Colon",
                 risk=CrcRisk$new(subject_sex=host_sex,
                         subject_risk_level=host_risk_level,
                         crcrisk_params=crcrisk_params),
-                sites=list())
+                sites=list(),
+               colon.temp.file = tempfile(fileext = ".colon.output"))
+            )
 
         },
 
@@ -1476,7 +1479,8 @@ Colon <- setRefClass( "Colon",
           temp<-risk_of_an_adenoma(
                                    risk_params=risk,
                                    subject_age=subject_age)
-
+          cat(temp,"\n", file =colon.temp.file = TRUE)
+            
           temp<-sample(c(0,1),1,prob=c(1-temp,temp))
 
           if (temp>0){
