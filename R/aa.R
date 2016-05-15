@@ -229,7 +229,7 @@ GenericModel <- setRefClass( "GenericModel",
             if (subject$state=="living") {
                 subject$restoreRNGState()
                 subject$age = subject$age + iteration_resolution
-                subject$modelDeathFromOtherCauses()
+#                subject$modelDeathFromOtherCauses()
                 subject$saveRNGState()
             }
             return((subject$state=="living"))
@@ -921,7 +921,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                     #
                     #   Alternate naming?
                     #       checkDeathFromOtherCauses()
-                    person$modelDeathFromOtherCauses()
+#                    person$modelDeathFromOtherCauses()
 
                 }
 
