@@ -1452,7 +1452,7 @@ Colon <- setRefClass( "Colon",
                         subject_risk_level=host_risk_level,
                         crcrisk_params=crcrisk_params),
                 sites=list(),
-               colon.temp.file = tempfile(fileext = ".colon.output"))
+               colon.temp.file = tempfile(fileext = ".colon.output")
             )
 
         },
