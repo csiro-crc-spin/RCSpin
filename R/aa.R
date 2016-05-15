@@ -1378,14 +1378,14 @@ Adenoma <- setRefClass( "Adenoma",
                 p1<-pnorm( (log(gamma1*size)+gamma2*(initiated_in_year-50))/gamma3)
                 temp<-tempfile(pattern = "~/Dropbox/CRC-Spin2/screening_compliance/",fileext = ".error")
                 if ( p1.i.minus.1 > p1){
-                    temp<-tempfile(pattern = "~/Dropbox/CRC-Spin2/screening_compliance/",fileext = ".error")
+                    temp<-tempfile(fileext = ".error")
                     cat(p1,p1.i.minus.1,div,file =temp)
                 }
                 q1<-p1 - p1.i.minus.1
                 div <<-div*(1-q1)
                 q1 <- q1/div
                 p1.i.minus.1 <<- p1
-                temp<-tempfile(pattern = "~/Dropbox/CRC-Spin2/screening_compliance/",fileext = ".output")
+                temp<-tempfile(fileext = ".output")
                 cat(q1,p1,p1.i.minus.1,div,"\n", file =temp,append = FALSE)
                 dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
