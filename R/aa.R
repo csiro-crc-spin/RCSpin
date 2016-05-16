@@ -1349,28 +1349,28 @@ Adenoma <- setRefClass( "Adenoma",
                 l_beta1<-runif(1,adenoma_params$beta1_min_rectum,adenoma_params$beta1_max_rectum)
                 l_beta2<-runif(1,adenoma_params$beta2_min_rectum,adenoma_params$beta2_max_rectum)
                 l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
-                if (subject$sex=="M"){
+#                if (subject$sex=="M"){
                     l_gamma1<-runif(1,adenoma_params$gamma1_male_rectum_min,adenoma_params$gamma1_male_rectum_max)
                     l_gamma2<-runif(1,adenoma_params$gamma2_male_rectum_min,adenoma_params$gamma2_male_rectum_max)
                     l_gamma3<-adenoma_params$gamma3_val
-                } else {
-                    l_gamma1<-runif(1,adenoma_params$gamma1_female_rectum_min,adenoma_params$gamma1_female_rectum_max)
-                    l_gamma2<-runif(1,adenoma_params$gamma2_female_rectum_min,adenoma_params$gamma2_female_rectum_max)
-                    l_gamma3<-adenoma_params$gamma3_val
-                }
+#                } else {
+#                    l_gamma1<-runif(1,adenoma_params$gamma1_female_rectum_min,adenoma_params$gamma1_female_rectum_max)
+#                    l_gamma2<-runif(1,adenoma_params$gamma2_female_rectum_min,adenoma_params$gamma2_female_rectum_max)
+#                    l_gamma3<-adenoma_params$gamma3_val
+#                }
             } else {
                 l_beta1<-runif(1,adenoma_params$beta1_min_colon,adenoma_params$beta1_max_colon)
                 l_beta2<-runif(1,adenoma_params$beta2_min_colon,adenoma_params$beta2_max_colon)
                 l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
-                if (subject$sex=="M"){
+ #               if (subject$sex=="M"){
                     l_gamma1<-runif(1,adenoma_params$gamma1_male_colon_min,adenoma_params$gamma1_male_colon_max)
                     l_gamma2<-runif(1,adenoma_params$gamma2_male_colon_min,adenoma_params$gamma2_male_colon_max)
                     l_gamma3<-adenoma_params$gamma3_val
-                } else {
-                    l_gamma1<-runif(1,adenoma_params$gamma1_female_colon_min,adenoma_params$gamma1_female_colon_max)
-                    l_gamma2<-runif(1,adenoma_params$gamma2_female_colon_min,adenoma_params$gamma2_female_colon_max)
-                    l_gamma3<-adenoma_params$gamma3_val
-                }
+ #               } else {
+ #                   l_gamma1<-runif(1,adenoma_params$gamma1_female_colon_min,adenoma_params$gamma1_female_colon_max)
+ #                   l_gamma2<-runif(1,adenoma_params$gamma2_female_colon_min,adenoma_params$gamma2_female_colon_max)
+ #                   l_gamma3<-adenoma_params$gamma3_val
+ #               }
             }
 
             mean_colon <- runif(1,0.5,5)
