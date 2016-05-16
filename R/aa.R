@@ -1441,7 +1441,7 @@ Adenoma <- setRefClass( "Adenoma",
                 q1 <- q1/div
                 cat(p1,p1.i.minus.1,div,file =temp)
                 p1.i.minus.1 <<- p1
-                dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
+                dice<-sample(c("transition","no transition"),1,prob=c(0.005,1-0.005))
                 if (dice =="transition"){
                   state<<-"CRC"
                   transition_to_preclinical_crc_year<<-subject_age
