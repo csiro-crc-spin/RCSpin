@@ -1405,7 +1405,9 @@ Adenoma <- setRefClass( "Adenoma",
                         nu_colon             = l_nu_colon,
                         xi_colon             = l_xi_colon,
                         div                  = 1,
-                        p1.i.minus.1         = 0)
+                        p1.i.minus.1         = 0,
+                        temp                 == tempfile(fileext = ".error") 
+                       )
 
         }, #end of initialize
 
@@ -1433,7 +1435,6 @@ Adenoma <- setRefClass( "Adenoma",
               #if it is already a "CRC" then there is nothing to do
               #if it is an adenoma (or large adenoma)  we check to see if it transitions to a "pre clinical CRC"
               if ( is.element(state , c("adenoma", "large adenoma"))){
-                temp<-tempfile(fileext = ".error") 
                 p1<-pnorm( (log(gamma1*size)+gamma2*(initiated_in_year-50))/gamma3)
                 q1<-p1 - p1.i.minus.1
                 div <<-div*(1-q1)
