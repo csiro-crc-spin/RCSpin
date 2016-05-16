@@ -1344,11 +1344,11 @@ Adenoma <- setRefClass( "Adenoma",
                        1, prob =c(0.08,0.23,0.24,0.12,0.24,0.09))
             dinfinity<-50
             d0<-1
-            l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
 
             if (a1=="rectum"){
                 l_beta1<-runif(1,adenoma_params$beta1_min_rectum,adenoma_params$beta1_max_rectum)
                 l_beta2<-runif(1,adenoma_params$beta2_min_rectum,adenoma_params$beta2_max_rectum)
+                l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
                 if (subject$sex=="M"){
                     l_gamma1<-runif(1,adenoma_params$gamma1_male_rectum_min,adenoma_params$gamma1_male_rectum_max)
                     l_gamma2<-runif(1,adenoma_params$gamma2_male_rectum_min,adenoma_params$gamma2_male_rectum_max)
@@ -1361,6 +1361,7 @@ Adenoma <- setRefClass( "Adenoma",
             } else {
                 l_beta1<-runif(1,adenoma_params$beta1_min_colon,adenoma_params$beta1_max_colon)
                 l_beta2<-runif(1,adenoma_params$beta2_min_colon,adenoma_params$beta2_max_colon)
+                l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
                 if (subject$sex=="M"){
                     l_gamma1<-runif(1,adenoma_params$gamma1_male_colon_min,adenoma_params$gamma1_male_colon_max)
                     l_gamma2<-runif(1,adenoma_params$gamma2_male_colon_min,adenoma_params$gamma2_male_colon_max)
