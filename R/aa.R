@@ -1406,7 +1406,7 @@ Adenoma <- setRefClass( "Adenoma",
                         xi_colon             = l_xi_colon,
                         div                  = 1,
                         p1.i.minus.1         = 0,
-                        temp                 == tempfile(fileext = ".error") 
+                        temp                 = tempfile(fileext = ".error") 
                        )
 
         }, #end of initialize
