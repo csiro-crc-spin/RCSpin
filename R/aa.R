@@ -1217,6 +1217,7 @@ AdenomaParams <- setRefClass( "AdenomaParams",
             beta2_max_colon  <<- max(beta2_min_colon, beta2_max_colon)
             beta1_max_rectum  <<- max(beta1_min_rectum, beta1_max_rectum)
             beta2_max_rectum  <<- max(beta2_min_rectum, beta2_max_rectum)
+
             gamma1_male_colon_max     <<- max(gamma1_male_colon_min, gamma1_male_colon_max)
             gamma2_male_colon_max     <<- max(gamma2_male_colon_min, gamma2_male_colon_max)
             gamma1_male_rectum_max    <<- max(gamma1_male_rectum_min, gamma1_male_rectum_max)
@@ -1325,7 +1326,8 @@ Adenoma <- setRefClass( "Adenoma",
         nu_colon                           = "numeric",
         xi_colon                           = "numeric",
         div                                = "numeric",
-        p1.i.minus.1                       = "numeric"
+        p1.i.minus.1                       = "numeric",
+        temp                              = "character"
         ),
 
     methods = list(
@@ -1403,7 +1405,7 @@ Adenoma <- setRefClass( "Adenoma",
                         nu_colon             = l_nu_colon,
                         xi_colon             = l_xi_colon,
                         div                  = 1,
-                        p1.i.minus.1         = 0  )
+                        p1.i.minus.1         = 0)
 
         }, #end of initialize
 
@@ -1431,10 +1433,12 @@ Adenoma <- setRefClass( "Adenoma",
               #if it is already a "CRC" then there is nothing to do
               #if it is an adenoma (or large adenoma)  we check to see if it transitions to a "pre clinical CRC"
               if ( is.element(state , c("adenoma", "large adenoma"))){
+                temp<-tempfile(fileext = ".error") 
                 p1<-pnorm( (log(gamma1*size)+gamma2*(initiated_in_year-50))/gamma3)
                 q1<-p1 - p1.i.minus.1
                 div <<-div*(1-q1)
                 q1 <- q1/div
+                cat(p1,p1.i.minus.1,div,file =temp)
                 p1.i.minus.1 <<- p1
                 dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
