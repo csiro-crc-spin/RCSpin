@@ -1010,12 +1010,12 @@ CrcRiskParams <- setRefClass( "CrcRiskParams",
 
         initialize = function(){
 
-            .self$sex_linked_mean <<- -0.24
-            .self$sex_linked_sd   <<- 0.04
-            .self$baseline_mean   <<- -6.6
-            .self$baseline_sd     <<- 0.27
-            .self$age_mean        <<- 0.03
-            .self$age_sd          <<- 0.003
+            .self$sex_linked_mean <<-  -0.24
+            .self$sex_linked_sd   <<-   0.04
+            .self$baseline_mean   <<-  -6.6
+            .self$baseline_sd     <<-   0.27
+            .self$age_mean        <<-   0.03
+            .self$age_sd          <<-   0.003
 
         }
     )
@@ -1123,10 +1123,11 @@ CrcRisk <- setRefClass( "CrcRisk",
 
             # Set age link risk
 #            age_risk <<- rnorm(4, mean=crcrisk_model_params$age_mean,sd=(crcrisk_model_params$age_sd))
+            age_risk <<- rep(0,4)
             age_risk[1] <<- max(rnorm(1,0.037,0.003 ),0)
             age_risk[2] <<- max(rnorm(1,0.031,0.003 ),0)
             age_risk[3] <<- max(rnorm(1,0.029,0.003 ),0)
-            age_risk[4] <<-  max(rnorm(1,0.03,0.003 ),0)
+            age_risk[4] <<- max(rnorm(1,0.03,0.003 ),0)
 
         },
 
@@ -1212,10 +1213,20 @@ AdenomaParams <- setRefClass( "AdenomaParams",
             initFields(...)
 
             # Cap certain variables to valid ranges
-#            beta1_max  <<- max(beta1_min, beta1_max)
-#            beta2_max  <<- max(beta2_min, beta2_max)
-#            gamma1_max <<- max(gamma1_min, gamma1_max)
-#            gamma2_max <<- max(gamma2_min, gamma2_max)
+            beta1_max_colon  <<- max(beta1_min_colon, beta1_max_colon)
+            beta2_max_colon  <<- max(beta2_min_colon, beta2_max_colon)
+            beta1_max_rectum  <<- max(beta1_min_rectum, beta1_max_rectum)
+            beta2_max_rectum  <<- max(beta2_min_rectum, beta2_max_rectum)
+            gamma1_max <<- max(gamma1_min, gamma1_max)
+            gamma2_max <<- max(gamma2_min, gamma2_max)
+            gamma1_male_colon_max     <<- max(gamma1_male_colon_min, gamma1_male_colon_max)
+            gamma2_male_colon_max     <<- max(gamma2_male_colon_min, gamma2_male_colon_max)
+            gamma1_male_rectum_max    <<- max(gamma1_male_rectum_min, gamma1_male_rectum_max)
+            gamma2_male_rectum_max    <<- max(gamma2_male_rectum_min, gamma2_male_rectum_max)
+            gamma1_female_colon_max   <<- max(gamma1_female_colon_min, gamma1_female_colon_max)  
+            gamma2_female_colon_max   <<- max(gamma2_female_colon_min, gamma2_female_colon_max)  
+            gamma1_female_rectum_max  <<- max(gamma1_female_rectum_min, gamma1_female_rectum_max)
+            gamma2_female_rectum_max  <<- max(gamma2_female_rectum_min, gamma2_female_rectum_max)
         },
 
         initialize = function(){
@@ -1249,8 +1260,7 @@ AdenomaParams <- setRefClass( "AdenomaParams",
 
             # call setParams() with no arguments to ensure
             # your defaults above meet valid ranges
-#            .self$setParams()
-
+            .self$setParams()
         }
 
     )
@@ -1428,7 +1438,7 @@ Adenoma <- setRefClass( "Adenoma",
                 div <<-div*(1-q1)
                 q1 <- q1/div
                 p1.i.minus.1 <<- p1
-                dice<-sample(c("transition","no transition"),1,prob=c(0.0005,1-0.0005))
+                dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
                   state<<-"CRC"
                   transition_to_preclinical_crc_year<<-subject_age
