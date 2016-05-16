@@ -1217,8 +1217,6 @@ AdenomaParams <- setRefClass( "AdenomaParams",
             beta2_max_colon  <<- max(beta2_min_colon, beta2_max_colon)
             beta1_max_rectum  <<- max(beta1_min_rectum, beta1_max_rectum)
             beta2_max_rectum  <<- max(beta2_min_rectum, beta2_max_rectum)
-            gamma1_max <<- max(gamma1_min, gamma1_max)
-            gamma2_max <<- max(gamma2_min, gamma2_max)
             gamma1_male_colon_max     <<- max(gamma1_male_colon_min, gamma1_male_colon_max)
             gamma2_male_colon_max     <<- max(gamma2_male_colon_min, gamma2_male_colon_max)
             gamma1_male_rectum_max    <<- max(gamma1_male_rectum_min, gamma1_male_rectum_max)
