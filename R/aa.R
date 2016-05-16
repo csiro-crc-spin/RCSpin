@@ -1186,22 +1186,22 @@ AdenomaParams <- setRefClass( "AdenomaParams",
         beta2_min_rectum   = "numeric",
         beta2_max_colon   = "numeric",
         beta2_max_rectum   = "numeric",
-        gamma1_male_colon_min   = "numeric",
-        gamma1_male_colon_max   = "numeric",
-        gamma2_male_colon_min   = "numeric",
-        gamma2_male_colon_max   = "numeric",
-        gamma1_male_rectum_min  = "numeric",
-        gamma1_male_rectum_max  = "numeric",
-        gamma2_male_rectum_min  = "numeric",
-        gamma2_male_rectum_max  = "numeric",
-        gamma1_female_colon_min = "numeric",
-        gamma1_female_colon_max = "numeric",
-        gamma2_female_colon_min = "numeric",
-        gamma2_female_colon_max = "numeric",
-        gamma1_female_rectum_min= "numeric",
-        gamma1_female_rectum_max= "numeric",
-        gamma2_female_rectum_min= "numeric",
-        gamma2_female_rectum_max= "numeric"
+        gamma1_male_colon_min    = "numeric",
+        gamma1_male_colon_max    = "numeric",
+        gamma2_male_colon_min    = "numeric",
+        gamma2_male_colon_max    = "numeric",
+        gamma1_male_rectum_min   = "numeric",
+        gamma1_male_rectum_max   = "numeric",
+        gamma2_male_rectum_min   = "numeric",
+        gamma2_male_rectum_max   = "numeric",
+        gamma1_female_colon_min  = "numeric",
+        gamma1_female_colon_max  = "numeric",
+        gamma2_female_colon_min  = "numeric",
+        gamma2_female_colon_max  = "numeric",
+        gamma1_female_rectum_min = "numeric",
+        gamma1_female_rectum_max = "numeric",
+        gamma2_female_rectum_min = "numeric",
+        gamma2_female_rectum_max = "numeric"
     ),
 
     methods = list(
@@ -1228,9 +1228,6 @@ AdenomaParams <- setRefClass( "AdenomaParams",
         .self$beta2_min_rectum  <<- 1
         .self$beta2_max_colon   <<- 4.7
         .self$beta2_max_rectum  <<- 4.7
-
-
-
         .self$gamma1_male_colon_min     <<- 0.04
         .self$gamma1_male_colon_max     <<-  0.049
         .self$gamma2_male_colon_min     <<- 0.002
@@ -1243,10 +1240,10 @@ AdenomaParams <- setRefClass( "AdenomaParams",
         .self$gamma1_female_colon_max   <<- 0.05
         .self$gamma2_female_colon_min   <<- 0.000
         .self$gamma2_female_colon_max   <<- 0.013
-        .self$gamma1_female_rectum_mi   <<- 0.03
-        .self$gamma1_female_rectum_ma   <<- 0.05
-        .self$gamma2_female_rectum_mi   <<- 0.008
-        .self$gamma2_female_rectum_ma   <<- 0.019
+        .self$gamma1_female_rectum_min   <<- 0.03
+        .self$gamma1_female_rectum_max   <<- 0.05
+        .self$gamma2_female_rectum_min   <<- 0.008
+        .self$gamma2_female_rectum_max   <<- 0.019
 
 
             # call setParams() with no arguments to ensure
