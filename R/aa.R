@@ -1201,7 +1201,8 @@ AdenomaParams <- setRefClass( "AdenomaParams",
         gamma1_female_rectum_min = "numeric",
         gamma1_female_rectum_max = "numeric",
         gamma2_female_rectum_min = "numeric",
-        gamma2_female_rectum_max = "numeric"
+        gamma2_female_rectum_max = "numeric",
+        gamma3_val = "numeric"
     ),
 
     methods = list(
