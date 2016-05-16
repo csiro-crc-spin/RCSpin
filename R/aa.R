@@ -1439,7 +1439,7 @@ Adenoma <- setRefClass( "Adenoma",
                 q1<-p1 - p1.i.minus.1
                 div <<-div*(1-q1)
                 q1 <- q1/div
-                cat(p1,p1.i.minus.1,div,file =temp)
+                cat(p1,p1.i.minus.1,div,"\n", file =temp)
                 p1.i.minus.1 <<- p1
                 dice<-sample(c("transition","no transition"),1,prob=c(0.005,1-0.005))
                 if (dice =="transition"){
