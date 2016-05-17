@@ -1447,7 +1447,7 @@ Adenoma <- setRefClass( "Adenoma",
                 div <<-div*(1-q1)
                 q1 <- q1/div
                 cat("gamma1=", gamma1,"size=",size,"gamma2=",gamma2,"gamma3=",gamma3,"year=",initiated_in_year,"\n")
-                cat("q1= " q1 , p1,p1.i.minus.1,div,"\n")
+                cat("q1= ", q1 , p1,p1.i.minus.1,div,"\n")
                 p1.i.minus.1 <<- p1
                 dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
