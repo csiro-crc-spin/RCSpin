@@ -1440,7 +1440,7 @@ Adenoma <- setRefClass( "Adenoma",
                 div <<-div*(1-q1)
                 q1 <- q1/div
 #                cat("gamma1=", gamma1,"size=",size,"gamma2=",gamma2,"gamma3=",gamma3,"year=",initiated_in_year,"\n")#, file =temp)
-                cat(q1, p1,p1.i.minus.1,div,"\n")#, file =temp)
+#                cat(q1, p1,p1.i.minus.1,div,"\n")#, file =temp)
                 p1.i.minus.1 <<- p1
                 dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
@@ -1566,7 +1566,7 @@ Colon <- setRefClass( "Colon",
 
         modelAdenomaTransitions = function (subject_age) {
             for( i in sites ){
-                cat("I got here 2","\n")
+#                cat("I got here 2","\n")
                 i$transition(subject_age=subject_age)
             }
         },
