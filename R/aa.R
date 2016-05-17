@@ -1276,8 +1276,8 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
     if (subject_age < 20){r1<-0}
     r2 <- 0
     r3 <- 0
-
-    cat("1 ","r1= ",r1," aa= ", aa[1], aa[2], aa[3], aa[4], " subject_age= ",subject_age ,"\n")
+    tt<- risk_params$sex_linked_risk
+    cat("1 ","r1= ",r1," aa= ", aa[1], aa[2], aa[3], aa[4], "sex linked=",  tt, "subject_age= ",subject_age ,"\n")
     
     if (subject_age >= 20){
         if (subject_age>=70){
