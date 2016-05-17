@@ -1277,7 +1277,7 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
     r2 <- 0
     r3 <- 0
 
-    cat("1 ","r1= ",r1," aa= "," subject_age= ",subject_age ,"\n")
+    cat("1 ","r1= ",r1," aa= ", aa[1], aa[2], aa[3], aa[4], " subject_age= ",subject_age ,"\n")
     
     if (subject_age >= 20){
         if (subject_age>=70){
@@ -1300,7 +1300,7 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
         }
     }
 
-    
+    cat("3 ","exp(r1+r2+r3))" , exp(r1+r2+r3), "\n")
     max(0, min(1, exp(r1+r2+r3)))
 }
 
