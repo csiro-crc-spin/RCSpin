@@ -1209,7 +1209,7 @@ AdenomaParams <- setRefClass( "AdenomaParams",
     methods = list(
 
         setParams = function(...){
-            # Set all the parameters passed in
+                           # Set all the parameters passed in
             initFields(...)
 
             # Cap certain variables to valid ranges
@@ -1252,10 +1252,10 @@ AdenomaParams <- setRefClass( "AdenomaParams",
         .self$gamma2_female_colon_min   <<- 0.000
         .self$gamma2_female_colon_max   <<- 0.013
         .self$gamma1_female_rectum_min   <<- 0.03
-        .self$gamma1_female_rectum_max   <<- 0.05
+         .self$gamma1_female_rectum_max   <<- 0.05
         .self$gamma2_female_rectum_min   <<- 0.008
         .self$gamma2_female_rectum_max   <<- 0.019
-
+        .self$gamma3_val                 <<- 0.5
 
             # call setParams() with no arguments to ensure
             # your defaults above meet valid ranges
