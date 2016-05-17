@@ -1231,14 +1231,14 @@ AdenomaParams <- setRefClass( "AdenomaParams",
         initialize = function(){
 
             # Set default values here
-        .self$beta1_min_colon   <<- 1
-        .self$beta1_min_rectum  <<- 1
-        .self$beta1_max_colon   <<- 56.3
-        .self$beta1_max_rectum  <<- 19.3
-        .self$beta2_min_colon   <<- 1
-        .self$beta2_min_rectum  <<- 1
-        .self$beta2_max_colon   <<- 4.7
-        .self$beta2_max_rectum  <<- 4.7
+        .self$beta1_min_colon   <<- 24.3
+        .self$beta1_min_rectum  <<- 5.9
+        .self$beta1_max_colon   <<- 34.2
+        .self$beta1_max_rectum  <<- 13.8
+        .self$beta2_min_colon   <<- 1.1
+        .self$beta2_min_rectum  <<- 1.4
+        .self$beta2_max_colon   <<- 3.9
+        .self$beta2_max_rectum  <<- 3.9
         .self$gamma1_male_colon_min     <<- 0.04
         .self$gamma1_male_colon_max     <<-  0.049
         .self$gamma2_male_colon_min     <<- 0.002
@@ -1277,6 +1277,8 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
     r2 <- 0
     r3 <- 0
 
+    cat("1 ","r1= ",r1," aa= "," subject_age= ",subject_age ,"\n")
+    
     if (subject_age >= 20){
         if (subject_age>=70){
             k<-4
@@ -1298,6 +1300,7 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
         }
     }
 
+    
     max(0, min(1, exp(r1+r2+r3)))
 }
 
@@ -1357,6 +1360,8 @@ Adenoma <- setRefClass( "Adenoma",
             d0<-1
 
             if (a1=="rectum"){
+                mean_colon <- runif(1,1.1,4.7)
+                tau_colon  <- runif(1,0.15,1.4)
                 l_beta1<-runif(1,adenoma_params$beta1_min_rectum,adenoma_params$beta1_max_rectum)
                 l_beta2<-runif(1,adenoma_params$beta2_min_rectum,adenoma_params$beta2_max_rectum)
                 l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
@@ -1370,6 +1375,8 @@ Adenoma <- setRefClass( "Adenoma",
 #                    l_gamma3<-adenoma_params$gamma3_val
 #                }
             } else {
+                mean_colon <- runif(1,1.0,3.9)
+                tau_colon  <- runif(1,0.15,1.4)
                 l_beta1<-runif(1,adenoma_params$beta1_min_colon,adenoma_params$beta1_max_colon)
                 l_beta2<-runif(1,adenoma_params$beta2_min_colon,adenoma_params$beta2_max_colon)
                 l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
@@ -1384,8 +1391,8 @@ Adenoma <- setRefClass( "Adenoma",
  #               }
             }
 
-            mean_colon <- runif(1,0.5,5)
-            tau_colon  <- runif(1,0.1,1.5)
+ cat("2 ","a1= ",a1," l_beta1 = ",l_beta1," l_beta2= ",l_beta2," l_d10 =",l_d10,"\n")
+            
             l_nu_colon <- sqrt(log(tau_colon^2+1))
             l_xi_colon <- log(mean_colon)-0.5*l_nu_colon^2
 
@@ -1439,8 +1446,8 @@ Adenoma <- setRefClass( "Adenoma",
                 q1<-p1 - p1.i.minus.1
                 div <<-div*(1-q1)
                 q1 <- q1/div
-#                cat("gamma1=", gamma1,"size=",size,"gamma2=",gamma2,"gamma3=",gamma3,"year=",initiated_in_year,"\n")#, file =temp)
-#                cat(q1, p1,p1.i.minus.1,div,"\n")#, file =temp)
+                cat("gamma1=", gamma1,"size=",size,"gamma2=",gamma2,"gamma3=",gamma3,"year=",initiated_in_year,"\n")
+                cat("q1= " q1 , p1,p1.i.minus.1,div,"\n")
                 p1.i.minus.1 <<- p1
                 dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
