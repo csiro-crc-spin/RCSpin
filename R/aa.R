@@ -1272,6 +1272,7 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
 
     r1 <- risk_params$baseline_risk
     aa <- risk_params$age_risk
+    cat("10 ","r1= ",r1,"aa= ", aa[1], aa[2], aa[3], aa[4],"\n")
 #    r1 <- r1+risk_params$sex_linked_risk
     if (subject_age < 20){r1<-0}
     r2 <- 0
