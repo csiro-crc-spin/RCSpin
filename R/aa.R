@@ -1272,14 +1272,10 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
 
     r1 <- risk_params$baseline_risk
     aa <- risk_params$age_risk
-    cat("10 ","r1= ",r1,"aa= ", aa[1], aa[2], aa[3], aa[4],"\n")
-#    r1 <- r1+risk_params$sex_linked_risk
+    r1 <- r1+risk_params$sex_linked_risk
     if (subject_age < 20){r1<-0}
     r2 <- 0
     r3 <- 0
-    tt<- risk_params$sex_linked_risk
-    r1<- r1 + tt    
-    cat("1 ","r1= ",r1," aa= ", aa[1], aa[2], aa[3], aa[4], "sex linked=",  tt, "subject_age= ",subject_age ,"\n")
     
     if (subject_age >= 20){
         if (subject_age>=70){
@@ -1301,8 +1297,7 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
             }
         }
     }
-    cat("4 ","r1=",r1,"r2=",r2,"r3=", r3,  "\n")
-    cat("3 ","exp(r1+r2+r3))" , exp(r1+r2+r3), "\n")
+
     max(0, min(1, exp(r1+r2+r3)))
 }
 
@@ -1393,7 +1388,6 @@ Adenoma <- setRefClass( "Adenoma",
  #               }
             }
 
- cat("2 ","a1= ",a1," l_beta1 = ",l_beta1," l_beta2= ",l_beta2," l_d10 =",l_d10,"\n")
             
             l_nu_colon <- sqrt(log(tau_colon^2+1))
             l_xi_colon <- log(mean_colon)-0.5*l_nu_colon^2
@@ -1448,8 +1442,6 @@ Adenoma <- setRefClass( "Adenoma",
                 q1<-p1 - p1.i.minus.1
                 div <<-div*(1-q1)
                 q1 <- q1/div
-                cat("gamma1=", gamma1,"size=",size,"gamma2=",gamma2,"gamma3=",gamma3,"year=",initiated_in_year,"\n")
-                cat("q1= ", q1 , p1,p1.i.minus.1,div,"\n")
                 p1.i.minus.1 <<- p1
                 dice<-sample(c("transition","no transition"),1,prob=c(q1,1-q1))
                 if (dice =="transition"){
@@ -1575,7 +1567,6 @@ Colon <- setRefClass( "Colon",
 
         modelAdenomaTransitions = function (subject_age) {
             for( i in sites ){
-#                cat("I got here 2","\n")
                 i$transition(subject_age=subject_age)
             }
         },
