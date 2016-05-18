@@ -1299,7 +1299,7 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
             }
         }
     }
-
+   cat("4 ","r1=",r1,"r2=",r2,"r3="r3,  "\n")
     cat("3 ","exp(r1+r2+r3))" , exp(r1+r2+r3), "\n")
     max(0, min(1, exp(r1+r2+r3)))
 }
