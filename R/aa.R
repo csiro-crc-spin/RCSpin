@@ -1272,11 +1272,12 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
 
     r1 <- risk_params$baseline_risk
     aa <- risk_params$age_risk
-    r1 <- r1+risk_params$sex_linked_risk
+#    r1 <- r1+risk_params$sex_linked_risk
     if (subject_age < 20){r1<-0}
     r2 <- 0
     r3 <- 0
     tt<- risk_params$sex_linked_risk
+    r1<- r1 + tt    
     cat("1 ","r1= ",r1," aa= ", aa[1], aa[2], aa[3], aa[4], "sex linked=",  tt, "subject_age= ",subject_age ,"\n")
     
     if (subject_age >= 20){
@@ -1299,7 +1300,7 @@ risk_of_an_adenoma<-function(risk_params, subject_age){
             }
         }
     }
-   cat("4 ","r1=",r1,"r2=",r2,"r3=", r3,  "\n")
+    cat("4 ","r1=",r1,"r2=",r2,"r3=", r3,  "\n")
     cat("3 ","exp(r1+r2+r3))" , exp(r1+r2+r3), "\n")
     max(0, min(1, exp(r1+r2+r3)))
 }
