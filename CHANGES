@@ -16,3 +16,9 @@ changed
            treatment_record <- testForAndTreatCRC(person)
             #treatment_record<-NBCSP(person)
 how can I optionally turn NBCSP on and off?
+
+
+Notes 
+1) do I need the rep(0,14) when not screening
+2) output columns of CRcSpinModel and DulesCrCSpinModel have different names
+3) need to set \gamma_1 etc for M and F
