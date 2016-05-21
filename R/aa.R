@@ -1010,9 +1010,9 @@ CrcRiskParams <- setRefClass( "CrcRiskParams",
 
         initialize = function(){
 
-            .self$sex_linked_mean <<-  -0.24
+            .self$sex_linked_mean <<-   -0.3
             .self$sex_linked_sd   <<-   0.04
-            .self$baseline_mean   <<-  -6.6
+            .self$baseline_mean   <<-  -6.7
             .self$baseline_sd     <<-   0.27
             .self$age_mean        <<-   0.03
             .self$age_sd          <<-   0.003
@@ -1117,17 +1117,21 @@ CrcRisk <- setRefClass( "CrcRisk",
               baseline_risk <<- rnorm(1, mean=-4, sd=(0.27))
             } else {
               mu <- rnorm(1, mean=crcrisk_model_params$baseline_mean, sd=(crcrisk_model_params$baseline_sd))
-              sigma <- runif(1, 0.35, 1.6)
+              sigma <- runif(1, 0.1, 2.5)
               baseline_risk <<- rnorm(1, mean=mu, sd=sigma)
             }
 
             # Set age link risk
-#            age_risk <<- rnorm(4, mean=crcrisk_model_params$age_mean,sd=(crcrisk_model_params$age_sd))
-            age_risk <<- rep(0,4)
-            age_risk[1] <<- max(rnorm(1,0.037,0.003 ),0)
-            age_risk[2] <<- max(rnorm(1,0.031,0.003 ),0)
-            age_risk[3] <<- max(rnorm(1,0.029,0.003 ),0)
-            age_risk[4] <<- max(rnorm(1,0.03,0.003 ),0)
+            age_risk <<- rnorm(4, mean=crcrisk_model_params$age_mean,sd=(crcrisk_model_params$age_sd))
+#            age_risk <<- rep(0,4)
+#            age_risk[1] <<- max(rnorm(1,0.037,0.003 ),0)
+#            age_risk[2] <<- max(rnorm(1,0.031,0.003 ),0)
+#            age_risk[3] <<- max(rnorm(1,0.029,0.003 ),0)
+#            age_risk[4] <<- max(rnorm(1,0.03,0.003 ),0)
+            age_risk[1] <<- max(age_risk[1], 0)
+            age_risk[2] <<- max(age_risk[2], 0)
+            age_risk[3] <<- max(age_risk[3], 0)
+            age_risk[4] <<- max(age_risk[4], 0)
 
         },
 
