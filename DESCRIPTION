@@ -1,7 +1,7 @@
 Package: RCSpin
 Type: Package
 Title: Group of Spin-alike models
-Version: 0.1
+Version: 0.11
 Date: 2013-08-22
 Author@R: c(person("Rob", "Dunne", role = c("aut", "cre"),
     email = "Rob.Dunne@csiro.au",
