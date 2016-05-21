@@ -1117,7 +1117,7 @@ CrcRisk <- setRefClass( "CrcRisk",
               baseline_risk <<- rnorm(1, mean=-4, sd=(0.27))
             } else {
               mu <- rnorm(1, mean=crcrisk_model_params$baseline_mean, sd=(crcrisk_model_params$baseline_sd))
-              sigma <- runif(1, 0.1, 2.1)
+              sigma <- runif(1, 0.35, 1.6)
               baseline_risk <<- rnorm(1, mean=mu, sd=sigma)
             }
 
