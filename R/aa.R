@@ -860,7 +860,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
         #' Returns the number of columns in the model's study result matrix
         #'
         #' @author Luke Domanski \email{luke.domanski@@csiro.au}
-        getModelResultSize = function () {
+        getModelResul tSize = function () {
             temp<-personWithColonType()$new()
             return(temp$treatmentRecordSize()+temp$medicalSnapshotSize())
         },
@@ -1839,6 +1839,124 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             return(getRefClass("DukesPersonWithColon"))
         },
 
+
+
+
+        screening.colonsocopy = function (person) {
+            temp1<-rep(FALSE,person$NBCSPRecordSize())
+            
+            ##has the peson had a colonoscopy on the past 5 years
+            aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
+            bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
+            not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 5)
+            
+            if (not.up.to.date){
+                uu<-person$BSA.propensity
+                ww<-age.specific.compliance.rates.for.BSA(person)
+                mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
+                aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
+                do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
+            }
+            
+            if ( (do.test=="accept") & ( person$colon_clinical=="clear") #
+                &(person$in_treatment_program=="no")){
+                person$updateState()  #object<-get.patient.state(object)
+                state<-person$colon$state    #object@colon@state
+                if( state=="symptomatic CRC" ){
+                    sensitivity<-1
+                    test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                    if(test.result=="positive"){
+                        test.state<-"TP"
+                    }
+                    else{
+                        test.state<-"FN"
+                    }
+                } else if ( state== "CRC" ){
+                    sensitivity<-0.1
+                    test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                    if(test.result=="positive"){
+                        test.state<-"TP"
+                    }
+                    else{
+                        test.state<-"FN"
+                    }
+                } else if ( state=="large adenoma" ){
+                    sensitivity<-0.8
+                    test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                    if(test.result=="positive"){
+                        test.state<-"TP"
+                    }
+                    else{
+                        test.state<-"FN"
+                    }
+                } else if ( state=="adenoma" ){
+                    specificity<-0.6
+                    test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+                    if(test.result=="positive"){
+                        test.state<-"FP"
+                    }
+                    else{
+                        test.state<-"TN"
+                    }
+                } else if ( state=="clear" ){
+                    specificity<-0.99
+                    test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
+                    if(test.result=="positive"){
+                        test.state<-"FP"
+                    }
+                    else{
+                        test.state<-"TN"
+                    }
+                }#end state =clear
+            }
+
+
+            temp1[6]<-1 #person has a colonoscopy woth probability 1
+            temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+            temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+            
+            person$clinical_history$events<-lappend(person$clinical_history$events,
+                                                    Test$new(
+                                                        age=age,
+                                                        type="colonoscopy",
+                                                        compliance=do.test,
+                                                        result=test.result,
+                                                        state= test.state)
+                                                    )
+
+            if(test.result=="positive"){  #if it is
+                 if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
+                        temp1[7]<-1
+                        temp1[12]<-1
+                        person$in_treatment_program<-"yes"
+                    } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
+                        if (person$colon$stage=="A"){
+                            temp1[8]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        }
+                        if (person$colon$stage=="B"){
+                            temp1[9]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        }
+                        if (person$colon$stage=="C"){
+                            temp1[10]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        }
+                        if(person$colon$stage=="D"){
+###            person$colon.clinical<-"CRC"
+                            temp1[11]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                                        #we do nothing.
+                        }
+                    }
+            } #end test.result=="positive"
+            temp1
+        },
+        
         NBCSP = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             if ( (person$age %in% c(50,55,60,65,70)) & ( person$colon_clinical=="clear") #
