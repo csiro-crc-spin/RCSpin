@@ -860,7 +860,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
         #' Returns the number of columns in the model's study result matrix
         #'
         #' @author Luke Domanski \email{luke.domanski@@csiro.au}
-        getModelResul tSize = function () {
+        getModelResultSize = function () {
             temp<-personWithColonType()$new()
             return(temp$treatmentRecordSize()+temp$medicalSnapshotSize())
         },
