@@ -1860,10 +1860,6 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         BSA = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
-            uu<-person$BSA.propensity
-            ww<-age.specific.compliance.rates.forBSA(person)
-            mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
-            aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
             
             if (  ( person$colon_clinical=="clear")            &(person$in_treatment_program=="no")) {
                 uu<-person$BSA.propensity
