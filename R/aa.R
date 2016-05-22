@@ -448,6 +448,7 @@ Person <- setRefClass( "Person",
                             in_treatment_program="no",
                             clinical_history=ClinicalHistory$new(),
                             random_seed_state=NA,
+                            BSA.propensity=set.BSA.propensity(),
                             ...){
 
         "Create and initialize a new instance of a Person
@@ -583,8 +584,8 @@ Person <- setRefClass( "Person",
         },
 
         show = function(){
-
-        "Display information about the object.
+            
+            "Display information about the object.
         "
 
             cat("Spin Person object of class",
@@ -603,7 +604,14 @@ Person <- setRefClass( "Person",
  #           methods::show(system_data)
             cat("Clinical history:\n")
             clinical_history$show()
+        },
+        
+        set.BSA.propensity =function(){
+            "set the propensity to screen with BSA
+        "
+            u<- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
         }
+        
 
         )
 )
