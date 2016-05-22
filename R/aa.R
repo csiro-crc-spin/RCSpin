@@ -1866,8 +1866,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 ww<-age.specific.compliance.rates.for.BSA(person)
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
-                compliance<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
-                if (compliance=="accept"){
+                do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
+                
+                if (do.test=="accept"){
                     
                     iFOBTscreening(person) #same as .self$iFOBT.screening(person)
                     
@@ -1989,6 +1990,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             age<-person$age
             test.result<-"none"
             test.state<-"none"
+            compliance <- "accept"
 #             compliance<-sample(c("accept","decline"),1, prob =c(0.4,0.6))
 #            if (compliance=="accept"){
                 person$updateState()  #object<-get.patient.state(object)
@@ -2234,6 +2236,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
 
         age.specific.compliance.rates.for.BSA = function(person){
+            compliance<- NA
             age<-person$age
             compliance.rates<-
                 structure(c(25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 
