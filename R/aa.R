@@ -426,7 +426,7 @@ ClinicalHistory <- setRefClass( "ClinicalHistory",
 #' @export Person
 #' @exportClass Person
 #' @family GenericModel_classes
-Person <- setRefClass( "Person",
+Person <-  setRefClass( "Person",
 
     fields = list(
         age="numeric",
@@ -435,7 +435,8 @@ Person <- setRefClass( "Person",
         in_treatment_program="character",
         clinical_history="ClinicalHistory",
         study_id="numeric",
-        random_seed_state="integer"
+        random_seed_state="integer",
+        BSA.propensity="numeric"
     ),
 
     methods = list(
@@ -448,7 +449,7 @@ Person <- setRefClass( "Person",
                             in_treatment_program="no",
                             clinical_history=ClinicalHistory$new(),
                             random_seed_state=NA,
-                            BSA.propensity=set.BSA.propensity(),
+                            BSA.propensity=NA,
                             ...){
 
         "Create and initialize a new instance of a Person
@@ -510,13 +511,20 @@ Person <- setRefClass( "Person",
 
             random_seed<-.Random.seed
 
+            if (is.na(BSA.propensity)){
+            propensity  <- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
+            } else {
+                propensity  <-BSA.propensity
+            }
+            
             initFields(age=age,
                 sex=s,
                 state=state,
                 in_treatment_program=in_treatment_program,
                 clinical_history=clinical_history,
                 study_id=study_id,
-                random_seed_state=random_seed)
+                random_seed_state=random_seed,
+                BSA.propensity=propensity)
 
         },
 
@@ -601,16 +609,18 @@ Person <- setRefClass( "Person",
             cat("Study id:")
             methods::show(study_id)
 #            cat("System data:")
- #           methods::show(system_data)
+ #           methods::show(syste m_data)
             cat("Clinical history:\n")
             clinical_history$show()
-        },
-        
-        set.BSA.propensity =function(){
-            "set the propensity to screen with BSA
-        "
-            u<- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
+            cat("BSA propensity to screen:")
+            methods::show(BSA.propensity)
         }
+        
+        ## set.BSA.propensity =function(){
+        ##     "set the propensity to screen with BSA
+        ## "
+        ##     u<- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
+        ## }
         
 
         )

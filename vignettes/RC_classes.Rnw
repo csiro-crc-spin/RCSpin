@@ -101,6 +101,7 @@ so where is " edits <<- c(edits, list(backup))" being assigned?
 <<echo=FALSE,eval=FALSE>>=
 
 # Person class
+#source("../R/aa.R") or 
 
 Person <- setRefClass( "Person",
     fields = list(
@@ -183,6 +184,7 @@ Person <- setRefClass( "Person",
 )
 
 Person$help(initialize)
+
 
 alex<-Person$new(study_id =1 , base_seed = 122, age = 1, sex = "F", state ="living" , in_treatment_program ="no")
 
