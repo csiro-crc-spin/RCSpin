@@ -1860,6 +1860,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         BSA = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
+            uu<-person$BSA.propensity
+            ww<-age.specific.compliance.rates.forBSA(person)
+            mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
+            aa1<-sample(c(1,0),1,prob=c(mm,1-mm ))
+            
             if ( (person$age %in% c(50,55,60,65,70)) & ( person$colon_clinical=="clear") #
                 &(person$in_treatment_program=="no")){
                                         #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
@@ -2061,9 +2066,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
 
+            treatment_record.2<-BSA(person)
 #            treatment_record.2<-NBCSP(person)
 #            treatment_record.2<-gemini.screening(person)
-            treatment_record.2<-rep(0,14)
+#            treatment_record.2<-rep(0,14)
             return(c(treatment_record.1,treatment_record.2))
         },
 
@@ -2224,8 +2230,52 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                                         result=test.result,
                                                         state= test.state)
                                                     )
-        } # blood.test.screening 
+        }, # blood.test.screening 
 
+
+        age.specific.compliance.rates.forBSA = function(person){
+            age<-person$age
+            compliance.rates<-
+                structure(c(25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 
+                            38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 
+                            54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 
+                            70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 
+                            86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 
+                            101, 3.8618223941714e-05, 5.96995473372722e-05, 5.97175981785437e-05, 
+                            6.32501599613477e-05, 9.13908266448829e-05, 8.43896997806899e-05, 
+                            0.000140699180546078, 0.000144271988564634, 0.000112646881751494, 
+                            0.000154956760061901, 0.000147980557286627, 0.000200930285077283, 
+                            0.000260994125237784, 0.000225854922081232, 0.000303683191434357, 
+                            0.000318023869125876, 0.000413737237785354, 0.000527324154594905, 
+                            0.000786380280813558, 0.000783602564221042, 0.000990311747546316, 
+                            0.000838665268932263, 0.00112083341152704, 0.001272057003427, 
+                            0.0013310955770969, 0.00154778012699325, 0.00186568902320527, 
+                            0.002622814248179, 0.0019020560640545, 0.00314610457651362, 0.00388362628541734, 
+                            0.00430685494502048, 0.00533628052554223, 0.00329399269521374, 
+                            0.00426283959904885, 0.00474793369180529, 0.00582017669403368, 
+                            0.00697354146491955, 0.00780926917871339, 0.00911990372139496, 
+                            0.00908153968305464, 0.00931608432798083, 0.00820784557387345, 
+                            0.00507115609923534, 0.00589133513332599, 0.00631686767678177, 
+                            0.00646453213666832, 0.0063516076897654, 0.00631292471292399, 
+                            0.00647381627769457, 0.00635656716297742, 0.00552001013666556, 
+                            0.00515892300940573, 0.00466089121849308, 0.00437723151733918, 
+                            0.00403466818842954, 0.00386720963205876, 0.00340113907744698, 
+                            0.0033391650613876, 0.0030435534446746, 0.00252406022815127, 
+                            0.00226022375246429, 0.00227695957494298, 0.0020206930924997, 
+                            0.00150126312282439, 0.00152691485218605, 0.00106522829395658, 
+                            0.000922466226509153, 0.00077861523522777, 0.000632894102132977, 
+                            0.000465674895938484, 0.000375838473077812, 0.000139498296005296, 
+                            0.000231186317703125, 0.000186949665243643, 0.000170935013520957, 
+                            3.8033227037236e-05), .Dim = c(77L, 2L), .Dimnames = list(NULL, 
+                                                                                      c("age", "compliance")))
+            temp<-match(age,compliance.rates[,1])
+            if (is.na(temp)){
+                compliance<-0
+            }else {
+                compliance<- compliance.rates[temp,2]
+            }
+            compliance
+        }
         
       ## blood.test.screening = function(person) {#person is offered blood test
       ##       age<-person$age
