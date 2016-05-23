@@ -435,7 +435,8 @@ Person <- setRefClass( "Person",
         in_treatment_program="character",
         clinical_history="ClinicalHistory",
         study_id="numeric",
-        random_seed_state="integer"
+        random_seed_state="integer",
+        NBCSP.propensity="numeric"
     ),
 
     methods = list(
@@ -448,6 +449,7 @@ Person <- setRefClass( "Person",
                             in_treatment_program="no",
                             clinical_history=ClinicalHistory$new(),
                             random_seed_state=NA,
+                            NBCSP.propensity=NA,
                             ...){
 
         "Create and initialize a new instance of a Person
@@ -509,14 +511,20 @@ Person <- setRefClass( "Person",
 
             random_seed<-.Random.seed
 
+            if (is.na(NBCSP.propensity)){
+            propensity  <- rbeta(1, shape1=0.198,shape2=0.3, ncp = 0) 
+            } else {
+                propensity  <-NBCSP.propensity
+            }
+
             initFields(age=age,
                 sex=s,
                 state=state,
                 in_treatment_program=in_treatment_program,
                 clinical_history=clinical_history,
                 study_id=study_id,
-                random_seed_state=random_seed)
-
+                random_seed_state=random_seed,
+                NBCSP.propensity=propensity)
         },
 
         saveRNGState = function () {
@@ -1841,7 +1849,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         NBCSP = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
-            if ( (person$age %in% c(50,55,60,65,70)) & ( person$colon_clinical=="clear") #
+            if ( (person$age %in% c(55,60,65,70,72)) & ( person$colon_clinical=="clear") #
                 &(person$in_treatment_program=="no")){
                                         #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
                                         #We do not offer it if the person already has a diagnosis of "CRC"
@@ -1905,6 +1913,13 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             test.result<-"none"
             test.state<-"none"
              compliance<-sample(c("accept","decline"),1, prob =c(0.4,0.6))
+
+
+
+
+
+
+            
             if (compliance=="accept"){
                 person$updateState()  #object<-get.patient.state(object)
                 state<-person$colon$state    #object@colon@state
