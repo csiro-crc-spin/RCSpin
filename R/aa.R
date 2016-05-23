@@ -1866,7 +1866,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 ww<-age.specific.compliance.rates.for.BSA(person)
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
-                do.test<-sample(c("accept","decline"),1, prob =c(0.08,1-0.08))
+                do.test<-sample(c("accept","decline"),1, prob =c(0.03,1-0.03))
                 
                 if (do.test=="accept"){
                     
