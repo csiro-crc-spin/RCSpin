@@ -1913,7 +1913,13 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             test.result<-"none"
             test.state<-"none"
             uu<-person$NBCSP.propensity
-            ww<-0.4
+            if (age ==55){
+                ww<- .359
+            }else if (age == 60){
+                ww<- .427
+            }  else {
+                ww<- 0.4
+            }
             mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=0.7)))
             aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
             compliance<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
