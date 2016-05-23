@@ -1866,7 +1866,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 ww<-age.specific.compliance.rates.for.BSA(person)
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
-                do.test<-sample(c("accept","decline"),1, prob =c(0.015,1-0.015))
+                do.test<-sample(c("accept","decline"),1, prob =c(0.08,1-0.08))
                 
                 if (do.test=="accept"){
                     
@@ -1878,7 +1878,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                         #person1@clinical.history@events
                     
                     test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a Test
-                    temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
+                    temp1[1]<-1  #ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
                     temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
                     temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
                     temp1[4]<-ifelse(is.element(test.outcome$compliance,c("screen")),1,0)
