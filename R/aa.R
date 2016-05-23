@@ -1912,14 +1912,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             age<-person$age
             test.result<-"none"
             test.state<-"none"
-             compliance<-sample(c("accept","decline"),1, prob =c(0.4,0.6))
-
-
-
-
-
-
-            
+            uu<-person$NBCSP.propensity
+            ww<-0.4
+            mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=0.7)))
+            aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
+            compliance<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
             if (compliance=="accept"){
                 person$updateState()  #object<-get.patient.state(object)
                 state<-person$colon$state    #object@colon@state
