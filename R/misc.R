@@ -113,7 +113,8 @@ organize_results<-function(object){
                             "person.initiateCRCTreatment.colon.stage.D",
                             "person.initiateCRCTreatment.person.in_treatment_program",
                             "person.initiateCRCTreatment.colonoscopy_caused_bleeding",
-                            "person.initiateCRCTreatment.colonoscopy_caued_perforation"
+                            "person.initiateCRCTreatment.colonoscopy_caued_perforation",
+                            rep(NA,14)
                             )
         names(results.M)<-names(results.F)
         descriptions<-c("A count of adenomas in all patients of the study group that have state \"adenoma\"",
@@ -177,7 +178,8 @@ organize_results<-function(object){
                         "A count of people that where treated for CRC IN THIS ITERATION, who had colons in state \"symptomatic CRC\" and in stage \"D\"",
                         "A count of people put into a treatment program THIS ITERATION!!!",
                         "A count of people that where treated for CRC IN THIS ITERATION, whose colonoscopy caused bleeding",
-                        "A count of people that where treated for CRC IN THIS ITERATION, whose colonoscopy caused perforation")
+                        "A count of people that where treated for CRC IN THIS ITERATION, whose colonoscopy caused perforation",
+                        rep(NA,14))
         
         descriptions<-data.frame(names(results.F),descriptions)
         names(descriptions)<-c("variable.name", "description")
