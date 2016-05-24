@@ -1982,23 +1982,25 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             treatment_record.1 <- testForAndTreatCRC(person)
 
 #            treatment_record.2<-NBCSP(person)
-#            treatment_record.2<-gemini.screening(person)
-            treatment_record.2<-rep(0,14)
+            treatment_record.2<-gemini.screening(person)
+#            treatment_record.2<-rep(0,14)
             return(c(treatment_record.1,treatment_record.2))
         },
 
         gemini.screening = function(person){
             temp1<-rep(0,14)
-            if ( (person$age %in% c(60)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")){
-                                                  #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
+            do.test<-sample(c("accept","decline"),1, prob =c(0.03,1-0.03))
+            if ( (person$age %in% c(50:80)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")   &(do.test=="accept")){
+                
+                                        #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
                                         #We do not offer it if the person already has a diagnosis of "CRC"
                 gemini.blood.screening(person) #  blood.test.screening(person) #
-
+                
                                         #offer Gemini test. Relevant parameters are the compliance rate and the
                                         #sensitivity and specificity, depending on the person1@colon@state and stage
                                         #The test results are retained in an object of class "test", appended to the list
                                         #person1@clinical.history@events
-
+                
                 test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a Test
                 temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
                 temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
