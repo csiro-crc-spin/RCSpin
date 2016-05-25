@@ -1862,11 +1862,12 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             
             if (  ( person$colon_clinical=="clear")            &(person$in_treatment_program=="no")) {
-                uu<-person$BSA.propensity
+                uu<-0.999 #person$BSA.propensity
                 ww<-age.specific.compliance.rates.for.BSA(person)
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
                 do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
+                
                 cat("uu=",uu,"ww=",ww,"mm=",mm,"aa1=",aa1,"do.test=",do.test,"\n")
                 if (do.test=="accept"){
                     
