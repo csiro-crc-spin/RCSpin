@@ -114,7 +114,20 @@ organize_results<-function(object){
                             "person.initiateCRCTreatment.person.in_treatment_program",
                             "person.initiateCRCTreatment.colonoscopy_caused_bleeding",
                             "person.initiateCRCTreatment.colonoscopy_caued_perforation",
-                            rep(NA,14)
+                            "test_FOBT",
+                            "test_accept",
+                            "test_blood",
+                            "test_screen",
+                            "test_positive",
+                            "test_colonoscopy",
+                            "test_large_adenoma",
+                            "test_A",
+                            "test_B",
+                            "test_C",
+                            "test_D",
+                            "test_count",
+                            "test_bleeding",
+                            "test_perforation"
                             )
         names(results.M)<-names(results.F)
         descriptions<-c("A count of adenomas in all patients of the study group that have state \"adenoma\"",
@@ -179,7 +192,21 @@ organize_results<-function(object){
                         "A count of people put into a treatment program THIS ITERATION!!!",
                         "A count of people that where treated for CRC IN THIS ITERATION, whose colonoscopy caused bleeding",
                         "A count of people that where treated for CRC IN THIS ITERATION, whose colonoscopy caused perforation",
-                        rep(NA,14))
+                        "test outcome ifelse(is.element(test.outcome$type,c(FOBT)),1,0)",
+                        "test outcome ifelse(is.element(test.outcome$compliance,c(accept)),1,0)",
+                        "test outcome ifelse(is.element(test.outcome$type,c(blood)),1,0)",
+                        "test outcome ifelse(is.element(test.outcome$compliance,c(screen)),1,0)",
+                        "test outcome test.result==positive",
+                        "test outcome person has a colonoscopy with probability 1",
+                        "test outcome adenoma or large adenoma ",
+                        "test outcome A",
+                        "test outcome B",
+                        "test outcome C",
+                        "test outcome D",
+                        "test outcome count",
+                        "test outcome bleeding",
+                        "test outcome perforation"
+                        )
         
         descriptions<-data.frame(names(results.F),descriptions)
         names(descriptions)<-c("variable.name", "description")
@@ -188,3 +215,6 @@ organize_results<-function(object){
     }
     res
 }
+
+
+
