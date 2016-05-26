@@ -1896,7 +1896,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     cat("5", temp1,"\n")
                     temp1[4]<-ifelse(is.element(test.outcome$compliance,c("screen")),1,0)
                     cat("6", temp1,"\n")
-                    
+                    cat("8", "test.outcome$result =",test.outcome$result,"\n")
+                    print(test.outcome)
 ###assumes that they only have one test. Needs to be changed
 ###we are also assuming that if the test is positive than the person has a colonoscopy. This
 ###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
