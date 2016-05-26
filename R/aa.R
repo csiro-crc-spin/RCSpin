@@ -1861,11 +1861,12 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         BSA = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
 
-            cat(length(person$clinical_history$events),"\n")
+            not.up.to.date<-TRUE
+            if (length(person$clinical_history$events >0){
             aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
             bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
             not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
-      
+            } 
              cat("aa=",aa,"bb=",bb,"not.up.to.date=",not.up.to.date,"person$colon_clinical=",person$colon_clinical,"person$in_treatment_program=",person$in_treatment_program,"\n")
             
             
