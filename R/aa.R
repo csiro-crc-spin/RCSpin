@@ -1866,10 +1866,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
             bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
             not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
-             cat("aa=",aa,"bb=",bb,"not.up.to.date=",not.up.to.date,"person$colon_clinical=",person$colon_clinical,"person$in_treatment_program=",person$in_treatment_program,"\n")
+#             cat("aa=",aa,"bb=",bb,"not.up.to.date=",not.up.to.date,"person$colon_clinical=",person$colon_clinical,"person$in_treatment_program=",person$in_treatment_program,"\n")
             
             } 
-             cat("not.up.to.date=",not.up.to.date,"person$colon_clinical=",person$colon_clinical,"person$in_treatment_program=",person$in_treatment_program,"\n")
+#             cat("not.up.to.date=",not.up.to.date,"person$colon_clinical=",person$colon_clinical,"person$in_treatment_program=",person$in_treatment_program,"\n")
             
             
             if (  ( person$colon_clinical=="clear")  & (person$in_treatment_program=="no") & (not.up.to.date)) {
@@ -1878,7 +1878,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 do.test<-sample(c("accept","decline"),1, prob =c(mm,1-mm))
                 
-                cat("uu=",uu,"ww=",ww,"mm=",mm,"aa1=",aa1,"do.test=",do.test,"\n")
+                cat("person$age=",person$age,"uu=",uu,"ww=",ww,"mm=",mm,"do.test=",do.test,"\n")
                 if (do.test=="accept"){
                     
                     iFOBTscreening(person) #same as .self$iFOBT.screening(person)
