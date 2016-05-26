@@ -1884,12 +1884,19 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                         #sensitivity and specificity, depending on the person1@colon@state and stage
                                         #The test results are retained in an object of class "test", appended to the list
                                         #person1@clinical.history@events
-                    
+                    cat("1", temp1,"\n")
                     test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a Test
+                    cat("2", temp1,"\n")
                     temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
+                    cat("3", temp1,"\n")
+                    
                     temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
+                    cat("4", temp1,"\n")
                     temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
+                    cat("5", temp1,"\n")
                     temp1[4]<-ifelse(is.element(test.outcome$compliance,c("screen")),1,0)
+                    cat("6", temp1,"\n")
+                    
 ###assumes that they only have one test. Needs to be changed
 ###we are also assuming that if the test is positive than the person has a colonoscopy. This
 ###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
@@ -1897,6 +1904,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                         #conditions on person1@colon@state and move on
                         temp1[5]<-1 #test.result=="positive"
                         temp1[6]<-1 #person has a colonoscopy woth probability 1
+                        cat("7", temp1,"\n")
                         temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
                         temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
                         if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
