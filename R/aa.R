@@ -1861,7 +1861,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         BSA = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             
-            
+browser()
             not.up.to.date<-TRUE
             if (length(person$clinical_history$events >0)){
             aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
@@ -1901,44 +1901,44 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 ###assumes that they only have one test. Needs to be changed
 ###we are also assuming that if the test is positive than the person has a colonoscopy. This
 ###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
-                    if(FALSE){# test.outcome$result=="positive"){  
-                        cat("7", temp1,"\n")
-                        temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-                        temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
-                        if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
-                            temp1[7]<-1
-                            temp1[12]<-1
-                            person$in_treatment_program<-"yes"
-                        } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
-                            if (person$colon$stage=="A"){
-                                temp1[8]<-1
-                                temp1[12]<-1
-                                person$in_treatment_program<-"yes"
-                            }
-                            if (person$colon$stage=="B"){
-                                temp1[9]<-1
-                                temp1[12]<-1
-                                person$in_treatment_program<-"yes"
-                            }
-                            if (person$colon$stage=="C"){
-                                temp1[10]<-1
-                                temp1[12]<-1
-                                person$in_treatment_program<-"yes"
-                            }
-                            if(person$colon$stage=="D"){
-###            person$colon.clinical<-"CRC"
-                                temp1[11]<-1
-                                temp1[12]<-1
-                                person$in_treatment_program<-"yes"
-                                        #we do nothing.
-                            }
-                        }
-                    } #end test.result=="positive"
+##                     if(FALSE){# test.outcome$result=="positive"){  
+##                         cat("7", temp1,"\n")
+##                         temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+##                         temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+##                         if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
+##                             temp1[7]<-1
+##                             temp1[12]<-1
+##                             person$in_treatment_program<-"yes"
+##                         } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
+##                             if (person$colon$stage=="A"){
+##                                 temp1[8]<-1
+##                                 temp1[12]<-1
+##                                 person$in_treatment_program<-"yes"
+##                             }
+##                             if (person$colon$stage=="B"){
+##                                 temp1[9]<-1
+##                                 temp1[12]<-1
+##                                 person$in_treatment_program<-"yes"
+##                             }
+##                             if (person$colon$stage=="C"){
+##                                 temp1[10]<-1
+##                                 temp1[12]<-1
+##                                 person$in_treatment_program<-"yes"
+##                             }
+##                             if(person$colon$stage=="D"){
+## ###            person$colon.clinical<-"CRC"
+##                                 temp1[11]<-1
+##                                 temp1[12]<-1
+##                                 person$in_treatment_program<-"yes"
+##                                         #we do nothing.
+##                             }
+##                         }
+##                     } #end test.result=="positive"
                 } #end compiance==accept   
             }
             cat("21", temp1,"\n")
             temp1
-        },
+        }, #end BSA
 
         NBCSP = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
