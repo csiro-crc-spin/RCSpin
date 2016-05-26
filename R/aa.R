@@ -1870,7 +1870,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             }
             
             if (  ( person$colon_clinical=="clear")            &(person$in_treatment_program=="no") & (not.up.to.date)) {
-                uu<-person$BSA.propensity
+                uu<-0.99 #person$BSA.propensity
                 ww<-age.specific.compliance.rates.for.BSA(person)
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
@@ -1903,8 +1903,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 ###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
                     if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
                                         #conditions on person1@colon@state and move on
-                        temp1[5]<-1 #test.result=="positive"
-                        temp1[6]<-1 #person has a colonoscopy woth probability 1
+#                        temp1[5]  <-1 #test.result=="positive"
+#                        temp1[6]<-1 #person has a colonoscopy woth probability 1
                         cat("7", temp1,"\n")
                         temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
                         temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
