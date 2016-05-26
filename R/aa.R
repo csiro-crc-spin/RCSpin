@@ -1861,7 +1861,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         BSA = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             
-browser()
+#browser()
             not.up.to.date<-TRUE
             if (length(person$clinical_history$events >0)){
             aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
