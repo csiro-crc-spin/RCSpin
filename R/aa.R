@@ -1901,10 +1901,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 ###assumes that they only have one test. Needs to be changed
 ###we are also assuming that if the test is positive than the person has a colonoscopy. This
 ###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
-                    if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
-                                        #conditions on person1@colon@state and move on
-#                        temp1[5]  <-1 #test.result=="positive"
-#                        temp1[6]<-1 #person has a colonoscopy woth probability 1
+                    if(test.outcome$result=="positive"){  
                         cat("7", temp1,"\n")
                         temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
                         temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
@@ -1939,6 +1936,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     } #end test.result=="positive"
                 } #end compiance==accept   
             }
+            cat("21", temp1,"\n")
             temp1
         },
 
