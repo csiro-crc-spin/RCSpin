@@ -1869,7 +1869,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
             
             
-            if (  ( person$colon_clinical=="clear")  & (person$in_treatment_program=="no") & (not.up.to.date==TRUE)) {
+            if (  ( person$colon_clinical=="clear")  & (person$in_treatment_program=="no") & (not.up.to.date)) {
                 uu<-0.999 #person$BSA.propensity
                 ww<-age.specific.compliance.rates.for.BSA(person)
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
