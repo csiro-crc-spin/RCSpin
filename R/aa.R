@@ -1866,8 +1866,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
             bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
             not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
-            } 
              cat("aa=",aa,"bb=",bb,"not.up.to.date=",not.up.to.date,"person$colon_clinical=",person$colon_clinical,"person$in_treatment_program=",person$in_treatment_program,"\n")
+            
+            } 
+             cat("not.up.to.date=",not.up.to.date,"person$colon_clinical=",person$colon_clinical,"person$in_treatment_program=",person$in_treatment_program,"\n")
             
             
             if (  ( person$colon_clinical=="clear")  & (person$in_treatment_program=="no") & (not.up.to.date)) {
