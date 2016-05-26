@@ -1860,8 +1860,15 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         BSA = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
+
+
+            not.up.to.date<-TRUE
+            if (length(person$clinical_history$events >0)){
+            aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
+            bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
+            not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
             
-            if (  ( person$colon_clinical=="clear")            &(person$in_treatment_program=="no")) {
+            if (  ( person$colon_clinical=="clear")            &(person$in_treatment_program=="no") & (not.up.to.date)) {
                 uu<-person$BSA.propensity
                 ww<-age.specific.compliance.rates.for.BSA(person)
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
