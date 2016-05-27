@@ -1877,7 +1877,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
                 
                 if (do.test=="accept"){
-                    
+                     if (person$age==52){
+                         browser()
+                     }
                     iFOBTscreening(person) #same as .self$iFOBT.screening(person)
                     
                                         #offer iFOBT. Relevant parameters are the compliance rate and the
@@ -1901,7 +1903,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 ###assumes that they only have one test. Needs to be changed
 ###we are also assuming that if the test is positive than the person has a colonoscopy. This
 ###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
-                    if(FALSE){# test.outcome$result=="positive"){  
+                     if(FALSE){# test.outcome$result=="positive"){  
                         cat("7", temp1,"\n")
                         temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
                         temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
