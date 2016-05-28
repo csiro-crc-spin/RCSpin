@@ -1846,11 +1846,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             temp1<-rep(FALSE,person$NBCSPRecordSize())
 
 
-#                browser()
+                browser()
 
             not.up.to.date<-TRUE
             do.test <- "decline"
-            
+           
             if (length(person$clinical_history$events) >0) {
                 aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
                 bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
