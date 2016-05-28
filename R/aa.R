@@ -1845,7 +1845,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         screening.colonoscopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
 
-            if(person$age==50){
+            if(person$age==49){
                 browser()
             }
             not.up.to.date<-FALSE
@@ -1872,7 +1872,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 state<-person$colon$state    #object@colon@state
                 if( state=="symptomatic CRC" ){
                     sensitivity<-1
-                    test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
+                    test.result <- sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
                         test.state<-"TP"
                     }
