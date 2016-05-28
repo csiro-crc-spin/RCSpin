@@ -1862,7 +1862,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
      #           ww<-age.specific.compliance.rates.for.BSA(person)*10
      #           mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
      #           aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
-                do.test<-sample(c("accept","decline"),1, prob =c(0.015,1-0.015))
+                do.test<-sample(c("accept","decline"),1, prob =c(0.0017,1-0.0017))
                 temp1[12]<-1  #test is offered
             }
             
