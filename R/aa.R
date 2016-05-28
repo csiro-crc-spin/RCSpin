@@ -1848,10 +1848,13 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             if(person$age==50){
                 browser()
             }
-            ##has the peson had a colonoscopy on the past 5 years
+            not.up.to.date<-FALSE
+            
+            if (length(person$clinical_history$events) >0) {
             aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
             bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
             not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 10)
+            }
             
             if (not.up.to.date){
                 uu<-person$BSA.propensity
