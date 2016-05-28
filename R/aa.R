@@ -1846,11 +1846,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             temp1<-rep(FALSE,person$NBCSPRecordSize())
 
 
-                browser()
 
             not.up.to.date<-TRUE
             do.test <- "decline"
-           
+           test.result <- "negative"
+
             if (length(person$clinical_history$events) >0) {
                 aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
                 bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
@@ -1916,7 +1916,6 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         test.state<-"TN"
                     }
                 }#end state =clear
-
 
 
                 temp1[6]<-1 #person has a colonoscopy woth probability 1
