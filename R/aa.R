@@ -1863,6 +1863,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
                 do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
+                temp1[12]<-1  #test is offered
             }
             
             if ( (do.test=="accept") & ( person$colon_clinical=="clear") #
@@ -1915,47 +1916,48 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         test.state<-"TN"
                     }
                 }#end state =clear
+
+
+
+                temp1[6]<-1 #person has a colonoscopy woth probability 1
+                temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+                temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+                
+                person$clinical_history$events<-lappend(person$clinical_history$events,
+                                                        Test$new(
+                                                            age=person$age,
+                                                            type="colonoscopy",
+                                                            compliance=do.test,
+                                                            result=test.result,
+                                                            state= test.state)
+                                                        )
             }
-
-
-            temp1[6]<-1 #person has a colonoscopy woth probability 1
-            temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-            temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
-            
-            person$clinical_history$events<-lappend(person$clinical_history$events,
-                                                    Test$new(
-                                                        age=person$age,
-                                                        type="colonoscopy",
-                                                        compliance=do.test,
-                                                        result=test.result,
-                                                        state= test.state)
-                                                    )
 
             if(test.result=="positive"){  #if it is
                  if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
                         temp1[7]<-1
-                        temp1[12]<-1
+  #                      temp1[12]<-1
                         person$in_treatment_program<-"yes"
                     } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
                         if (person$colon$stage=="A"){
                             temp1[8]<-1
-                            temp1[12]<-1
+ #                           temp1[12]<-1
                             person$in_treatment_program<-"yes"
                         }
                         if (person$colon$stage=="B"){
                             temp1[9]<-1
-                            temp1[12]<-1
+  #                          temp1[12]<-1
                             person$in_treatment_program<-"yes"
                         }
                         if (person$colon$stage=="C"){
                             temp1[10]<-1
-                            temp1[12]<-1
+  #                          temp1[12]<-1
                             person$in_treatment_program<-"yes"
                         }
                         if(person$colon$stage=="D"){
 ###            person$colon.clinical<-"CRC"
                             temp1[11]<-1
-                            temp1[12]<-1
+  #                          temp1[12]<-1
                             person$in_treatment_program<-"yes"
                                         #we do nothing.
                         }
