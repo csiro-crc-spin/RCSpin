@@ -1849,7 +1849,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 browser()
             }
             not.up.to.date<-FALSE
-            do.test <- decline
+            do.test <- "decline"
             
             if (length(person$clinical_history$events) >0) {
                 aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
