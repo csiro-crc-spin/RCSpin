@@ -1842,7 +1842,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
 
 
-        screening.colonsocopy = function (person) {
+        screening.colonoscopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
 
             if(person$age==50){
