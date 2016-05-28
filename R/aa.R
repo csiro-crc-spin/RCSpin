@@ -1845,9 +1845,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         screening.colonoscopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
 
-            if(person$age==49){
+
                 browser()
-            }
+
             not.up.to.date<-FALSE
             do.test <- "decline"
             
