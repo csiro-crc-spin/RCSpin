@@ -1844,7 +1844,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         screening.colonsocopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
-            
+
+            if(person$age==50){
+                browser()
+            }
             ##has the peson had a colonoscopy on the past 5 years
             aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
             bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
