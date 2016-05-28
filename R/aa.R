@@ -1849,11 +1849,12 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 browser()
             }
             not.up.to.date<-FALSE
+            do.test <- decline
             
             if (length(person$clinical_history$events) >0) {
-            aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
-            bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
-            not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 10)
+                aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
+                bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
+                not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 10)
             }
             
             if (not.up.to.date){
