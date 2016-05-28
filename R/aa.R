@@ -1924,7 +1924,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
             person$clinical_history$events<-lappend(person$clinical_history$events,
                                                     Test$new(
-                                                        age=age,
+                                                        age=person$age,
                                                         type="colonoscopy",
                                                         compliance=do.test,
                                                         result=test.result,
