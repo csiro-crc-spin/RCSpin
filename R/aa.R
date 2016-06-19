@@ -680,7 +680,8 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
 
     fields = list(
         crcrisk_model_params = "CrcRiskParams",
-        adenoma_model_params = "AdenomaParams"
+        adenoma_model_params = "AdenomaParams",
+        screening_flag = "character"
     ),
 
     methods = list(
@@ -699,10 +700,12 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                         base_seed=NA,
                         commencement_age=20,
                         set.sex=NA_character_,
+                        screening_flag="none",
                         ...) {
 
             crcrisk_model_params<<-crcRiskParamsType()$new()
             adenoma_model_params<<-adenomaParamsType()$new()
+            screening_flag<<- screening_flag
 
             temp_study_group<-list()
 
@@ -2117,6 +2120,19 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
 
+
+            if (screening_flag=="none"){
+                treatment_record.2<-rep(0,14)
+            } else if (screening_flag=="NBCSP"){
+                treatment_record.2<-NBCSP(person)
+            } else if (screening_flag=="screening.colonoscopy"){
+                treatment_record.2<-screening.colonoscopy(person)
+            } else if (screening_flag=="gemini.screening"){
+                treatment_record.2<-gemini.screening(person)
+            }
+            
+                        
+            
 #            treatment_record.2<-NBCSP(person)
 #            treatment_record.2<-gemini.screening(person)
 #            treatment_record.2<-screening.colonoscopy(person)
