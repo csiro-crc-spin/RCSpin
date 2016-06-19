@@ -1872,20 +1872,36 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         screening.colonoscopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
-            
-            ##has the peson had a colonoscopy on the past 5 years
-            aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
-            bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
-            not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 10)
+            not.up.to.date<-TRUE
+            do.test <- "decline"
+            test.result <- "negative"
 
-            browser()
-            if (not.up.to.date){
-                uu<-person$BSA.propensity
-                ww<-age.specific.compliance.rates.for.BSA(person)*10
-                mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
-                aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
-                do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
+            ##has the peson had a colonoscopy on the past 10 years
+            if (length(person$clinical_history$events) >0) {
+                aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
+                bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
+                not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 10)
             }
+
+#            if (not.up.to.date){
+#                uu<-person$BSA.propensity
+#                ww<-age.specific.compliance.rates.for.BSA(person)*10
+#                mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
+#                aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
+#                do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
+#            }
+
+            if (not.up.to.date){
+                                        #            uu<-person$BSA.propensity
+                                        #           ww<-age.specific.compliance.rates.for.BSA(person)*10
+                                        #           mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
+                                        #           aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
+                do.test<-sample(c("accept","decline"),1, prob =c(0.0017,1-0.0017))
+                temp1[12]<-1  #test is offered
+            }
+            
+
+            
             
             if ( (do.test=="accept") & ( person$colon_clinical=="clear") #
                 &(person$in_treatment_program=="no")){
