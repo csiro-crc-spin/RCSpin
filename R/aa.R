@@ -680,7 +680,8 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
 
     fields = list(
         crcrisk_model_params = "CrcRiskParams",
-        adenoma_model_params = "AdenomaParams"
+        adenoma_model_params = "AdenomaParams",
+        screening_flag = "screening_flag"
     ),
 
     methods = list(
@@ -1370,7 +1371,7 @@ Adenoma <- setRefClass( "Adenoma",
             dinfinity<-50
             d0<-1
 
-            browser()
+#            browser()
             
             if (a1=="rectum"){
                 mean_colon <- runif(1,1.1,4.7)
@@ -2120,6 +2121,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #               ...some code...
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
+browser()
             
 #            treatment_record.2<-NBCSP(person)
 #            treatment_record.2<-gemini.screening(person)
