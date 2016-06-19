@@ -57,13 +57,38 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         },
 
 
+        modelSubjectTesting = function (person) {
+            ## test for and treat CRC
+            ##   Call function containing what was originally:
+            ##       if ((person1@colon.clinical=="CRC")
+            ##           & (person1@in.treatment.program=="no")){
+            ##               ...some code...
+            ##       }
+            treatment_record.1 <- testForAndTreatCRC(person)
+            
+            
+            if (screening_flag=="none"){
+                treatment_record.2<-rep(0,14)
+            } else if (screening_flag=="NBCSP"){
+                treatment_record.2<-NBCSP(person)
+            } else if (screening_flag=="screening.colonoscopy"){
+                treatment_record.2<-screening.colonoscopy(person)
+            } else if (screening_flag=="gemini.screening"){
+                treatment_record.2<-gemini.screening(person)
+            } else if (screening_flag=="BSA"){
+                treatment_record.2<-BSA(person)
+            } 
+            
+            return(c(treatment_record.1,treatment_record.2))
+        },
+        
         screening.colonoscopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             not.up.to.date<-TRUE
             do.test <- "decline"
             test.result <- "negative"
             test.state <- "decline"
-
+            
             ##has the peson had a colonoscopy on the past 10 years
             if (length(person$clinical_history$events) >0) {
                 aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
@@ -342,16 +367,6 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             age<-person$age
             test.result<-"none"
             test.state<-"none"
-#            uu<-person$NBCSP.propensity
-#            if (age ==55){
-#                ww<- .359
-#            }else if (age == 60){
-#                ww<- .427
-#            }  else {
-#                ww<- 0.4
-#            }
-#            mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=0.7)))
-#            aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
             compliance<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
             if (compliance=="accept"){
                 person$updateState()  #object<-get.patient.state(object)
@@ -418,31 +433,6 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 ### sensitivity 0.86   P(test.result="positive"| state="CRC")
 ### sensitivity 0.47  P(test.result="positive"| state="large adenoma")
             
-        },
-
-        modelSubjectTesting = function (person) {
-            # test for and treat CRC
-            #   Call function containing what was originally:
-            #       if ((person1@colon.clinical=="CRC")
-            #           & (person1@in.treatment.program=="no")){
-            #               ...some code...
-            #       }
-            treatment_record.1 <- testForAndTreatCRC(person)
-
-
-            if (screening_flag=="none"){
-                treatment_record.2<-rep(0,14)
-            } else if (screening_flag=="NBCSP"){
-                       treatment_record.2<-NBCSP(person)
-            } else if (screening_flag=="screening.colonoscopy"){
-                treatment_record.2<-screening.colonoscopy(person)
-            } else if (screening_flag=="gemini.screening"){
-                treatment_record.2<-gemini.screening(person)
-            } else if (screening_flag=="BSA"){
-                treatment_record.2<-BSA(person)
-            } 
-            
-            return(c(treatment_record.1,treatment_record.2))
         },
 
         gemini.screening = function(person){
@@ -649,73 +639,6 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             compliance
         }
         
-      ## blood.test.screening = function(person) {#person is offered blood test
-      ##       age<-person$age
-      ##       test.result<-"none"
-      ##       test.state<-"none"
-      ##       compliance<-sample(c("accept","decline"),1, prob =c(0.75,0.25))
-      ##       if (compliance=="accept"){
-      ##           person$updateState()  #object<-get.patient.state(object)
-      ##           state<-person$colon$state    #object@colon@state
-      ##           if( state=="symptomatic CRC" ){
-      ##               sensitivity<-0.86
-      ##               test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
-      ##               if(test.result=="positive"){
-      ##                   test.state<-"TP"
-      ##               }
-      ##               else{
-      ##                   test.state<-"FN"
-      ##               }
-      ##           } else if ( state== "CRC" ){
-      ##               sensitivity<-0.86
-      ##               test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
-      ##               if(test.result=="positive"){
-      ##                   test.state<-"TP"
-      ##               }
-      ##               else{
-      ##                   test.state<-"FN"
-      ##               }
-      ##           } else if ( state=="large adenoma" ){
-      ##               sensitivity<-0.474
-      ##               test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
-      ##               if(test.result=="positive"){
-      ##                   test.state<-"TP"
-      ##               }
-      ##               else{
-      ##                   test.state<-"FN"
-      ##               }
-      ##           }else if ( state=="adenoma" ){
-      ##               specificity<-0.9585
-      ##               test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
-      ##               if(test.result=="positive"){
-      ##                   test.state<-"FP"
-      ##               }
-      ##               else{
-      ##                   test.state<-"TN"
-      ##               }
-      ##           } else if ( state=="clear" ){
-      ##               specificity<-0.968
-      ##               test.result<-sample(c("positive","negative"),1,prob=c(1- specificity, specificity))
-      ##               if(test.result=="positive"){
-      ##                   test.state<-"FP"
-      ##               }
-      ##               else{
-      ##                   test.state<-"TN"
-      ##               }
-      ##           }#end state =clear
-      ##       }
-      ##       person$clinical_history$events<-lappend(person$clinical_history$events,
-      ##                                               Test$new(
-      ##                                                   age=age,
-      ##                                                   type="blood",
-      ##                                                   compliance=compliance,
-      ##                                                   result=test.result,
-      ##                                                   state= test.state)
-      ##                                               )
-      ##   }  # blood.test.screening 
-    ) #end method list
-                                 )
-
 
 
 # Duke's Adenoma Parameters class
