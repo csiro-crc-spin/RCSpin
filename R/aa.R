@@ -520,7 +520,7 @@ Person <-  setRefClass( "Person",
             }
             
             if (is.na(BSA.propensity)){
-                BSA.propensity  <- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
+                BSA.propensity_l  <- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
             } else {
                 BSA.propensity_l  <-  BSA.propensity
             }
