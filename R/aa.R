@@ -1875,6 +1875,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             not.up.to.date<-TRUE
             do.test <- "decline"
             test.result <- "negative"
+            test.state<-NA
 
             ##has the peson had a colonoscopy on the past 10 years
             if (length(person$clinical_history$events) >0) {
