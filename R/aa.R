@@ -681,7 +681,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
     fields = list(
         crcrisk_model_params = "CrcRiskParams",
         adenoma_model_params = "AdenomaParams",
-        screening_flag = "screening_flag"
+        screening_flag = "character"
     ),
 
     methods = list(
@@ -700,7 +700,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                         base_seed=NA,
                         commencement_age=20,
                         set.sex=NA_character_,
-                        screening_flag=1,
+                        screening_flag="none",
                         ...) {
 
             crcrisk_model_params<<-crcRiskParamsType()$new()
