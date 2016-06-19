@@ -526,7 +526,7 @@ Person <-  setRefClass( "Person",
             }
                 
             
-            initFields(age age,
+            initFields(age = age,
                 sex = s,
                 state = state,
                 in_treatment_program = in_treatment_program,
