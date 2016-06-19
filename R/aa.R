@@ -429,15 +429,15 @@ ClinicalHistory <- setRefClass( "ClinicalHistory",
 Person <-  setRefClass( "Person",
 
     fields = list(
-        age="numeric",
-        sex="character",
-        state="character", #"deceased","living", etc (as needed by subclasses)
-        in_treatment_program="character",
-        clinical_history="ClinicalHistory",
-        study_id="numeric",
-        random_seed_state="integer",
-        NBCSP.propensity="numeric",
-        BSA.propensity="numeric"
+        age = "numeric",
+        sex = "character",
+        state = "character", #"deceased","living", etc (as needed by subclasses)
+        in_treatment_program = "character",
+        clinical_history = "ClinicalHistory",
+        study_id = "numeric",
+        random_seed_state = "integer",
+        NBCSP.propensity = "numeric",
+        BSA.propensity = "numeric"
     ),
 
     methods = list(
@@ -514,22 +514,27 @@ Person <-  setRefClass( "Person",
             random_seed<-.Random.seed
 
             if (is.na(NBCSP.propensity)){
-                NBCSP.propensity  <- rbeta(1, shape1=0.198,shape2=0.3, ncp = 0) 
+                NBCSP.propensity_l  <- rbeta(1, shape1=0.198,shape2=0.3, ncp = 0) 
+            } else{
+                NBCSP.propensity_l <- NBCSP.propensity
             }
             
             if (is.na(BSA.propensity)){
                 BSA.propensity  <- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
-            } 
+            } else {
+                BSA.propensity_l  <-  BSA.propensity
+            }
+                
             
-            initFields(age=age,
-                sex=s,
-                state=state,
-                in_treatment_program=in_treatment_program,
-                clinical_history=clinical_history,
-                study_id=study_id,
-                random_seed_state=random_seed,
-                NBCSP.propensity=NBCSP.propensity,
-                BSA.propensity=BSA.propensity)
+            initFields(age age,
+                sex = s,
+                state = state,
+                in_treatment_program = in_treatment_program,
+                clinical_history = clinical_history,
+                study_id = study_id,
+                random_seed_state = random_seed,
+                NBCSP.propensity = NBCSP.propensity_l,
+                BSA.propensity = BSA.propensity_l)
         },
 
         saveRNGState = function () {
