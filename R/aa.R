@@ -680,8 +680,8 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
 
     fields = list(
         crcrisk_model_params = "CrcRiskParams",
-        adenoma_model_params = "AdenomaParams",
-        screening_flag = "character"
+        adenoma_model_params = "AdenomaParams"
+#        screening_flag = "character"
     ),
 
     methods = list(
