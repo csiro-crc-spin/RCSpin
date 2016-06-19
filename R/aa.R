@@ -2192,7 +2192,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         test.state<-"TN"
                     }
                 }#end state =clear
-#            }
+            }
             person$clinical_history$events<-lappend(person$clinical_history$events,
                                                     Test$new(
                                                         age=age,
