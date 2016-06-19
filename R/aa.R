@@ -2121,6 +2121,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             treatment_record.1 <- testForAndTreatCRC(person)
 browser()
 
+            
             if (screening_flag=="none"){
                 treatment_record.2<-rep(0,14)
             } else if (screening_flag=="NBCSP"){
@@ -2135,10 +2136,10 @@ browser()
             
 #            treatment_record.2<-NBCSP(person)
 #            treatment_record.2<-gemini.screening(person)
-#            treatment_record.2<-screening.colonoscopy(person)
+#            treatment_record.2<-screening.colonoscopy(person) 
 #            treatment_record.2<-rep(0,14)
 #            treatment_record.2<-gemini.screening(person)
-            treatment_record.2<-rep(0,14)
+#            treatment_record.2<-rep(0,14)
             return(c(treatment_record.1,treatment_record.2))
         },
 
