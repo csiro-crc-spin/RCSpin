@@ -101,6 +101,7 @@ so where is " edits <<- c(edits, list(backup))" being assigned?
 <<echo=FALSE,eval=FALSE>>=
 
 # Person class
+#source("../R/aa.R") or 
 
 Person <- setRefClass( "Person",
     fields = list(
@@ -183,6 +184,7 @@ Person <- setRefClass( "Person",
 )
 
 Person$help(initialize)
+
 
 alex<-Person$new(study_id =1 , base_seed = 122, age = 1, sex = "F", state ="living" , in_treatment_program ="no")
 
@@ -840,6 +842,29 @@ mEdit$trace(undo, browser)
 ## End(Not run)
 
 
+source("../R/aa.R")
+alex<-PersonWithColon$new()
+alex$age #1
+alex$clinical_history
+alex$in_treatment_program
+alex$state
+alex$colon_clinical
+
+alex$clinical_history$events<- lappend(alex$clinical_history$events,
+                                             Test$new(
+                                                 age=alex$age,
+                                                 type="iFOBT",
+                                                 compliance="accept",
+                                                 result="positive",
+                                                 state= "adenoma")
+                                             )
+
+test.outcome<-tail(alex$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a Test
+test.outcome$type
+model<-DukesCrcSpinModel$new(iterations=99, num_subjects=5)
+ model$NBCSP(alex)
+Error in envRefInferField(x, what, getClass(class(x)), selfEnv) (from aa.R#1929) : 
+  ‘NBCSPRecordSize’ is not a valid field or method name for reference class “PersonWithColon”
 
 @ 
 

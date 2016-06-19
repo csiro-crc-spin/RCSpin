@@ -426,7 +426,7 @@ ClinicalHistory <- setRefClass( "ClinicalHistory",
 #' @export Person
 #' @exportClass Person
 #' @family GenericModel_classes
-Person <- setRefClass( "Person",
+Person <-  setRefClass( "Person",
 
     fields = list(
         age="numeric",
@@ -436,7 +436,8 @@ Person <- setRefClass( "Person",
         clinical_history="ClinicalHistory",
         study_id="numeric",
         random_seed_state="integer",
-        NBCSP.propensity="numeric"
+        NBCSP.propensity="numeric",
+        BSA.propensity="numeric"
     ),
 
     methods = list(
@@ -450,6 +451,7 @@ Person <- setRefClass( "Person",
                             clinical_history=ClinicalHistory$new(),
                             random_seed_state=NA,
                             NBCSP.propensity=NA,
+                            BSA.propensity=NA,
                             ...){
 
         "Create and initialize a new instance of a Person
@@ -512,11 +514,13 @@ Person <- setRefClass( "Person",
             random_seed<-.Random.seed
 
             if (is.na(NBCSP.propensity)){
-            propensity  <- rbeta(1, shape1=0.198,shape2=0.3, ncp = 0) 
-            } else {
-                propensity  <-NBCSP.propensity
+                NBCSP.propensity  <- rbeta(1, shape1=0.198,shape2=0.3, ncp = 0) 
             }
-
+            
+            if (is.na(BSA.propensity)){
+                BSA.propensity  <- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
+            } 
+            
             initFields(age=age,
                 sex=s,
                 state=state,
@@ -524,7 +528,8 @@ Person <- setRefClass( "Person",
                 clinical_history=clinical_history,
                 study_id=study_id,
                 random_seed_state=random_seed,
-                NBCSP.propensity=propensity)
+                NBCSP.propensity=NBCSP.propensity,
+                BSA.propensity=BSA.propensity)
         },
 
         saveRNGState = function () {
@@ -591,8 +596,8 @@ Person <- setRefClass( "Person",
         },
 
         show = function(){
-
-        "Display information about the object.
+            
+            "Display information about the object.
         "
 
             cat("Spin Person object of class",
@@ -608,10 +613,19 @@ Person <- setRefClass( "Person",
             cat("Study id:")
             methods::show(study_id)
 #            cat("System data:")
- #           methods::show(system_data)
+ #           methods::show(syste m_data)
             cat("Clinical history:\n")
             clinical_history$show()
+            cat("BSA propensity to screen:")
+            methods::show(BSA.propensity)
         }
+        
+        ## set.BSA.propensity =function(){
+        ##     "set the propensity to screen with BSA
+        ## "
+        ##     u<- rbeta(1, shape1=0.02, shape2=0.3, ncp = 0) 
+        ## }
+        
 
         )
 )
@@ -1851,8 +1865,6 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         },
 
 
-
-
         screening.colonoscopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             
@@ -1968,13 +1980,100 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             temp1
         },
         
+
+        BSA = function (person) {
+            temp1<-rep(FALSE,person$NBCSPRecordSize())
+            
+            
+            not.up.to.date<-TRUE
+            if (length(person$clinical_history$events) >0){
+            aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
+            bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
+            not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
+            }
+            
+            if (  ( person$colon_clinical=="clear")            &(person$in_treatment_program=="no") & (not.up.to.date)) {
+                uu<-person$BSA.propensity
+                ww<-age.specific.compliance.rates.for.BSA(person)*7.0
+                mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
+                aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
+                do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
+                
+#                if (do.test=="accept"){
+                    
+                    iFOBTscreening(person,aa1) #same as .self$iFOBT.screening(person)
+                    
+                                        #offer iFOBT. Relevant parameters are the compliance rate and the
+                                        #sensitivity and specificity, depending on the person1@colon@state and stage
+                                        #The test results are retained in an object of class "test", appended to the list
+                                        #person1@clinical.history@events
+                    
+                    test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a Test
+                    temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
+                    temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
+                    temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
+                    temp1[4]<-ifelse(is.element(test.outcome$compliance,c("screen")),1,0)
+###assumes that they only have one test. Needs to be changed
+###we are also assuming that if the test is positive than the person has a colonoscopy. This
+###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
+                    if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
+                                        #conditions on person1@colon@state and move on
+                        temp1[5]<-1 #test.result=="positive"
+                        temp1[6]<-1 #person has a colonoscopy woth probability 1
+                        temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+                        temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+                        if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
+                            temp1[7]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
+                            if (person$colon$stage=="A"){
+                                temp1[8]<-1
+                                temp1[12]<-1
+                                person$in_treatment_program<-"yes"
+                            }
+                            if (person$colon$stage=="B"){
+                                temp1[9]<-1
+                                temp1[12]<-1
+                                person$in_treatment_program<-"yes"
+                            }
+                            if (person$colon$stage=="C"){
+                                temp1[10]<-1
+                                temp1[12]<-1
+                                person$in_treatment_program<-"yes"
+                            }
+                            if(person$colon$stage=="D"){
+###            person$colon.clinical<-"CRC"
+                                temp1[11]<-1
+                                temp1[12]<-1
+                                person$in_treatment_program<-"yes"
+                                        #we do nothing.
+                            }
+                        }
+                    } #end test.result=="positive"
+#                } #end compiance==accept   
+            }
+            temp1
+        },
+
         NBCSP = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             if ( (person$age %in% c(55,60,65,70,72)) & ( person$colon_clinical=="clear") #
                 &(person$in_treatment_program=="no")){
                                         #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
                                         #We do not offer it if the person already has a diagnosis of "CRC"
-                iFOBTscreening(person) #same as .self$iFOBT.screening(person)
+                uu<-person$NBCSP.propensity
+                if (person$age ==55){
+                    ww<- .359
+                }else if (person$age == 60){
+                    ww<- .427
+                }  else {
+                    ww<- 0.4
+                }
+                mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=0.7)))
+                aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
+                
+                iFOBTscreening(person,aa1) #same as .self$iFOBT.screening(person)
 
                                         #offer iFOBT. Relevant parameters are the compliance rate and the
                                         #sensitivity and specificity, depending on the person1@colon@state and stage
@@ -2029,20 +2128,20 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             temp1
         },
         
-        iFOBTscreening = function(person) {#person is offered iFOBT
+        iFOBTscreening = function(person,aa1) {#person is offered iFOBT
             age<-person$age
             test.result<-"none"
             test.state<-"none"
-            uu<-person$NBCSP.propensity
-            if (age ==55){
-                ww<- .359
-            }else if (age == 60){
-                ww<- .427
-            }  else {
-                ww<- 0.4
-            }
-            mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=0.7)))
-            aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
+#            uu<-person$NBCSP.propensity
+#            if (age ==55){
+#                ww<- .359
+#            }else if (age == 60){
+#                ww<- .427
+#            }  else {
+#                ww<- 0.4
+#            }
+#            mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=0.7)))
+#            aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
             compliance<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
             if (compliance=="accept"){
                 person$updateState()  #object<-get.patient.state(object)
@@ -2093,7 +2192,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         test.state<-"TN"
                     }
                 }#end state =clear
-            }
+#            }
             person$clinical_history$events<-lappend(person$clinical_history$events,
                                                     Test$new(
                                                         age=age,
@@ -2124,7 +2223,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             if (screening_flag=="none"){
                 treatment_record.2<-rep(0,14)
             } else if (screening_flag=="NBCSP"){
-                treatment_record.2<-NBCSP(person)
+                       treatment_record.2<-NBCSP(person)
             } else if (screening_flag=="screening.colonoscopy"){
                 treatment_record.2<-screening.colonoscopy(person)
             } else if (screening_flag=="gemini.screening"){
@@ -2293,8 +2392,50 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                                         result=test.result,
                                                         state= test.state)
                                                     )
-        } # blood.test.screening 
+        }, # blood.test.screening 
 
+
+        age.specific.compliance.rates.for.BSA = function(person){
+            compliance<- NA
+            age<-person$age
+            compliance.rates<-structure(c(25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 
+                                          38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 
+                                          54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 
+                                          70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 
+                                          86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 0.000112114391175735, 
+                                          0.000144059006569091, 0.000140745953553835, 0.000178600284059499, 
+                                          0.000210958002480866, 0.000206700493815974, 0.000256992454023768, 
+                                          0.000276503597457331, 0.000341535126145256, 0.000449870277132416, 
+                                          0.000416345996139337, 0.000560955558779438, 0.000581870844068312, 
+                                          0.000723750319064036, 0.0010183234577173, 0.00139337414745452, 
+                                          0.0013756079152236, 0.001501001641173, 0.00149055311606172, 0.0018664612442872, 
+                                          0.002099961903346, 0.00238890000839343, 0.00284066511200809, 
+                                          0.00352980948971881, 0.00435570972446687, 0.00331614443793592, 
+                                          0.0051611514117174, 0.00652146344556464, 0.00769247906608148, 
+                                          0.0100330702644304, 0.00575132800343403, 0.00795829796884718, 
+                                          0.00923958919527293, 0.0120125261258177, 0.0145806052937455, 
+                                          0.0165975418926515, 0.0195853065994219, 0.0199481276967024, 0.0206706123967076, 
+                                          0.0181319021570854, 0.0113700676161581, 0.0134075236037529, 0.0136003269309358, 
+                                          0.0164902793122832, 0.016571732361206, 0.0172908205144605, 0.0193048819532556, 
+                                          0.0184263552717827, 0.0175446654112892, 0.0164079488006146, 0.015579392613731, 
+                                          0.015072929791066, 0.0140010770059235, 0.0138120591896003, 0.0129765106350968, 
+                                          0.0127438624792055, 0.0120982342541907, 0.0104820138172, 0.00967267930902822, 
+                                          0.00856947975444906, 0.00762470568909818, 0.00664491784055204, 
+                                          0.00605023217977833, 0.00478679610163326, 0.00413796188601593, 
+                                          0.00321031545992412, 0.00246481157164169, 0.00166608547405944, 
+                                          0.00113300492610837, 0.000945562609752803, 0.000977623289159244, 
+                                          0.000863309352517986, 0.00118764845605701, 0.00107411385606874, 
+                                          0.00107411385606874), .Dim = c(75L, 2L), .Dimnames = list(NULL, 
+                                                                                                    c("age", "compliance")))
+            
+            temp<-match(age,compliance.rates[,1])
+            if (is.na(temp)){
+                compliance<-0
+            }else {
+                compliance<- compliance.rates[temp,2]
+            }
+            compliance
+        }
         
       ## blood.test.screening = function(person) {#person is offered blood test
       ##       age<-person$age
