@@ -506,7 +506,7 @@ Person <- setRefClass( "Person",
                 !(sex=="F" | sex=="M")) {
                 s <- sample(c("F","M"),1,prob=c(0.5,0.5))
             } else {
-                s<-sex
+                s<-sex  
             }
 
             random_seed<-.Random.seed
@@ -1853,7 +1853,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
 
 
-        screening.colonsocopy = function (person) {
+        screening.colonoscopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             
             ##has the peson had a colonoscopy on the past 5 years
