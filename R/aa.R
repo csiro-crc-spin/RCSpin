@@ -704,7 +704,8 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
 
             crcrisk_model_params<<-crcRiskParamsType()$new()
             adenoma_model_params<<-adenomaParamsType()$new()
-
+            screening_flag<<- screening_flag
+            
             temp_study_group<-list()
 
             if (num_subjects<1) {
