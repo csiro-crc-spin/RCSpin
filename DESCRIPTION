@@ -18,3 +18,13 @@ Description: A set of extensible classes for running population disease
     implementation + extension of the CRC Spin model.
 License: file LICENSE
 Depends: methods
+Collate:
+    "GenericModel.R"
+    "CrcSpinModel.R"
+    "DukesCrcSpinModel.R"
+    "death_rates.R"
+    "menugget_functions.R"
+    "misc.R"
+    "RCSpin.R"
+    "zzz.R"
+
