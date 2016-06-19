@@ -699,6 +699,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                         base_seed=NA,
                         commencement_age=20,
                         set.sex=NA_character_,
+                        screening_flag=1,
                         ...) {
 
             crcrisk_model_params<<-crcRiskParamsType()$new()
