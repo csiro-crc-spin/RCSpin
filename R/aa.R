@@ -2117,7 +2117,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #               ...some code...
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
-
+browser()
+            
 #            treatment_record.2<-NBCSP(person)
 #            treatment_record.2<-gemini.screening(person)
 #            treatment_record.2<-screening.colonoscopy(person)
