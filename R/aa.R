@@ -1877,7 +1877,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
             bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
             not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 10)
-            
+
+            browser()
             if (not.up.to.date){
                 uu<-person$BSA.propensity
                 ww<-age.specific.compliance.rates.for.BSA(person)*10
@@ -2233,7 +2234,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 treatment_record.2<-screening.colonoscopy(person)
             } else if (screening_flag=="gemini.screening"){
                 treatment_record.2<-gemini.screening(person)
-            }
+            } else if (screening_flag=="BSA"){
+                treatment_record.2<-BSA(person)
+            } 
             
             return(c(treatment_record.1,treatment_record.2))
         },
