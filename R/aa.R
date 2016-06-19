@@ -743,7 +743,7 @@ CrcSpinModel <- setRefClass( "CrcSpinModel",
                 study_group=temp_study_group,
                 ...)
 
-        },
+         },
 
         # Overwriting these *Type() functions in subclasses
         # allows the CrcSpinModel$new()/initialize()
@@ -1370,6 +1370,8 @@ Adenoma <- setRefClass( "Adenoma",
             dinfinity<-50
             d0<-1
 
+            browser()
+            
             if (a1=="rectum"){
                 mean_colon <- runif(1,1.1,4.7)
                 tau_colon  <- runif(1,0.15,1.4)
@@ -2118,7 +2120,6 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             #               ...some code...
             #       }
             treatment_record.1 <- testForAndTreatCRC(person)
-browser()
             
 #            treatment_record.2<-NBCSP(person)
 #            treatment_record.2<-gemini.screening(person)
