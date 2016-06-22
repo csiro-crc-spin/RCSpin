@@ -204,7 +204,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
             if (  ( person$colon_clinical=="clear")            &(person$in_treatment_program=="no") & (not.up.to.date)) {
                 uu<-person$BSA.propensity
-                ww<-age.specific.compliance.rates.for.BSA(person)*7.0
+                ww<-age.specific.compliance.rates.for.BSA(person)*10.0   
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
 #              do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
@@ -220,7 +220,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                         #The test results are retained in an object of class "test", appended to the list
                                         #person1@clinical.history@events
                     
-                    test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a est
+                    test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a test
                     temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
                     temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
                     temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
