@@ -638,7 +638,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             }
             compliance
         }
-        
+
+ )       
 
 
 # Duke's Adenoma Parameters class
@@ -647,6 +648,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 #' @exportClass DukesCrcSpinModel
 #' 
 #' @family DukesCrcSpinModel_classes
+
 DukesAdenomaParams <- setRefClass( "DukesAdenomaParams",
                                   contains = "AdenomaParams",
     fields = list(
