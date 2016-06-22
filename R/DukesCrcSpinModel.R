@@ -207,8 +207,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 ww<-age.specific.compliance.rates.for.BSA(person)*7.0
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
-                do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
-                
+#              do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
+#                temp1[1]<-1 # a test was offered
+#            }
+            
 #                if (do.test=="accept"){
                     
                     iFOBTscreening(person,aa1) #same as .self$iFOBT.screening(person)
@@ -218,7 +220,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                         #The test results are retained in an object of class "test", appended to the list
                                         #person1@clinical.history@events
                     
-                    test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a Test
+                    test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a est
                     temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
                     temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
                     temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
@@ -261,8 +263,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                             }
                         }
                     } #end test.result=="positive"
-#                } #end compiance==accept   
-            }
+            } #end person$colon==clear
             temp1
         },
 
