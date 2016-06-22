@@ -141,12 +141,14 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         test.state<-"TN"
                     }
                 }#end state =clear
+            
+
+
+                temp1[6]<-1 #person has a colonoscopy woth probability 1
+                temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+                temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+
             }
-
-
-            temp1[6]<-1 #person has a colonoscopy woth probability 1
-            temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-            temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
             
             person$clinical_history$events<-lappend(person$clinical_history$events,
                                                     Test$new(
