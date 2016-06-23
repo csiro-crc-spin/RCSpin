@@ -73,7 +73,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
             if (not.up.to.date){
                 uu<-person$BSA.propensity
-                ww<-age.specific.compliance.rates.for.BSA(person)*10
+                ww<-age.specific.compliance.rates.for.BSA(person)*200
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
                 do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
