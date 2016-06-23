@@ -71,20 +71,12 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 10)
             }
 
-#            if (not.up.to.date){
-#                uu<-person$BSA.propensity
-#                ww<-age.specific.compliance.rates.for.BSA(person)*10
-#                mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
-#                aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
-#                do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
-#            }
-
             if (not.up.to.date){
-                                        #            uu<-person$BSA.propensity
-                                        #           ww<-age.specific.compliance.rates.for.BSA(person)*10
-                                        #           mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
-                                        #           aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
-                do.test<-sample(c("accept","decline"),1, prob =c(0.0017,1-0.0017))
+                uu<-person$BSA.propensity
+                ww<-age.specific.compliance.rates.for.BSA(person)*10
+                mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
+                aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
+                do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
                 temp1[12]<-1  #test is offered
             }
             
