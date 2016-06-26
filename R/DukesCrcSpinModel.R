@@ -59,28 +59,36 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         screening.colonoscopy = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
-            not.up.to.date<-TRUE
+            up.to.date<-FALSE
             do.test <- "decline"
             test.result <- "negative"
             test.state <- "decline"
-
+            
+#            if (person$age==32){browser()}
+            
             ##has the peson had a colonoscopy on the past 10 years
             if (length(person$clinical_history$events) >0) {
-                aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
-                bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
-                not.up.to.date <- (person$age - unlist(bb[match("colonoscopy",aa)]) > 10)
+                cc<-rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+                                        #                cc<-match("accept",rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$compliance}))))
+                                        #                if(!is.na(cc)){
+                aa<-rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$type})))
+                which((cc=="accept")&(aa=="colonoscopy"))[1]
+                bb<-unlist(rev(lapply(person$clinical_history$events,f<-function(x){x$age}))[which((cc=="accept")&(aa=="colonoscopy"))[1]])
+#                up.to.date <- (person$age - bb < 10)
             }
 
-            if (not.up.to.date){
+            print(up.to.date)
+            if (!up.to.date){
                 uu<-person$BSA.propensity
                 ww<-age.specific.compliance.rates.for.BSA(person)*200
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
                 do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
                 temp1[12]<-1  #test is offered
+                
             }
             
-
+            print(do.test)
             
             
             if ( (do.test=="accept") & ( person$colon_clinical=="clear") #
@@ -140,21 +148,22 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
                 temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
 
-            }
             
-            person$clinical_history$events<-lappend(person$clinical_history$events,
-                                                    Test$new(
-                                                        age=person$age,
-                                                        type="colonoscopy",
-                                                        compliance=do.test,
-                                                        result=test.result,
-                                                        state= test.state)
-                                                    )
-
+                person$clinical_history$events<-lappend(person$clinical_history$events,
+                                                        Test$new(
+                                                                 age=person$age,
+                                                                 type="colonoscopy",
+                                                                 compliance=do.test,
+                                                                 result=test.result,
+                                                                 state= test.state)
+                                                        )
+                
+                
+              }               
             if(test.result=="positive"){  #if it is
-                 if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
-                        temp1[7]<-1
-                        temp1[12]<-1
+              if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
+                temp1[7]<-1
+                temp1[12]<-1
                         person$in_treatment_program<-"yes"
                     } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
                         if (person$colon$stage=="A"){
