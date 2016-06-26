@@ -272,7 +272,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
         NBCSP = function (person) {
             temp1<-rep(FALSE,person$NBCSPRecordSize())
-            if ( (person$age %in% c(55,60,65,70,72)) & ( person$colon_clinical=="clear") #
+            if ( (person$age %in% c(60)) & ( person$colon_clinical=="clear") #
                 &(person$in_treatment_program=="no")){
                                         #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
                                         #We do not offer it if the person already has a diagnosis of "CRC"
