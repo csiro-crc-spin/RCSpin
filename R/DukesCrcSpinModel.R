@@ -64,7 +64,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             test.result <- "negative"
             test.state <- "decline"
             
-#            if (person$age==32){browser()}
+#            if (person$age==61){browser()}
             
             ##has the peson had a colonoscopy on the past 10 years
             if (length(person$clinical_history$events) >0) {
@@ -74,10 +74,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 aa<-rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$type})))
                 which((cc=="accept")&(aa=="colonoscopy"))[1]
                 bb<-unlist(rev(lapply(person$clinical_history$events,f<-function(x){x$age}))[which((cc=="accept")&(aa=="colonoscopy"))[1]])
-#                up.to.date <- (person$age - bb < 10)
+                up.to.date <- (person$age - bb < 9)
             }
 
-            print(up.to.date)
+#            print(paste(up.to.date," ",person$age,sep=""))
             if (!up.to.date){
                 uu<-person$BSA.propensity
                 ww<-age.specific.compliance.rates.for.BSA(person)*200
@@ -88,7 +88,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 
             }
             
-            print(do.test)
+ #           print(do.test)
             
             
             if ( (do.test=="accept") & ( person$colon_clinical=="clear") #
