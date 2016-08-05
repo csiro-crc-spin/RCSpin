@@ -34,6 +34,7 @@ DukesPersonWithColon <- setRefClass( "DukesPersonWithColon")
 #' 
 #' @family DukesCrcSpinModel_classes
 
+
 DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             contains="CrcSpinModel",
 
@@ -445,7 +446,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             } else if (screening_flag=="BSA"){
                 treatment_record.2<-BSA(person)
             } else if (screening_flag=="GP.screening"){
-                treatment_record.2<-GP.screening(person)
+               treatment_record.2<-GP.screening(person)
             } 
             
             return(c(treatment_record.1,treatment_record.2))
@@ -655,87 +656,87 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             compliance
         },
 
-
-        GP.screening = function (person) {
-            if (person@age < 45){
-              return()
-                }
+       GP.screening = function(person){
+             if (person@age < 45){
+               return(NULL)
+                 }
             temp1<-rep(FALSE,person$NBCSPRecordSize())
             
             
             not.up.to.date<-TRUE
-            if (length(person$clinical_history$events) >0){
-                aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
-                bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
-                not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
-            }
+             if (length(person$clinical_history$events) >0){
+                 aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
+                 bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
+                 not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
+             }
             
             if (  ( person$colon_clinical=="clear")            &(person$in_treatment_program=="no") & (not.up.to.date)) {
-                person$age    if (subject_age >= 20){
-                                  if (person$age >= 85){
-                                      aa1 <- 0.01674272
-                                  } else if ((person$age >= 75){
-                                      aa1 <- 0.03297858
-                                  } else if ((person$age >= 65){
-                                      aa1 <- 0.03094770
-                                  } else if ((person$age >= 55){
-                                      aa1 <- 0.02790423 
-                                  } else if ((person$age >= 45){
-                                      aa1 <-  0.01605888
-                                  }
-                                  
-                                  
-                                  iFOBTscreening(person,aa1) #same as .self$iFOBT.screening(person)
-                                  
+                
+                if (person$age >= 85){
+                    aa1 <- 0.01674272
+                } else if (person$age >= 75){
+                    aa1 <- 0.03297858
+                } else if (person$age >= 65){
+                    aa1 <- 0.03094770
+                } else if (person$age >= 55){
+                    aa1 <- 0.02790423 
+                } else if (person$age >= 45){
+                    aa1 <-  0.01605888
+                }
+                
+                
+                iFOBTscreening(person,aa1) #same as .self$iFOBT.screening(person)
+                
                                         #offer iFOBT. Relevant parameters are the compliance rate and the
                                         #sensitivity and specificity, depending on the person1@colon@state and stage
                                         #The test results are retained in an object of class "test", appended to the list
                                         #person1@clinical.history@events
-                                  
-                                  test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a test
-                                  temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
-                    temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
-                    temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
-                    temp1[4]<-ifelse(is.element(test.outcome$compliance,c("screen")),1,0)
-
-                    if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
-                        temp1[5]<-1 #test.result=="positive"
-                        temp1[6]<-1 #person has a colonoscopy woth probability 1
-                        temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-                        temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
-                        if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
-                            temp1[7]<-1
+                
+                test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a test
+                temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
+                temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
+                temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
+                temp1[4]<-ifelse(is.element(test.outcome$compliance,c("screen")),1,0)
+                
+                if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
+                    temp1[5]<-1 #test.result=="positive"
+                    temp1[6]<-1 #person has a colonoscopy woth probability 1
+                    temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+                    temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+                    if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
+                        temp1[7]<-1
+                        temp1[12]<-1
+                        person$in_treatment_program<-"yes"
+                    } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
+                        if (person$colon$stage=="A"){
+                            temp1[8]<-1
                             temp1[12]<-1
                             person$in_treatment_program<-"yes"
-                        } else if (person$colon$state=="CRC"){   #has this been changed to just "CRC" ??  yes **Changed
-                            if (person$colon$stage=="A"){
-                                temp1[8]<-1
-                                temp1[12]<-1
-                                person$in_treatment_program<-"yes"
-                            }
-                            if (person$colon$stage=="B"){
-                                temp1[9]<-1
-                                temp1[12]<-1
-                                person$in_treatment_program<-"yes"
-                            }
-                            if (person$colon$stage=="C"){
-                                temp1[10]<-1
-                                temp1[12]<-1
-                                person$in_treatment_program<-"yes"
-                            }
-                            if(person$colon$stage=="D"){
-                                temp1[11]<-1
-                                temp1[12]<-1
-                                person$in_treatment_program<-"yes"
-                                        #we do nothing.
-                            }
                         }
-                    } #end test.result=="positive"
-            } #end person$colon==clear
-            temp1
-        },
-    ) #end method list
-                                 )
+                        if (person$colon$stage=="B"){
+                            temp1[9]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        }
+                        if (person$colon$stage=="C"){
+                            temp1[10]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                        }
+                        if(person$colon$stage=="D"){
+                            temp1[11]<-1
+                            temp1[12]<-1
+                            person$in_treatment_program<-"yes"
+                                        #we do nothing.
+                        }
+                    }
+                } #end test.result=="positive"
+                } #end person$colon==clear
+                    temp1
+               }
+
+        ) #end method list
+    )
 
 
 
