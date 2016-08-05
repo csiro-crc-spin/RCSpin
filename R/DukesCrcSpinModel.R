@@ -653,7 +653,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 compliance<- compliance.rates[temp,2]
             }
             compliance
-        }
+        },
 
 
         GP.screening = function (person) {
