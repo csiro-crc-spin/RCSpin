@@ -657,7 +657,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         },
 
        GP.screening = function(person){
-             if (person@age < 45){
+             if (person$age < 45){
                return(NULL)
                  }
             temp1<-rep(FALSE,person$NBCSPRecordSize())
