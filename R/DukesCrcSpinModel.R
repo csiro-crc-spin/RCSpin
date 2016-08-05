@@ -65,7 +65,6 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             test.result <- "negative"
             test.state <- "decline"
             
-#            if (person$age==61){browser()}
             
             ##has the peson had a colonoscopy on the past 10 years
             if (length(person$clinical_history$events) >0) {
@@ -657,10 +656,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
         },
 
        GP.screening = function(person){
-             if (person$age < 45){
-               return(NULL)
+           temp1<-rep(FALSE,person$NBCSPRecordSize())
+            
+           if (person$age < 45){
+               return(temp1)
                  }
-            temp1<-rep(FALSE,person$NBCSPRecordSize())
             
             
             not.up.to.date<-TRUE
