@@ -432,33 +432,21 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             ##       }
             treatment_record.1 <- testForAndTreatCRC(person)
             
-            ##            if (length(person$clinical_history$events) >0){
-            ##            aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
-            ##            bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
-            ##            not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
-            ##            }
-            
-            ##            if (length(person$clinical_history$events) >0){
-            ##            aa<-rev(lapply(person$clinical_history$events,f<-function(x){x$type}))
-            ##            bb<-rev(lapply(person$clinical_history$events,f<-function(x){x$age}))
-            ##            not.up.to.date <- (person$age - unlist(bb[match("iFOBT",aa)]) > 1)
-            ##            }
-            
-            ## ##has the peson had a colonoscopy on the past 10 years
-            ## if (length(person$clinical_history$events) >0) {
-            ##     cc<-rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
-            ##                             #                cc<-match("accept",rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$compliance}))))
-            ##                             #                if(!is.na(cc)){
-            ##     aa<-rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$type})))
-            ##     t1<- which((cc=="accept")&(aa=="colonoscopy"))[1]
-            ##     if (!is.na(t1)){
-            ##         bb<-unlist(rev(lapply(person$clinical_history$events,f<-function(x){x$age}))[which((cc=="accept")&(aa=="colonoscopy"))[1]])
-            ##         up.to.date <- (person$age - bb < 9)
-            ##         }
-            ## }
-
             treatment_record.2<-rep(0,14)
-            not.up.to.date <-TRUE
+            not.up.to.date <- FALSE
+            
+            if (screening_flag=="none"){
+                treatment_record.2<-rep(0,14)
+                return(c(treatment_record.1,treatment_record.2))
+            }
+            
+            if (person$age %in% c(55,60,65,70,72)){
+                treatment_record.2<-NBCSP(person)
+                return(c(treatment_record.1,treatment_record.2))
+            }
+            
+            
+            
             if (length(person$clinical_history$events) >0) {
                 aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
                 bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
@@ -476,24 +464,17 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
             
             if ( not.up.to.date){
-                
-                
-                if (screening_flag=="none"){
-                    treatment_record.2<-rep(0,14)
-                } else if (screening_flag=="all"){
-                     aa<- sample(1:4,1)
-                    switch(aa,
-                    {treatment_record.2<-NBCSP(person)    },
-                    { treatment_record.2<-screening.colonoscopy(person)    },
-                    {  treatment_record.2<-BSA(person)  },
-                    {  treatment_record.2<-GP.screening(person)   },
-                    {treatment_record.2<-rep(0,14)}
-                    )
-                }
+                aa<- sample(1:3,1)
+                switch(aa,
+                { treatment_record.2<-screening.colonoscopy(person)    },
+                {  treatment_record.2<-BSA(person)  },
+                {  treatment_record.2<-GP.screening(person)   },
+                {treatment_record.2<-rep(0,14)}
+                )
             }
-            
-            return(c(treatment_record.1,treatment_record.2))
-        },
+        
+        return(c(treatment_record.1,treatment_record.2))
+    },
         
         gemini.screening = function(person){
             temp1<-rep(0,14)
