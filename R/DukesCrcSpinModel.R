@@ -72,10 +72,14 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                         #                cc<-match("accept",rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$compliance}))))
                                         #                if(!is.na(cc)){
                 aa<-rev(unlist(lapply(person$clinical_history$events,f<-function(x){x$type})))
-                which((cc=="accept")&(aa=="colonoscopy"))[1]
-                bb<-unlist(rev(lapply(person$clinical_history$events,f<-function(x){x$age}))[which((cc=="accept")&(aa=="colonoscopy"))[1]])
-                up.to.date <- (person$age - bb < 9)
+                t1<- which((cc=="accept")&(aa=="colonoscopy"))[1]
+                if (!is.na(t1)){
+                    bb<-unlist(rev(lapply(person$clinical_history$events,f<-function(x){x$age}))[which((cc=="accept")&(aa=="colonoscopy"))[1]])
+                    up.to.date <- (person$age - bb < 9)
+                    }
             }
+            
+            if (length(up.to.date)==0){ browser()}
 
 #            print(paste(up.to.date," ",person$age,sep=""))
             if (!up.to.date){
@@ -436,18 +440,17 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
             if (screening_flag=="none"){
                 treatment_record.2<-rep(0,14)
-            } else if (screening_flag=="NBCSP"){
-                       treatment_record.2<-NBCSP(person)
-            } else if (screening_flag=="screening.colonoscopy"){
-                treatment_record.2<-screening.colonoscopy(person)
-            } else if (screening_flag=="gemini.screening"){
-                treatment_record.2<-gemini.screening(person)
-            } else if (screening_flag=="BSA"){
-                treatment_record.2<-BSA(person)
-            } else if (screening_flag=="GP.screening"){
-               treatment_record.2<-GP.screening(person)
-            } 
-            
+            } else if (screening_flag=="all"){
+               aa<- sample(1:4,1)
+               switch(aa,
+                      {treatment_record.2<-NBCSP(person)    },
+                      { treatment_record.2<-screening.colonoscopy(person)    },
+                      {  treatment_record.2<-BSA(person)  },
+                      {  treatment_record.2<-GP.screening(person)   },
+                      {treatment_record.2<-rep(0,14)}
+                      )
+            }
+        
             return(c(treatment_record.1,treatment_record.2))
         },
 
