@@ -585,7 +585,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             stage<-person$colon$stage
             if (state=="CRC" | state=="pre symptomatic CRC"){
                 if (stage =="A"){
-                    sensitivity<-0.50
+                    sensitivity<-0.38
                     specificity<-0.0
                     test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
@@ -596,9 +596,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     }
                 }#end stage A
                 if (stage =="B"){
-                    sensitivity<-0.68
-                    specificity<-0.0
-                    sensitivity<-0.68
+                    sensitivity<-0.69
                     specificity<-0.0
                     test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
@@ -609,7 +607,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     }
                 }#end stage B
                 if (stage =="C"){
-                    sensitivity<-0.80
+                    sensitivity<-0.73
                     specificity<-0.0
                     test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
@@ -620,7 +618,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     }
                 }#end stage C
                 if (stage =="D"){
-                    sensitivity<-1.0
+                    sensitivity<-0.94
                     specificity<-0.0
                     test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                     if(test.result=="positive"){
@@ -631,7 +629,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     }
                 }#end stage D
             } else if ( state=="large adenoma" ){
-                sensitivity<-0.33
+                sensitivity<-0.06
                 specificity<-0.0
                 test.result<-sample(c("positive","negative"),1,prob=c(sensitivity,1-sensitivity))
                 if(test.result=="positive"){
