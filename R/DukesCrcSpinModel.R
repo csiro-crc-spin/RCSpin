@@ -345,7 +345,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             age<-person$age
             test.result<-"none"
             test.state<-"none"
-#            uu<-person$NBCSP.propensity
+#            uu< -person$NBCSP.propensity
 #            if (age ==55){
 #                ww<- .359
 #            }else if (age == 60){
@@ -434,6 +434,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
             treatment_record.2<-rep(0,14)
             not.up.to.date <- TRUE
+            not.up.to.date.2 <- TRUE
             
             if (screening_flag=="none"){
                 treatment_record.2<-rep(0,14)
@@ -457,8 +458,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     age.at.test <- bb[dd]
                     if (test.type =="iFOBT"){
                         not.up.to.date <- ((person$age - age.at.test) >= 1) #
+                        not.up.to.date.2 <- ((person$age - age.at.test) >= 5) #
                     } else if (test.type =="colonoscopy"){
                         not.up.to.date <- ((person$age - age.at.test) >=  5)
+                        not.up.to.date.2 <- ((person$age - age.at.test) >=  15)
                     }
                 }
             }
@@ -474,8 +477,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 )
             }
 
-            if (FALSE){           
-                if (person$age==68){
+            if (FALSE ){           
+                if (person$age==65){
                     not.up.to.date<-TRUE
                     if (length(person$clinical_history$events) >0) {
                         aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
@@ -496,13 +499,20 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     }
                 }
             }
-        
+
+
+
+            if (TRUE ){           
+                if ((person$age >= 65) &(not.up.to.date.2)) {
+                    treatment_record.2<-gemini.screening(person)   
+                }
+            }
         return(c(treatment_record.1,treatment_record.2))
     },
         
         gemini.screening = function(person){
             temp1<-rep(0,14)
-            do.test<-sample(c("accept","decline"),1, prob =c(0.03,1-0.03))
+            do.test<-sample(c("accept","decline"),1, prob =c(0.1,1-0.1))
             if ( (person$age %in% c(50:80)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")   &(do.test=="accept")){
                 
                                         #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
@@ -518,7 +528,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
                 temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
                 temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
-                temp1[4]<-ifelse(is.element(test.outcome$compliance,c("screen")),1,0)
+                temp1[4]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
 ###assumes that they only have one test. Needs to be changed
 ###we are also assuming that if the test is positive than the person has a colonoscopy. This
 ###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
