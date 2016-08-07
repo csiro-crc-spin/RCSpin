@@ -82,7 +82,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
             if (not.up.to.date){
                 uu<-person$BSA.propensity
-                ww<-age.specific.compliance.rates.for.BSA(person)*400
+                ww<-age.specific.compliance.rates.for.BSA(person)*100
                 mm<-min(1,max(0,qlnorm(uu,mean=log(ww),sd=1.1)))
                 aa1<-sample(c(1,0),1,prob=c(mm,1-mm )) 
                 do.test<-sample(c("accept","decline"),1, prob =c(aa1,1-aa1))
@@ -433,7 +433,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             treatment_record.1 <- testForAndTreatCRC(person)
             
             treatment_record.2<-rep(0,14)
-            not.up.to.date <- FALSE
+            not.up.to.date <- TRUE
             
             if (screening_flag=="none"){
                 treatment_record.2<-rep(0,14)
@@ -455,9 +455,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     test.type <- aa[dd] 
                     age.at.test <- bb[dd]
                     if (test.type =="iFOBT"){
-                        not.up.to.date <- (person$age - age.at.test > 1)
+                        not.up.to.date <- ((person$age - age.at.test) >= 2) #
                     } else if (test.type =="colonoscopy"){
-                        not.up.to.date <- (person$age - age.at.test > 5)
+                        not.up.to.date <- ((person$age - age.at.test) >=  5)
                     }
                 }
             }
@@ -472,6 +472,30 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 {treatment_record.2<-rep(0,14)}
                 )
             }
+
+            
+if (person$age==68){
+    not.up.to.date<-TRUE
+           if (length(person$clinical_history$events) >0) {
+                aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
+                bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
+                cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+                if (!is.na(dd<-match("accept",cc))){ # exit the look if no test offer has been accepted
+                    test.type <- aa[dd] 
+                    age.at.test <- bb[dd]
+                    if (test.type =="iFOBT"){
+                        not.up.to.date <- ((person$age - age.at.test) >=  2)
+                        print(paste(person$study_id, " ", not.up.to.date, "iFOBT", sep=" "))
+                    } else if (test.type =="colonoscopy"){
+                        not.up.to.date <- ((person$age - age.at.test) >=  5)
+                        print(paste(person$study_id, " ", not.up.to.date, "colonoscopy", sep=" "))
+                    }
+                }
+                
+            }
+
+#             print(paste(person$study_id, " ", not.up.to.date,sep=" "))
+                }
         
         return(c(treatment_record.1,treatment_record.2))
     },
