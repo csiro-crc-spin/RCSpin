@@ -92,6 +92,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
             if ( (do.test=="accept") & ( person$colon_clinical=="clear") #
                 &(person$in_treatment_program=="no")){
+                print("I got here")
                 person$updateState()  #object<-get.patient.state(object)
                 state<-person$colon$state    #object@colon@state
                 if( state=="symptomatic CRC" ){
@@ -233,9 +234,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
                                         #conditions on person1@colon@state and move on
                         temp1[5]<-1 #test.result=="positive"
-                        temp1[6]<-1 #person has a colonoscopy woth probability 1
-                        temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-                        temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+#                        temp1[6]<-1 #person has a colonoscopy woth probability 1
+#                        temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+#                        temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
                         if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
                             temp1[7]<-1
                             temp1[12]<-1
@@ -304,9 +305,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
                                         #conditions on person1@colon@state and move on
                     temp1[5]<-1 #test.result=="positive"
-                    temp1[6]<-1 #person has a colonoscopy woth probability 1
-                    temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-                    temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+#                    temp1[6]<-1 #person has a colonoscopy woth probability 1
+#                    temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+#                    temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
                     if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
                         temp1[7]<-1
                         temp1[12]<-1
@@ -525,9 +526,9 @@ if (person$age==68){
                 if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
                                         #conditions on person1@colon@state and move on
                     temp1[5]<-1 #test.result=="positive"
-                    temp1[6]<-1 #person has a colonoscopy woth probability 1
-                    temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-                    temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+#                    temp1[6]<-1 #person has a colonoscopy woth probability 1
+#                    temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+#                    temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
                     #so these are the results of colonoscopy. 
                     if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
                         temp1[7]<-1
@@ -749,9 +750,9 @@ if (person$age==68){
                 
                 if(test.outcome$result=="positive"){  #if it is a false positive, then we will skip over all the
                     temp1[5]<-1 #test.result=="positive"
-                    temp1[6]<-1 #person has a colonoscopy woth probability 1
-                    temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
-                    temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
+#                    temp1[6]<-1 #person has a colonoscopy woth probability 1
+#                    temp1[13]<-sample(c(0,1),1,prob=c(0.9997,0.0003)) #probability of bleeding
+#                    temp1[14]<-sample(c(0,1),1,prob=c(0.9999,0.0001)) #probability of perforation
                     if ( (person$colon$state=="adenoma") | (person$colon$state=="large adenoma")){   #this may be wrong. 
                         temp1[7]<-1
                         temp1[12]<-1
