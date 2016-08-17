@@ -430,6 +430,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             ##           & (person1@in.treatment.program=="no")){
             ##               ...some code...
             ##       }
+
+            ## screening_flag should take the values "none" or "gemini"
             treatment_record.1 <- testForAndTreatCRC(person)
             
             treatment_record.2<-rep(0,14)
@@ -443,11 +445,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
             if (person$age %in% c(55,60,65,70,72)){
                 treatment_record.2<-NBCSP(person)
-#                return(c(treatment_record.1,treatment_record.2))
             }
-
-            
-            
             
             if (length(person$clinical_history$events) >0) {
                 aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
@@ -476,7 +474,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 {treatment_record.2<-rep(0,14)}
                 )
             }
-
+            
             if (FALSE ){           
                 if (person$age==65){
                     not.up.to.date<-TRUE
@@ -499,15 +497,16 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     }
                 }
             }
-
-
-
-            if (TRUE ){           
+            
+            
+            
+            if (screening_flag=="gemini"){           
                 if ((person$age >= 65) &(not.up.to.date.2)) {
                     treatment_record.2<-gemini.screening(person)   
                 }
             }
-        return(c(treatment_record.1,treatment_record.2))
+
+            return(c(treatment_record.1,treatment_record.2))
     },
         
         gemini.screening = function(person){
