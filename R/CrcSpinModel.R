@@ -470,7 +470,7 @@ CrcRisk <- setRefClass( "CrcRisk",
         init = function(subject_sex){
 
             # Set sex linked risk based on subject sex
-            sex_linked_risk <<- rnorm(1, mean=crcrisk_model_params$sex_linked_mean, sd=(crcrisk_model_params$sex_linked_sd))
+            sex_linked_risk <<- rnorm(1, mean= -0.24, sd=(crcrisk_model_params$sex_linked_sd))
             if(subject_sex=="M"){
               sex_linked_risk <<- -sex_linked_risk
             }
@@ -479,9 +479,9 @@ CrcRisk <- setRefClass( "CrcRisk",
             if (risk_level=="high"){
               baseline_risk <<- rnorm(1, mean=-4, sd=(0.27))
             } else {
-              mu <- rnorm(1, mean=crcrisk_model_params$baseline_mean, sd=(crcrisk_model_params$baseline_sd))
+#              mu <- rnorm(1, mean=crcrisk_model_params$baseline_mean, sd=(crcrisk_model_params$baseline_sd))
               sigma <- runif(1, 0.1, 2.5)
-              baseline_risk <<- rnorm(1, mean=mu, sd=sigma)
+              baseline_risk <<- rnorm(1, mean= -6.6 , sd=1.1)
             }
 
             # Set age link risk
@@ -491,10 +491,10 @@ CrcRisk <- setRefClass( "CrcRisk",
 #            age_risk[2] <<- max(rnorm(1,0.031,0.003 ),0)
 #            age_risk[3] <<- max(rnorm(1,0.029,0.003 ),0)
 #            age_risk[4] <<- max(rnorm(1,0.03,0.003 ),0)
-            age_risk[1] <<- max(age_risk[1], 0)
-            age_risk[2] <<- max(age_risk[2], 0)
-            age_risk[3] <<- max(age_risk[3], 0)
-            age_risk[4] <<- max(age_risk[4], 0)
+            age_risk[1] <<- 0.037
+            age_risk[2] <<- 0.031
+            age_risk[3] <<- 0.029
+            age_risk[4] <<- 0.030
 
         },
 
@@ -724,10 +724,10 @@ Adenoma <- setRefClass( "Adenoma",
             d0<-1
 
             if (a1=="rectum"){
-                mean_colon <- runif(1,1.1,4.7)
-                tau_colon  <- runif(1,0.15,1.4)
-                l_beta1<-runif(1,adenoma_params$beta1_min_rectum,adenoma_params$beta1_max_rectum)
-                l_beta2<-runif(1,adenoma_params$beta2_min_rectum,adenoma_params$beta2_max_rectum)
+                mean_colon <- 2.7
+                tau_colon  <- 0.84
+                l_beta1<- 10.3
+                l_beta2<- 2.7
                 l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
 #                if (subject$sex=="M"){
                     l_gamma1<-runif(1,adenoma_params$gamma1_male_rectum_min,adenoma_params$gamma1_male_rectum_max)
@@ -739,10 +739,10 @@ Adenoma <- setRefClass( "Adenoma",
 #                    l_gamma3<-adenoma_params$gamma3_val
 #                }
             } else {
-                mean_colon <- runif(1,1.0,3.9)
-                tau_colon  <- runif(1,0.15,1.4)
-                l_beta1<-runif(1,adenoma_params$beta1_min_colon,adenoma_params$beta1_max_colon)
-                l_beta2<-runif(1,adenoma_params$beta2_min_colon,adenoma_params$beta2_max_colon)
+                mean_colon <- 1.9
+                tau_colon  <- 0.8
+                l_beta1<- 28.6
+                l_beta2<- 2.7
                 l_d10<-l_beta1*((-log(runif(1,0,1)))^(-1/l_beta2))
  #               if (subject$sex=="M"){
                     l_gamma1<-runif(1,adenoma_params$gamma1_male_colon_min,adenoma_params$gamma1_male_colon_max)
