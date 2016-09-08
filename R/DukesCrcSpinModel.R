@@ -422,7 +422,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 ### sensitivity 0.47  P(test.result="positive"| state="large adenoma")
             
         },
-
+        
         modelSubjectTesting = function (person) {
             ## test for and treat CRC
             ##   Call function containing what was originally:
@@ -430,23 +430,35 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             ##           & (person1@in.treatment.program=="no")){
             ##               ...some code...
             ##       }
-
+            
             ## screening_flag should take the values "none" or "gemini"
+            DEBUG<-TRUE
             treatment_record.1 <- testForAndTreatCRC(person)
             
-            treatment_record.2<-rep(0,14)
-            not.up.to.date <- TRUE
-            not.up.to.date.2 <- TRUE
             
+            
+            treatment_record.2<-rep(0,14)
+            
+            ##no screening          
             if (screening_flag=="none"){
-                treatment_record.2<-rep(0,14)
                 return(c(treatment_record.1,treatment_record.2))
             }
             
+            ##NBCSP
             if (person$age %in% c(55,60,65,70,72)){
                 treatment_record.2<-NBCSP(person)
             }
+
+            if (person$age==65){
+                browser()
+            }
+
             
+            ## check  if uptodate (iFOBT,colonoscopy,blood)
+            ## this is not quite what I want. If a person had a iFOBT 5 years ago and a colonoscopy 6 then they should be considered up to date.
+            not.up.to.date <- FALSE
+            not.up.to.date.2 <- FALSE
+            not.up.to.date.3 <- FALSE
             if (length(person$clinical_history$events) >0) {
                 aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
                 bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
@@ -457,15 +469,50 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     if (test.type =="iFOBT"){
                         not.up.to.date <- ((person$age - age.at.test) >= 1) #
                         not.up.to.date.2 <- ((person$age - age.at.test) >= 5) #
+                        not.up.to.date.3 <- ((person$age - age.at.test) >= 10) #
                     } else if (test.type =="colonoscopy"){
                         not.up.to.date <- ((person$age - age.at.test) >=  5)
-                        not.up.to.date.2 <- ((person$age - age.at.test) >=  15)
+                        not.up.to.date.2 <- ((person$age - age.at.test) >=  10)
+                        not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+                    } else if  (test.type =="blood"){
+                        not.up.to.date <- ((person$age - age.at.test) >= 5) #
+                        not.up.to.date.2 <- ((person$age - age.at.test) >= 10) #
+                        not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+                    }
+                    
+                }
+            }
+
+            
+            
+            ## perhaps this is what I want?
+            temp.not.up.to.date<-FALSE
+            if (TRUE){           
+                if (length(person$clinical_history$events) >0) {
+                    aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
+                    bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
+                    cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+                    if (length(dd<-grep("accept",cc)) >0) {  
+                        test.type <- aa[dd] 
+                        age.at.test <- bb[dd]
+                        ## get most  rectect test of each sort
+                        iFOBT.age <- age.at.test[which(test.type =="iFOBT")[1]]
+                        colonoscopy.age <- age.at.test[which(test.type =="colonoscopy")[1]]
+                        
+                        if (!is.na(colonoscopy.age)){
+                            temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  10)
+                        }
+                        if (!is.na(iFOBT.age)){
+                            temp.not.up.to.date <- ((person$age - iFOBT.age) >=  2)
+                        }
                     }
                 }
             }
             
             
-            if ( not.up.to.date){
+            
+          ## if not uptodate then offer a test -- selected at random            
+            if (not.up.to.date){
                 aa<- sample(1:3,1)
                 switch(aa,
                 { treatment_record.2<-screening.colonoscopy(person)    },
@@ -475,9 +522,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 )
             }
             
-            if (FALSE ){           
+            
+            ##write out some results
+            if (DEBUG){           
                 if (person$age==65){
-                    not.up.to.date<-TRUE
+                    temp.not.up.to.date<-TRUE
                     if (length(person$clinical_history$events) >0) {
                         aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
                         bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
@@ -486,33 +535,71 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                             test.type <- aa[dd] 
                             age.at.test <- bb[dd]
                             if (test.type =="iFOBT"){
-                                not.up.to.date <- ((person$age - age.at.test) >=  2)
-                                print(paste(person$study_id, " ", not.up.to.date, "iFOBT", sep=" "))
+                                temp.not.up.to.date <- ((person$age - age.at.test) >=  1)
+                                print(paste(person$study_id, " ", temp.not.up.to.date, "iFOBT", sep=" "))
                             } else if (test.type =="colonoscopy"){
-                                not.up.to.date <- ((person$age - age.at.test) >=  10)
-                                print(paste(person$study_id, " ", not.up.to.date, "colonoscopy", sep=" "))
+                                temp.not.up.to.date <- ((person$age - age.at.test) >=  5)
+                                print(paste(person$study_id, " ", temp.not.up.to.date, "colonoscopy", sep=" "))
                             }
                         }
-                        
                     }
                 }
             }
             
             
-            
-            if (screening_flag=="gemini"){           
-                if ((person$age >= 65) &(not.up.to.date.2)) {
-                    treatment_record.2<-gemini.screening(person)   
+            ## nned to check up.to.date again, in case they did a test
+            not.up.to.date <- FALSE
+            not.up.to.date.2 <- FALSE
+            not.up.to.date.3 <- FALSE
+            if (length(person$clinical_history$events) >0) {
+                aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
+                bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
+                cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+                if (!is.na(dd<-match("accept",cc))){ # exit the look if no test offer has been accepted
+                    test.type <- aa[dd] 
+                    age.at.test <- bb[dd]
+                    if (test.type =="iFOBT"){
+                        not.up.to.date <- ((person$age - age.at.test) >= 1) #
+                        not.up.to.date.2 <- ((person$age - age.at.test) >= 5) #
+                        not.up.to.date.3 <- ((person$age - age.at.test) >= 10) #
+                    } else if (test.type =="colonoscopy"){
+                        not.up.to.date <- ((person$age - age.at.test) >=  5)
+                        not.up.to.date.2 <- ((person$age - age.at.test) >=  10)
+                        not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+                    } else if  (test.type =="blood"){
+                        not.up.to.date <- ((person$age - age.at.test) >= 5) #
+                        not.up.to.date.2 <- ((person$age - age.at.test) >= 10) #
+                        not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+                    }
+                    
                 }
             }
-
+            
+            
+            ##If not up.to.date, then offer gemini test
+            if (screening_flag=="gemini"){           
+                if ((person$age == 65) & (not.up.to.date)) {
+                    treatment_record.2<-gemini.screening(person)
+                                        #                    print(paste(person$study_id, " ", person$age, sep=" "))
+                                        #                    print(paste(treatment_record.2 ,sep=" "))
+                                        #                    browser()
+                    
+                                        #                    if (( person$study_id ==5) &(person$age==75)){
+                                        #                        browser()
+                                        #                    }
+                    
+                }
+            }
+            
             return(c(treatment_record.1,treatment_record.2))
-    },
+        },
         
         gemini.screening = function(person){
             temp1<-rep(0,14)
-            do.test<-sample(c("accept","decline"),1, prob =c(0.1,1-0.1))
-            if ( (person$age %in% c(50:80)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")   &(do.test=="accept")){
+#            do.test<-sample(c("accept","decline"),1, prob =c(0.1,1-0.1))
+            do.test<-"accept"
+#            if ( (person$age %in% c(50:80)) & ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")   &(do.test=="accept")){
+             if ( ( person$colon_clinical=="clear") &(person$in_treatment_program=="no")   &(do.test=="accept")){
                 
                                         #the current screening scheme offers iFOBT to people at the ages 50,55,60,65,70.
                                         #We do not offer it if the person already has a diagnosis of "CRC"
