@@ -1,5 +1,5 @@
 Package: RCSpin
-Type: PPackage
+Type: Package
 Title: Group of Spin-alike models
 Version: 0.11
 Date: 2013-08-22
@@ -10,7 +10,7 @@ Author@R: c(person("Rob", "Dunne", role = c("aut", "cre"),
     email = "Luke.Domanski@csiro.au"
     comment = "OO design and Rcpp extension"))
 Author: Rob Dunne and Luke Domanski
-Maintainer: Rob Dunne <Rob.Dunne@data61.csiro.au>
+Maintainer: Rob Dunne <Rob.Dunne@csiro.au>
 Copyright: CSIRO, 2013-
 Description: A set of extensible classes for running population disease
     intervention models. Currently provides a generic base class for running a

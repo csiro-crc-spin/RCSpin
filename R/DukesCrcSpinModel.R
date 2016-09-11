@@ -432,10 +432,27 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             ##       }
             
             ## screening_flag should take the values "none" or "gemini"
+
+            ## should we test for other things? shoudl we use the function
+            # to get correct size of returned object#
+#               if ((person$study_id==12) & (person$age==77)){
+#                browser()
+#            }
+#            
+#            if (person$in_treatment_program=="yes"){
+#                return(rep(0,28))
+#            }
+                
             DEBUG<-TRUE
+
             treatment_record.1 <- testForAndTreatCRC(person)
+            if (person$in_treatment_program=="yes"){
+                return(rep(0,28))
+            }
             
-            
+            if (person$in_treatment_program=="yes"){
+                browser()
+            }
             
             treatment_record.2<-rep(0,14)
             
@@ -443,51 +460,56 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             if (screening_flag=="none"){
                 return(c(treatment_record.1,treatment_record.2))
             }
+
+
+
             
             ##NBCSP
             if (person$age %in% c(55,60,65,70,72)){
                 treatment_record.2<-NBCSP(person)
-            }
-
-            if (person$age==65){
-                browser()
-            }
-
+                if (treatment_record.2[2]==1){
+#                    print(paste(person$age, "i got here", sep=" "))
+                return(c(treatment_record.1,treatment_record.2))
+            }}
             
-            ## check  if uptodate (iFOBT,colonoscopy,blood)
-            ## this is not quite what I want. If a person had a iFOBT 5 years ago and a colonoscopy 6 then they should be considered up to date.
-            not.up.to.date <- FALSE
-            not.up.to.date.2 <- FALSE
-            not.up.to.date.3 <- FALSE
-            if (length(person$clinical_history$events) >0) {
-                aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
-                bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
-                cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
-                if (!is.na(dd<-match("accept",cc))){ # exit the look if no test offer has been accepted
-                    test.type <- aa[dd] 
-                    age.at.test <- bb[dd]
-                    if (test.type =="iFOBT"){
-                        not.up.to.date <- ((person$age - age.at.test) >= 1) #
-                        not.up.to.date.2 <- ((person$age - age.at.test) >= 5) #
-                        not.up.to.date.3 <- ((person$age - age.at.test) >= 10) #
-                    } else if (test.type =="colonoscopy"){
-                        not.up.to.date <- ((person$age - age.at.test) >=  5)
-                        not.up.to.date.2 <- ((person$age - age.at.test) >=  10)
-                        not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
-                    } else if  (test.type =="blood"){
-                        not.up.to.date <- ((person$age - age.at.test) >= 5) #
-                        not.up.to.date.2 <- ((person$age - age.at.test) >= 10) #
-                        not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
-                    }
+            
+            ## ## check  if uptodate (iFOBT,colonoscopy,blood)
+            ## ## this is not quite what I want. If a person had a iFOBT 5 years ago and a colonoscopy 6 then they should be considered up to date.
+            ## not.up.to.date <- FALSE
+            ## not.up.to.date.2 <- FALSE
+            ## not.up.to.date.3 <- FALSE
+            ## if (length(person$clinical_history$events) >0) {
+            ##     aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
+            ##     bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
+            ##     cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+            ##     if (!is.na(dd<-match("accept",cc))){ # exit the look if no test offer has been accepted
+            ##         test.type <- aa[dd] 
+            ##         age.at.test <- bb[dd]
+            ##         if (test.type =="iFOBT"){
+            ##             not.up.to.date <- ((person$age - age.at.test) >= 1) #
+            ##             not.up.to.date.2 <- ((person$age - age.at.test) >= 5) #
+            ##             not.up.to.date.3 <- ((person$age - age.at.test) >= 10) #
+            ##         } else if (test.type =="colonoscopy"){
+            ##             not.up.to.date <- ((person$age - age.at.test) >=  5)
+            ##             not.up.to.date.2 <- ((person$age - age.at.test) >=  10)
+            ##             not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+            ##         } else if  (test.type =="blood"){
+            ##             not.up.to.date <- ((person$age - age.at.test) >= 5) #
+            ##             not.up.to.date.2 <- ((person$age - age.at.test) >= 10) #
+            ##             not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+            ##         }
                     
-                }
-            }
+            ##     }
+            ## }
 
             
             
             ## perhaps this is what I want?
-            temp.not.up.to.date<-FALSE
-            if (TRUE){           
+            temp.not.up.to.date<-FALSE  
+            if (TRUE){
+                ## if(person$age==65){
+                ## browser()
+                ## }
                 if (length(person$clinical_history$events) >0) {
                     aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
                     bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
@@ -495,24 +517,38 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                     if (length(dd<-grep("accept",cc)) >0) {  
                         test.type <- aa[dd] 
                         age.at.test <- bb[dd]
-                        ## get most  rectect test of each sort
+                        ## get most recent test of each sort
                         iFOBT.age <- age.at.test[which(test.type =="iFOBT")[1]]
                         colonoscopy.age <- age.at.test[which(test.type =="colonoscopy")[1]]
                         
                         if (!is.na(colonoscopy.age)){
                             temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  10)
                         }
-                        if (!is.na(iFOBT.age)){
-                            temp.not.up.to.date <- ((person$age - iFOBT.age) >=  2)
-                        }
+                        if (!temp.not.up.to.date){
+                            if (!is.na(iFOBT.age)){
+                                temp.not.up.to.date <- ((person$age - iFOBT.age) >=  2)
+                            }
+                        } #otherwise we have the situation  where temp.not.up.to.date could be set to FALSE by colonoscopy and then back to TRUE by iFOBT
+                    } else {
+                        temp.not.up.to.date<- TRUE  #never accepted a test
                     }
+                } else {
+                    temp.not.up.to.date<- TRUE  #never offered a test
                 }
             }
             
+#            if (person$age==65){
+#                        print(paste(temp.not.up.to.date, sep=" "))
+#                        if (person$study_id == 7){
+#                            browser()
+#                            }
+#                }
             
+            not.up.to.date <- temp.not.up.to.date
             
-          ## if not uptodate then offer a test -- selected at random            
-            if (not.up.to.date){
+#          if not uptodate then offer a test -- selected at random            
+#            if (not.up.to.date){
+            if (TRUE){
                 aa<- sample(1:3,1)
                 switch(aa,
                 { treatment_record.2<-screening.colonoscopy(person)    },
@@ -520,61 +556,164 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 {  treatment_record.2<-GP.screening(person)   },
                 {treatment_record.2<-rep(0,14)}
                 )
+                ## if (is.logical(treatment_record.2[2])){browser()}
+                ## if (person$age==63){
+                ##     if (aa==1){
+                ##         print(paste(aa, " ",treatment_record.2[6], sep=" "))
+                ##     } else {
+                ##         print(paste(aa, " ",treatment_record.2[2], sep=" "))
+                ##     }
+                ## }
             }
             
-            
+            DEBUG<-FALSE
             ##write out some results
             if (DEBUG){           
                 if (person$age==65){
+#                    browser()
                     temp.not.up.to.date<-TRUE
                     if (length(person$clinical_history$events) >0) {
                         aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
                         bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
                         cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
-                        if (!is.na(dd<-match("accept",cc))){ # exit the look if no test offer has been accepted
-                            test.type <- aa[dd] 
-                            age.at.test <- bb[dd]
-                            if (test.type =="iFOBT"){
-                                temp.not.up.to.date <- ((person$age - age.at.test) >=  1)
-                                print(paste(person$study_id, " ", temp.not.up.to.date, "iFOBT", sep=" "))
-                            } else if (test.type =="colonoscopy"){
-                                temp.not.up.to.date <- ((person$age - age.at.test) >=  5)
-                                print(paste(person$study_id, " ", temp.not.up.to.date, "colonoscopy", sep=" "))
-                            }
-                        }
+#                        print(paste(person$study_id, " ", person$NBCSP.propensity,  sep=" "))
+#                        print(paste( aa[1],  sep=" "))
+#                        print(paste( bb[1],  sep=" "))
+                        print(paste(cc[1],  sep=" "))
+
+                        
+                        ## if (!is.na(dd<-match("accept",cc))){ # exit the look if no test offer has been accepted
+                        ##     test.type <- aa[dd] 
+                        ##     age.at.test <- bb[dd]
+                        ##     if (test.type =="iFOBT"){
+                        ##         temp.not.up.to.date <- ((person$age - age.at.test) >=  1)
+                        ##         print(paste(person$study_id, " ", temp.not.up.to.date, "iFOBT", sep=" "))
+                        ##     } else if (test.type =="colonoscopy"){
+                        ##         temp.not.up.to.date <- ((person$age - age.at.test) >=  5)
+                        ##         print(paste(person$study_id, " ", temp.not.up.to.date, "colonoscopy", sep=" "))
+                        ##     }
+                        ## }
                     }
                 }
             }
             
             
-            ## nned to check up.to.date again, in case they did a test
-            not.up.to.date <- FALSE
-            not.up.to.date.2 <- FALSE
-            not.up.to.date.3 <- FALSE
-            if (length(person$clinical_history$events) >0) {
-                aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
-                bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
-                cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
-                if (!is.na(dd<-match("accept",cc))){ # exit the look if no test offer has been accepted
-                    test.type <- aa[dd] 
-                    age.at.test <- bb[dd]
-                    if (test.type =="iFOBT"){
-                        not.up.to.date <- ((person$age - age.at.test) >= 1) #
-                        not.up.to.date.2 <- ((person$age - age.at.test) >= 5) #
-                        not.up.to.date.3 <- ((person$age - age.at.test) >= 10) #
-                    } else if (test.type =="colonoscopy"){
-                        not.up.to.date <- ((person$age - age.at.test) >=  5)
-                        not.up.to.date.2 <- ((person$age - age.at.test) >=  10)
-                        not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
-                    } else if  (test.type =="blood"){
-                        not.up.to.date <- ((person$age - age.at.test) >= 5) #
-                        not.up.to.date.2 <- ((person$age - age.at.test) >= 10) #
-                        not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
-                    }
+            ## ## nned to check up.to.date again, in case they did a test
+            ## not.up.to.date <- FALSE
+            ## not.up.to.date.2 <- FALSE
+            ## not.up.to.date.3 <- FALSE
+            ## if (length(person$clinical_history$events) >0) {
+            ##     aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
+            ##     bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
+            ##     cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+            ##     if (!is.na(dd<-match("accept",cc))){ # exit the look if no test offer has been accepted
+            ##         test.type <- aa[dd] 
+            ##         age.at.test <- bb[dd]
+            ##         if (test.type =="iFOBT"){
+            ##             not.up.to.date <- ((person$age - age.at.test) >= 1) #
+            ##             not.up.to.date.2 <- ((person$age - age.at.test) >= 5) #
+            ##             not.up.to.date.3 <- ((person$age - age.at.test) >= 10) #
+            ##         } else if (test.type =="colonoscopy"){
+            ##             not.up.to.date <- ((person$age - age.at.test) >=  5)
+            ##             not.up.to.date.2 <- ((person$age - age.at.test) >=  10)
+            ##             not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+            ##         } else if  (test.type =="blood"){
+            ##             not.up.to.date <- ((person$age - age.at.test) >= 5) #
+            ##             not.up.to.date.2 <- ((person$age - age.at.test) >= 10) #
+            ##             not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+            ##         }
                     
+            ##     }
+            ## }
+
+            ## if (FALSE){            
+            ##     if (person$age==68) {
+            ##         ## check  if uptodate (iFOBT,colonoscopy,blood)
+            ##         ## this is not quite what I want. If a person had a iFOBT 5 years ago and a colonoscopy 6 then they should be considered up to date.
+            ##         not.up.to.date <- FALSE
+            ##         not.up.to.date.2 <- FALSE
+            ##         not.up.to.date.3 <- FALSE
+            ##         if (length(person$clinical_history$events) >0) {
+            ##             aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
+            ##             bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
+            ##             cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+            ##             if (!is.na(dd<-match("accept",cc))){ # 
+            ##                 test.type <- aa[dd] 
+            ##                 age.at.test <- bb[dd]
+            ##                 if (test.type =="iFOBT"){
+            ##                     not.up.to.date <- ((person$age - age.at.test) >= 1) #
+            ##                     not.up.to.date.2 <- ((person$age - age.at.test) >= 5) #
+            ##                     not.up.to.date.3 <- ((person$age - age.at.test) >= 10) #
+            ##                     print(paste("accept", test.type,person$age - age.at.test,sep=","))
+            ##                 } else if (test.type =="colonoscopy"){
+            ##                     not.up.to.date <- ((person$age - age.at.test) >=  5)
+            ##                     not.up.to.date.2 <- ((person$age - age.at.test) >=  10)
+            ##                     not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+            ##                     print(paste("accept", test.type,person$age - age.at.test,sep=","))
+            ##                 } else if  (test.type =="blood"){
+            ##                     not.up.to.date <- ((person$age - age.at.test) >= 5) #
+            ##                     not.up.to.date.2 <- ((person$age - age.at.test) >= 10) #
+            ##                     not.up.to.date.3 <- ((person$age - age.at.test) >=  15)
+            ##                     print(paste("accept", test.type,person$age - age.at.test,sep=","))
+            ##                 }
+            ##             } else {
+            ##                 not.up.to.date <- TRUE
+            ##                 not.up.to.date.2 <- TRUE
+            ##                 not.up.to.date.3 <- TRUE
+            ##                 print(paste("decline"))
+            ##             }
+                        
+            ##         }
+            ##     }
+            ## }
+            
+
+
+           temp.not.up.to.date<-FALSE  
+            if (TRUE){
+                ## if(person$age==65){
+                ## browser()
+                ## }
+                if (length(person$clinical_history$events) >0) {
+                    aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
+                    bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
+                    cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+                    if (length(dd<-grep("accept",cc)) >0) {  
+                        test.type <- aa[dd] 
+                        age.at.test <- bb[dd]
+                        ## get most recent test of each sort
+                        iFOBT.age <- age.at.test[which(test.type =="iFOBT")[1]]
+                        colonoscopy.age <- age.at.test[which(test.type =="colonoscopy")[1]]
+                        
+                        if (!is.na(colonoscopy.age)){
+                            temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  10)
+                        }
+                        if (!temp.not.up.to.date){
+                            if (!is.na(iFOBT.age)){
+                                temp.not.up.to.date <- ((person$age - iFOBT.age) >=  2)
+                            }
+                        } #otherwise we have the situation  where temp.not.up.to.date could be set to FALSE by colonoscopy and then back to TRUE by iFOBT
+                    } else {
+                        temp.not.up.to.date<- TRUE  #never accepted a test
+                    }
+                } else {
+                    temp.not.up.to.date<- TRUE  #never offered a test
                 }
             }
             
+#            if (person$age==65){
+#                        print(paste(temp.not.up.to.date, sep=" "))
+#                        if (person$study_id == 7){
+#                            browser()
+#                            }
+#                }
+            
+            not.up.to.date <- temp.not.up.to.date
+
+            ## if (person$age==65){
+            ##     print(paste(temp.not.up.to.date, sep=" "))
+            ## }    
+
             
             ##If not up.to.date, then offer gemini test
             if (screening_flag=="gemini"){           
