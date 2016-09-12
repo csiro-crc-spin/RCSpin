@@ -716,8 +716,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
             
             ##If not up.to.date, then offer gemini test
-            if (screening_flag=="gemini"){           
+            if (screening_flag=="gemini"){
                 if ((person$age == 65) & (not.up.to.date)) {
+#                    browser()
                     treatment_record.2<-gemini.screening(person)
                                         #                    print(paste(person$study_id, " ", person$age, sep=" "))
                                         #                    print(paste(treatment_record.2 ,sep=" "))
@@ -733,7 +734,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             return(c(treatment_record.1,treatment_record.2))
         },
         
-        gemini.screening = function(person){
+        gemini.screening  = function(person){
             temp1<-rep(0,14)
 #            do.test<-sample(c("accept","decline"),1, prob =c(0.1,1-0.1))
             do.test<-"accept"
@@ -750,10 +751,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                                         #person1@clinical.history@events
                 
                 test.outcome<-tail(person$clinical_history$events,1)[[1]] #returns a list -- the first item of which is a Test
-                temp1[1]<-ifelse(is.element(test.outcome$type,c("iFOBT")),1,0)
-                temp1[2]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
-                temp1[3]<-ifelse(is.element(test.outcome$type,c("blood")),1,0)
+                temp1[3]<-1
                 temp1[4]<-ifelse(is.element(test.outcome$compliance,c("accept")),1,0)
+                 
 ###assumes that they only have one test. Needs to be changed
 ###we are also assuming that if the test is positive than the person has a colonoscopy. This
 ###is not the case --  0.938 go on to a colonoscopy (Cronin et al 2010)
