@@ -669,35 +669,39 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
 
 
-           temp.not.up.to.date<-FALSE  
+            temp.not.up.to.date<-FALSE
+            never.screened <-FALSE 
             if (TRUE){
-                ## if(person$age==65){
-                ## browser()
-                ## }
-                if (length(person$clinical_history$events) >0) {
-                    aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
-                    bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
-                    cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
-                    if (length(dd<-grep("accept",cc)) >0) {  
-                        test.type <- aa[dd] 
-                        age.at.test <- bb[dd]
-                        ## get most recent test of each sort
-                        iFOBT.age <- age.at.test[which(test.type =="iFOBT")[1]]
-                        colonoscopy.age <- age.at.test[which(test.type =="colonoscopy")[1]]
-                        
-                        if (!is.na(colonoscopy.age)){
-                            temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  15)
-                        }
-                        if (!temp.not.up.to.date){
-                            if (!is.na(iFOBT.age)){
-                                temp.not.up.to.date <- ((person$age - iFOBT.age) >=  5)
+                if(person$age==65){
+                    ## browser()
+                    ## }
+                    if (length(person$clinical_history$events) >0) {
+                        aa<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$type})) )# type will be one of iFOBT, colonoscopy
+                        bb<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$age})))
+                        cc<-unlist( rev(lapply(person$clinical_history$events,f<-function(x){x$compliance})))
+                        if (length(dd<-grep("accept",cc)) >0) {  
+                            test.type <- aa[dd] 
+                            age.at.test <- bb[dd]
+                            ## get most recent test of each sort
+                            iFOBT.age <- age.at.test[which(test.type =="iFOBT")[1]]
+                            colonoscopy.age <- age.at.test[which(test.type =="colonoscopy")[1]]
+                            
+                            if (!is.na(colonoscopy.age)){
+                                temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  15)
                             }
-                        } #otherwise we have the situation  where temp.not.up.to.date could be set to FALSE by colonoscopy and then back to TRUE by iFOBT
+                            if (!temp.not.up.to.date){
+                                if (!is.na(iFOBT.age)){
+                                    temp.not.up.to.date <- ((person$age - iFOBT.age) >=  5)
+                                }
+                            } #otherwise we have the situation  where temp.not.up.to.date could be set to FALSE by colonoscopy and then back to TRUE by iFOBT
+                        } else {
+                            temp.not.up.to.date<- TRUE  #never accepted a test
+                            never.screened     <- TRUE  #never accepted a test
+                        }
                     } else {
-                        temp.not.up.to.date<- TRUE  #never accepted a test
+                        temp.not.up.to.date<- TRUE  #never offered a test
+                        never.screened     <- TRUE  #never offered a test
                     }
-                } else {
-                    temp.not.up.to.date<- TRUE  #never offered a test
                 }
             }
             
@@ -707,8 +711,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 #                            browser()
 #                            }
 #                }
+
             
-            not.up.to.date <- temp.not.up.to.date
+#            not.up.to.date <- temp.not.up.to.date
+            not.up.to.date <-  never.screened 
 
             ## if (person$age==65){
             ##     print(paste(temp.not.up.to.date, sep=" "))
@@ -717,8 +723,9 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
             ##If not up.to.date, then offer gemini test
             if (screening_flag=="gemini"){
-                if ( (person$age %in% c(60,65,70,75)) & (not.up.to.date)) {
+                if ( (person$age %in% c(65)) & (not.up.to.date)) {  #c(60,65,70,75))
 #                    browser()
+#                     print("I got here")
                     treatment_record.2<-gemini.screening(person)
                                         #                    print(paste(person$study_id, " ", person$age, sep=" "))
                                         #                    print(paste(treatment_record.2 ,sep=" "))
