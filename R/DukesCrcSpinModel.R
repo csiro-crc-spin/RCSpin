@@ -686,11 +686,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         colonoscopy.age <- age.at.test[which(test.type =="colonoscopy")[1]]
                         
                         if (!is.na(colonoscopy.age)){
-                            temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  10)
+                            temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  15)
                         }
                         if (!temp.not.up.to.date){
                             if (!is.na(iFOBT.age)){
-                                temp.not.up.to.date <- ((person$age - iFOBT.age) >=  2)
+                                temp.not.up.to.date <- ((person$age - iFOBT.age) >=  5)
                             }
                         } #otherwise we have the situation  where temp.not.up.to.date could be set to FALSE by colonoscopy and then back to TRUE by iFOBT
                     } else {
