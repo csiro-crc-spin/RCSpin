@@ -717,7 +717,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             
             ##If not up.to.date, then offer gemini test
             if (screening_flag=="gemini"){
-                if ((person$age == 65) & (not.up.to.date)) {
+                if ( (person$age %in% c(60,65,70,75) & (not.up.to.date)) {
 #                    browser()
                     treatment_record.2<-gemini.screening(person)
                                         #                    print(paste(person$study_id, " ", person$age, sep=" "))
