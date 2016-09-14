@@ -435,7 +435,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
             ## should we test for other things? shoudl we use the function
             # to get correct size of returned object#
-#               if ((person$study_id==12) & (person$age==77)){
+#
+#               if ((person$study_id==7) & (person$age==65)){
 #                browser()
 #            }
 #            
@@ -705,12 +706,12 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                 }
             }
             
-#            if (person$age==65){
-#                        print(paste(temp.not.up.to.date, sep=" "))
-#                        if (person$study_id == 7){
-#                            browser()
-#                            }
-#                }
+            ## if (person$age==65){
+            ##             print(paste(temp.not.up.to.date, sep=" "))
+            ##             if (person$study_id == 7){
+            ##                 browser()
+            ##                 }
+            ##     }
 
             
 #            not.up.to.date <- temp.not.up.to.date
@@ -725,7 +726,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             if (screening_flag=="gemini"){
                 if ( (person$age %in% c(65)) & (not.up.to.date)) {  #c(60,65,70,75))
 #                    browser()
-#                     print("I got here")
+                     print("I got here")
                     treatment_record.2<-gemini.screening(person)
                                         #                    print(paste(person$study_id, " ", person$age, sep=" "))
                                         #                    print(paste(treatment_record.2 ,sep=" "))
