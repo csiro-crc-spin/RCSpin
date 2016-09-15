@@ -674,7 +674,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             never.screened <-FALSE
             not.up.to.date<-FALSE
             if (TRUE){
-                if(person$age %in% c(55,65,75)){
+                if(person$age %in% c(50,55,60,65,70,75)){
                     ## browser()
                     ## }
                     if (length(person$clinical_history$events) >0) {
@@ -704,7 +704,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         temp.not.up.to.date<- TRUE  #never offered a test
                         never.screened     <- TRUE  #never offered a test
                     }
-                       if (person$age==55){
+                       if (person$age==50){
                            not.up.to.date <-  never.screened 
                        }  else{
                            not.up.to.date <-  temp.not.up.to.date
@@ -719,13 +719,12 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             ##                 }
             ##     }
 
-
             
             ##If not up.to.date, then offer gemini test
             if (screening_flag=="gemini"){
-                if ( (person$age %in% c(55,65,75)) & (not.up.to.date)) {  #c(60,65,70,75))
+                if ( (person$age %in% c(50,55,60,65,70,75)) & (not.up.to.date)) {  #c(60,65,70,75))
 #                    browser()
-#                     print(paste("I got here", person$age, sep=""))
+#                      print(paste("I got here", person$age, sep=""))
                     treatment_record.2<-gemini.screening(person)
                                         #                    print(paste(person$study_id, " ", person$age, sep=" "))
                                         #                    print(paste(treatment_record.2 ,sep=" "))
