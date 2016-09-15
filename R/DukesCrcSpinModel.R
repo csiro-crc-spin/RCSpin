@@ -671,9 +671,10 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
 
 
             temp.not.up.to.date<-FALSE
-            never.screened <-FALSE 
+            never.screened <-FALSE
+            not.up.to.date<-FALSE
             if (TRUE){
-                if(person$age==65){
+                if(person$age %in% c(55,65,75)){
                     ## browser()
                     ## }
                     if (length(person$clinical_history$events) >0) {
@@ -688,11 +689,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                             colonoscopy.age <- age.at.test[which(test.type =="colonoscopy")[1]]
                             
                             if (!is.na(colonoscopy.age)){
-                                temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  15)
+                                temp.not.up.to.date <- ((person$age - colonoscopy.age) >=  10)
                             }
                             if (!temp.not.up.to.date){
                                 if (!is.na(iFOBT.age)){
-                                    temp.not.up.to.date <- ((person$age - iFOBT.age) >=  5)
+                                    temp.not.up.to.date <- ((person$age - iFOBT.age) >=  3)
                                 }
                             } #otherwise we have the situation  where temp.not.up.to.date could be set to FALSE by colonoscopy and then back to TRUE by iFOBT
                         } else {
@@ -703,6 +704,11 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         temp.not.up.to.date<- TRUE  #never offered a test
                         never.screened     <- TRUE  #never offered a test
                     }
+                       if (person$age==55){
+                           not.up.to.date <-  never.screened 
+                       }  else{
+                           not.up.to.date <-  temp.not.up.to.date
+                       }
                 }
             }
             
@@ -713,20 +719,13 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             ##                 }
             ##     }
 
-            
-#            not.up.to.date <- temp.not.up.to.date
-            not.up.to.date <-  never.screened 
-
-            ## if (person$age==65){
-            ##     print(paste(temp.not.up.to.date, sep=" "))
-            ## }    
 
             
             ##If not up.to.date, then offer gemini test
             if (screening_flag=="gemini"){
-                if ( (person$age %in% c(65)) & (not.up.to.date)) {  #c(60,65,70,75))
+                if ( (person$age %in% c(55,65,75)) & (not.up.to.date)) {  #c(60,65,70,75))
 #                    browser()
-#                     print("I got here")
+#                     print(paste("I got here", person$age, sep=""))
                     treatment_record.2<-gemini.screening(person)
                                         #                    print(paste(person$study_id, " ", person$age, sep=" "))
                                         #                    print(paste(treatment_record.2 ,sep=" "))
