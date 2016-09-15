@@ -527,7 +527,7 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
                         }
                         if (!temp.not.up.to.date){
                             if (!is.na(iFOBT.age)){
-                                temp.not.up.to.date <- ((person$age - iFOBT.age) >=  2)
+                                temp.not.up.to.date <- ((person$age - iFOBT.age) >=  3)
                             }
                         } #otherwise we have the situation  where temp.not.up.to.date could be set to FALSE by colonoscopy and then back to TRUE by iFOBT
                     } else {
@@ -548,8 +548,8 @@ DukesCrcSpinModel <- setRefClass( "DukesCrcSpinModel",
             not.up.to.date <- temp.not.up.to.date
             
 #          if not uptodate then offer a test -- selected at random            
-#            if (not.up.to.date){
-            if (TRUE){
+            if (not.up.to.date){
+#            if (TRUE){
                 aa<- sample(1:3,1)
                 switch(aa,
                 { treatment_record.2<-screening.colonoscopy(person)    },
